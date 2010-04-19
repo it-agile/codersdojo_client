@@ -27,13 +27,27 @@ describe PersonalCodersDojo do
 	end
 	
   it "should create a state directory for every state" do
+    @shell_mock.should_receive(:ctime).with("my_file.rb").and_return 1
     @shell_mock.should_receive(:mkdir).with "#{STATE_DIR_PREFIX}0"
 	  @shell_mock.should_receive(:cp).with "my_file.rb", "#{STATE_DIR_PREFIX}0"
     @runner.start
+    @shell_mock.should_receive(:ctime).with("my_file.rb").and_return 2
     @shell_mock.should_receive(:mkdir).with "#{STATE_DIR_PREFIX}1"
 	  @shell_mock.should_receive(:cp).with "my_file.rb", "#{STATE_DIR_PREFIX}1"
     @runner.execute
   end
+
+  it "should not run if the kata file wasn't modified" do
+	  a_time = Time.new
+    @shell_mock.should_receive(:ctime).with("my_file.rb").and_return a_time
+    @shell_mock.should_receive(:mkdir).with "#{STATE_DIR_PREFIX}0"
+	  @shell_mock.should_receive(:cp).with "my_file.rb", "#{STATE_DIR_PREFIX}0"
+    @runner.start
+    @shell_mock.should_receive(:ctime).with("my_file.rb").and_return a_time
+    @shell_mock.should_not_receive(:mkdir).with "#{STATE_DIR_PREFIX}1"
+	  @shell_mock.should_not_receive(:cp).with "my_file.rb", "#{STATE_DIR_PREFIX}1"
+    @runner.execute
+	end
 
   it "should capture run result into state directory" do
     @shell_mock.should_receive(:execute).and_return "spec result"

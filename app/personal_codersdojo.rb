@@ -41,12 +41,15 @@ class PersonalCodersDojo
 	end
 	
 	def execute
+		change_time = @shell.ctime @file
+		if change_time == @previous_change_time then return end
 		result = @shell.execute "#{@run_command} #{@file}"
 		state_dir = "#{@session_dir}/state_#{@step}"
 		@shell.mkdir state_dir
 		@shell.cp @file, state_dir
 		@shell.write_file "#{state_dir}/#{RESULT_FILE}", result
 		@step += 1
+		@previous_change_time = change_time
 	end
 	
 end
@@ -81,6 +84,10 @@ class Shell
 		file.close
 	end
 	
+	def ctime filename
+		File.new(filename).ctime
+	end
+	
 end
 
 class SessionIdGenerator
@@ -91,10 +98,17 @@ class SessionIdGenerator
 	
 end
 
-file = ARGV[0]
-puts "Starting PersonalCodersDojo with kata file #{file} ..."
-dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
-dojo.file = file
-dojo.run_command = "ruby"
-scheduler = Scheduler.new dojo
-scheduler.start
+def run_from_shell
+	file = ARGV[1]
+	puts "Starting PersonalCodersDojo with kata file #{file} ..."
+	dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
+	dojo.file = file
+	dojo.run_command = "ruby"
+	scheduler = Scheduler.new dojo
+	scheduler.start
+end
+
+if ARGV[0] == "start" then
+	run_from_shell
+end
+
