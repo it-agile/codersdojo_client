@@ -1,0 +1,1 @@
+puts "hallo " + Time.new.to_s
