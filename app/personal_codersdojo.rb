@@ -108,7 +108,24 @@ def run_from_shell
 	scheduler.start
 end
 
+def print_help
+	puts <<-helptext
+PersonalCodersDojo automatically runs your specs/tests of a code kata.
+Usage: ruby personal_codersdojo.rb command kata_file
+Commands:
+ start \t Start the spec/test runner.
+ help, -h, --help \t Print this help text.
+
+Examples:
+ ruby personal_codersdojo.rb run prime.rb
+Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
+
+helptext
+end
+
 if ARGV[0] == "start" then
 	run_from_shell
+elsif ["help", "--help", "-h"].include? ARGV[0] then
+	print_help
 end
 
