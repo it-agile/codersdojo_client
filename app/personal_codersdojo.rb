@@ -1,23 +1,34 @@
 class PersonalCodersDojo
 	
 	CODERSDOJO_WORKSPACE = ".codersdojo"
+	RESULT_FILE = "result.txt"
 
-  attr_accessor :file
+  attr_accessor :file, :run_command
 	
 	def initialize shell, session_provider
 		@shell = shell
 		@session_provider = session_provider
-		@run_command = "ruby"
 	end
 	
 	def start
+		init_session
+		execute
+	end
+	
+	def init_session
+		@step = 0
 		id = @session_provider.generate_id
 		@session_dir = "#{CODERSDOJO_WORKSPACE}/#{id}"
 		@shell.mkdir_p @session_dir
-		@shell.execute "#{@run_command} #{@file}"
-		state_dir = "#{@session_dir}/state_0"
+	end
+	
+	def execute
+		result = @shell.execute "#{@run_command} #{@file}"
+		state_dir = "#{@session_dir}/state_#{@step}"
 		@shell.mkdir state_dir
 		@shell.cp @file, state_dir
+		@shell.write_file "#{state_dir}/#{RESULT_FILE}", result
+		@step += 1
 	end
 	
 end
