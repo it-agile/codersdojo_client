@@ -82,6 +82,13 @@ class Shell
 		file.close
 	end
 	
+	def read_file filename
+		file = File.new filename
+		content = file.read
+		file.close
+		content
+	end
+	
 	def ctime filename
 		File.new(filename).ctime
 	end
@@ -96,15 +103,32 @@ class SessionIdGenerator
 	
 end
 
-class Uploader
+class StateUploader
+	
+	API_PREFIX = "restapi"
+	
+	def initialize server_url, api
+		@url_prefix = "#{server_url}/#{API_PREFIX}"
+		@api = api
+	end
+	
+	def init_upload
+		@uuid = @api.get "#{@url_prefix}/uuid"
+	end
+	
+	def upload_state state
+		@api.post "#{@url_prefix}/state", {:uuid => @uuid, :time => state.time, :code => state.code, :result => state.result}
+	end
+	
+end
+
+class StateReader
 	
 	attr_accessor :session_id, :next_step, :source_code_file
 	
-	def initialize shell, server_url, api
+	def initialize shell
 		@filename_formatter = FilenameFormatter.new
 		@shell = shell
-		@url_prefix = "#{server_url}/restapi"
-		@api = api
 		@next_step = 0
 	end
 	
@@ -116,14 +140,6 @@ class Uploader
 		state.result = @shell.read_file @filename_formatter.result_file(state_dir)
 		@next_step += 1
 		state
-	end
-	
-	def init_upload
-		@uuid = @api.get "#{@url_prefix}/uuid"
-	end
-	
-	def upload_state state
-		@api.post "#{@url_prefix}/state", {:uuid => @uuid, :time => state.time, :code => state.code, :result => state.result}
 	end
 	
 end

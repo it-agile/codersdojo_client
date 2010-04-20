@@ -58,29 +58,15 @@ describe PersonalCodersDojo, "in run mode" do
 
 end
 
-describe PersonalCodersDojo, "in upload mode" do
+describe StateUploader do
 
   SERVER_URL = "http://dummy.com"
   URL_PREFIX = "#{SERVER_URL}/restapi"
 
   before (:each) do
 	  @a_time = Time.new
-	  @shell_mock = mock
 	  @api_mock = mock.as_null_object
-	  @uploader = Uploader.new @shell_mock, SERVER_URL, @api_mock
-		@uploader.source_code_file = "file.rb"
-		@uploader.session_id = "id0815"
-	end
-	
-	it "should read a stored kata state" do
-		@shell_mock.should_receive(:ctime).with("#{STATE_DIR_PREFIX}0").and_return @a_time
-		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/file.rb").and_return "source code"
-		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/result.txt").and_return "result"
-		state = @uploader.read_next_state
-		state.time.should == @a_time
-		state.code.should == "source code"
-		state.result.should == "result"
-		@uploader.next_step.should == 1
+	  @uploader = StateUploader.new SERVER_URL, @api_mock
 	end
 	
   it "should generate a kata uuid and use that for uploading kata states" do
@@ -90,6 +76,29 @@ describe PersonalCodersDojo, "in upload mode" do
 	  state = State.new @a_time, "source code", "result"
 	  @uploader.upload_state state
 	end	
+	
+end
+
+describe StateReader do
+	
+  before (:each) do
+	  @a_time = Time.new
+	  @shell_mock = mock
+	  @state_reader = StateReader.new @shell_mock
+		@state_reader.source_code_file = "file.rb"
+		@state_reader.session_id = "id0815"
+	end
+	
+	it "should read a stored kata state" do
+		@shell_mock.should_receive(:ctime).with("#{STATE_DIR_PREFIX}0").and_return @a_time
+		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/file.rb").and_return "source code"
+		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/result.txt").and_return "result"
+		state = @state_reader.read_next_state
+		state.time.should == @a_time
+		state.code.should == "source code"
+		state.result.should == "result"
+		@state_reader.next_step.should == 1
+	end
 	
 end
 
