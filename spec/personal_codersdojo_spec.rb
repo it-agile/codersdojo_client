@@ -68,15 +68,14 @@ describe PersonalCodersDojo, "in upload mode" do
 	  @shell_mock = mock
 	  @api_mock = mock.as_null_object
 	  @uploader = Uploader.new @shell_mock, SERVER_URL, @api_mock
+		@uploader.source_code_file = "file.rb"
+		@uploader.session_id = "id0815"
 	end
 	
 	it "should read a stored kata state" do
 		@shell_mock.should_receive(:ctime).with("#{STATE_DIR_PREFIX}0").and_return @a_time
 		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/file.rb").and_return "source code"
 		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/result.txt").and_return "result"
-		@uploader.session_id = "id0815"
-		@uploader.next_step = 0
-		@uploader.source_code_file = "file.rb"
 		state = @uploader.read_next_state
 		state.time.should == @a_time
 		state.code.should == "source code"

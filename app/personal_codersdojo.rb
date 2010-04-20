@@ -105,6 +105,7 @@ class Uploader
 		@shell = shell
 		@url_prefix = "#{server_url}/restapi"
 		@api = api
+		@next_step = 0
 	end
 	
 	def read_next_state
