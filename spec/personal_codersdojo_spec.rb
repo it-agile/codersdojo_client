@@ -88,7 +88,8 @@ describe PersonalCodersDojo, "in upload mode" do
 	  @api_mock.should_receive(:get).with("#{URL_PREFIX}/uuid").and_return "1"
 	  @api_mock.should_receive(:post).with("#{URL_PREFIX}/state", {:uuid => "1", :time => @a_time, :code => "source code", :result => "result"})
 	  @uploader.init_upload
-	  @uploader.upload_state @a_time, "source code", "result"
+	  state = State.new @a_time, "source code", "result"
+	  @uploader.upload_state state
 	end	
 	
 end

@@ -118,11 +118,11 @@ class Uploader
 	end
 	
 	def init_upload
-		@uuid = @api.get("#{@url_prefix}/uuid")
+		@uuid = @api.get "#{@url_prefix}/uuid"
 	end
 	
-	def upload_state time, source_code, result
-		@api.post "#{@url_prefix}/state", {:uuid => @uuid, :time => time, :code => source_code, :result => result}
+	def upload_state state
+		@api.post "#{@url_prefix}/state", {:uuid => @uuid, :time => state.time, :code => state.code, :result => state.result}
 	end
 	
 end
@@ -160,11 +160,17 @@ class State
 	
 	attr_accessor :time, :code, :result
 	
+	def initialize time=nil, code=nil, result=nil
+		@time = time
+		@code = code
+		@result = result
+	end
+	
 end
 
 def run_from_shell
 	file = ARGV[1]
-	puts "Starting PersonalCodersDojo with kata file #{file} ..."
+	puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."
 	dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
 	dojo.file = file
 	dojo.run_command = "ruby"
