@@ -71,9 +71,9 @@ describe PersonalCodersDojo, "in upload mode" do
 	end
 	
 	it "should read a stored kata state" do
-		@shell_mock.should_receive(:read_time).with("#{STATE_DIR_PREFIX}0").and_return @a_time
-		@shell_mock.should_receive(:read_source_code).with("#{STATE_DIR_PREFIX}0/file.rb").and_return "source code"
-		@shell_mock.should_receive(:read_result).with("#{STATE_DIR_PREFIX}0/result.txt").and_return "result"
+		@shell_mock.should_receive(:ctime).with("#{STATE_DIR_PREFIX}0").and_return @a_time
+		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/file.rb").and_return "source code"
+		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/result.txt").and_return "result"
 		@uploader.session_id = "id0815"
 		@uploader.step = 0
 		@uploader.source_code_file = "file.rb"

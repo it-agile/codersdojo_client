@@ -110,9 +110,9 @@ class Uploader
 	def read_state
 		state = State.new
 		state_dir = @filename_formatter.state_dir(@session_id, @step)
-		state.time = @shell.read_time state_dir
-		state.code = @shell.read_source_code @filename_formatter.source_code_file(state_dir, @source_code_file)
-		state.result = @shell.read_result @filename_formatter.result_file(state_dir)
+		state.time = @shell.ctime state_dir
+		state.code = @shell.read_file @filename_formatter.source_code_file(state_dir, @source_code_file)
+		state.result = @shell.read_file @filename_formatter.result_file(state_dir)
 		state
 	end
 	
