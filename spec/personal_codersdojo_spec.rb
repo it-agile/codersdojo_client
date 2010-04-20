@@ -75,12 +75,13 @@ describe PersonalCodersDojo, "in upload mode" do
 		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/file.rb").and_return "source code"
 		@shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/result.txt").and_return "result"
 		@uploader.session_id = "id0815"
-		@uploader.step = 0
+		@uploader.next_step = 0
 		@uploader.source_code_file = "file.rb"
-		state = @uploader.read_state
+		state = @uploader.read_next_state
 		state.time.should == @a_time
 		state.code.should == "source code"
 		state.result.should == "result"
+		@uploader.next_step.should == 1
 	end
 	
   it "should generate a kata uuid and use that for uploading kata states" do

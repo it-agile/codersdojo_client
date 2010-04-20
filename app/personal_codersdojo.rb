@@ -98,7 +98,7 @@ end
 
 class Uploader
 	
-	attr_accessor :session_id, :step, :source_code_file
+	attr_accessor :session_id, :next_step, :source_code_file
 	
 	def initialize shell, server_url, api
 		@filename_formatter = FilenameFormatter.new
@@ -107,12 +107,13 @@ class Uploader
 		@api = api
 	end
 	
-	def read_state
+	def read_next_state
 		state = State.new
-		state_dir = @filename_formatter.state_dir(@session_id, @step)
+		state_dir = @filename_formatter.state_dir(@session_id, @next_step)
 		state.time = @shell.ctime state_dir
 		state.code = @shell.read_file @filename_formatter.source_code_file(state_dir, @source_code_file)
 		state.result = @shell.read_file @filename_formatter.result_file(state_dir)
+		@next_step += 1
 		state
 	end
 	
