@@ -1,6 +1,7 @@
+ARGV[0] = "spec" # to be first line to suppress help text output of shell command
 require "app/personal_codersdojo"
 
-describe PersonalCodersDojo do
+describe PersonalCodersDojo, "in run mode" do
 
 	WORKSPACE_DIR = ".codersdojo"
 	SESSION_ID = "id0815"
@@ -56,3 +57,38 @@ describe PersonalCodersDojo do
   end
 
 end
+
+describe PersonalCodersDojo, "in upload mode" do
+
+  SERVER_URL = "http://dummy.com"
+  URL_PREFIX = "#{SERVER_URL}/restapi"
+
+  before (:each) do
+	  @a_time = Time.new
+	  @shell_mock = mock
+	  @api_mock = mock.as_null_object
+	  @uploader = Uploader.new @shell_mock, SERVER_URL, @api_mock
+	end
+	
+	it "should read a stored kata state" do
+		@shell_mock.should_receive(:read_time).with("#{STATE_DIR_PREFIX}0").and_return @a_time
+		@shell_mock.should_receive(:read_source_code).with("#{STATE_DIR_PREFIX}0/file.rb").and_return "source code"
+		@shell_mock.should_receive(:read_result).with("#{STATE_DIR_PREFIX}0/result.txt").and_return "result"
+		@uploader.session_id = "id0815"
+		@uploader.step = 0
+		@uploader.source_code_file = "file.rb"
+		state = @uploader.read_state
+		state.time.should == @a_time
+		state.code.should == "source code"
+		state.result.should == "result"
+	end
+	
+  it "should generate a kata uuid and use that for uploading kata states" do
+	  @api_mock.should_receive(:get).with("#{URL_PREFIX}/uuid").and_return "1"
+	  @api_mock.should_receive(:post).with("#{URL_PREFIX}/state", {:uuid => "1", :time => @a_time, :code => "source code", :result => "result"})
+	  @uploader.init_upload
+	  @uploader.upload_state @a_time, "source code", "result"
+	end	
+	
+end
+

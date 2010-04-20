@@ -18,12 +18,11 @@ end
 
 class PersonalCodersDojo
 	
-	CODERSDOJO_WORKSPACE = ".codersdojo"
-	RESULT_FILE = "result.txt"
-
+	
   attr_accessor :file, :run_command
 	
 	def initialize shell, session_provider
+		@filename_formatter = FilenameFormatter.new
 		@shell = shell
 		@session_provider = session_provider
 	end
@@ -35,19 +34,18 @@ class PersonalCodersDojo
 	
 	def init_session
 		@step = 0
-		id = @session_provider.generate_id
-		@session_dir = "#{CODERSDOJO_WORKSPACE}/#{id}"
-		@shell.mkdir_p @session_dir
+		@session_id = @session_provider.generate_id
+		@shell.mkdir_p(@filename_formatter.session_dir @session_id)
 	end
 	
 	def execute
 		change_time = @shell.ctime @file
 		if change_time == @previous_change_time then return end
 		result = @shell.execute "#{@run_command} #{@file}"
-		state_dir = "#{@session_dir}/state_#{@step}"
+		state_dir = @filename_formatter.state_dir @session_id, @step
 		@shell.mkdir state_dir
 		@shell.cp @file, state_dir
-		@shell.write_file "#{state_dir}/#{RESULT_FILE}", result
+		@shell.write_file @filename_formatter.result_file(state_dir), result
 		@step += 1
 		@previous_change_time = change_time
 	end
@@ -98,6 +96,71 @@ class SessionIdGenerator
 	
 end
 
+class Uploader
+	
+	attr_accessor :session_id, :step, :source_code_file
+	
+	def initialize shell, server_url, api
+		@filename_formatter = FilenameFormatter.new
+		@shell = shell
+		@url_prefix = "#{server_url}/restapi"
+		@api = api
+	end
+	
+	def read_state
+		state = State.new
+		state_dir = @filename_formatter.state_dir(@session_id, @step)
+		state.time = @shell.read_time state_dir
+		state.code = @shell.read_source_code @filename_formatter.source_code_file(state_dir, @source_code_file)
+		state.result = @shell.read_result @filename_formatter.result_file(state_dir)
+		state
+	end
+	
+	def init_upload
+		@uuid = @api.get("#{@url_prefix}/uuid")
+	end
+	
+	def upload_state time, source_code, result
+		@api.post "#{@url_prefix}/state", {:uuid => @uuid, :time => time, :code => source_code, :result => result}
+	end
+	
+end
+
+class FilenameFormatter
+	
+	CODERSDOJO_WORKSPACE = ".codersdojo"
+	RESULT_FILE = "result.txt"
+	STATE_DIR_PREFIX = "state_"
+
+  def source_code_file state_dir, source_code_file
+	  state_file state_dir, source_code_file
+	end
+
+  def result_file state_dir
+	  state_file state_dir, RESULT_FILE
+	end
+
+  def state_file state_dir, file
+	  "#{state_dir}/#{file}"
+	end
+
+  def state_dir session_id, step
+	  session_directory = session_dir session_id
+	  "#{session_directory}/#{STATE_DIR_PREFIX}#{step}"
+	end
+
+  def session_dir session_id
+	  "#{CODERSDOJO_WORKSPACE}/#{session_id}"
+	end
+	
+end
+
+class State
+	
+	attr_accessor :time, :code, :result
+	
+end
+
 def run_from_shell
 	file = ARGV[1]
 	puts "Starting PersonalCodersDojo with kata file #{file} ..."
@@ -111,21 +174,26 @@ end
 def print_help
 	puts <<-helptext
 PersonalCodersDojo automatically runs your specs/tests of a code kata.
-Usage: ruby personal_codersdojo.rb command kata_file
+Usage: ruby personal_codersdojo.rb command
 Commands:
- start \t Start the spec/test runner.
- help, -h, --help \t Print this help text.
+ start <kata_file> \t\t Start the spec/test runner.
+ upload <session_directory> \t Upload the kata to codersdojo.com.
+ help, -h, --help \t\t Print this help text.
 
 Examples:
  ruby personal_codersdojo.rb run prime.rb
-Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
+   Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
+ ruby personal_codersdojo.rb upload .codersdojo/1271665711
+   Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
 
 helptext
 end
 
 if ARGV[0] == "start" then
 	run_from_shell
-elsif ["help", "--help", "-h"].include? ARGV[0] then
+elsif ARGV[0] == "spec" then
+	
+else
 	print_help
 end
 
