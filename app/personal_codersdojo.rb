@@ -1,4 +1,7 @@
+require "rubygems"
 require "tempfile"
+require 'rest_client'
+require "rexml/document"
 
 class Scheduler
 
@@ -105,25 +108,6 @@ class SessionIdGenerator
 
 end
 
-class StateUploader
-
-  API_PREFIX = "restapi"
-
-  def initialize server_url, api
-    @url_prefix = "#{server_url}/#{API_PREFIX}"
-    @api = api
-  end
-
-  def init_upload
-    @uuid = @api.get "#{@url_prefix}/uuid"
-  end
-
-  def upload_state state
-    @api.post "#{@url_prefix}/state", {:uuid => @uuid, :time => state.time, :code => state.code, :result => state.result}
-  end
-
-end
-
 class StateReader
 
   attr_accessor :session_id, :next_step, :source_code_file
@@ -132,6 +116,11 @@ class StateReader
     @filename_formatter = FilenameFormatter.new
     @shell = shell
     @next_step = 0
+  end
+
+  def enough_states?
+    dir = Dir.new(@filename_formatter.session_dir @session_id)
+    dir.count >= 4
   end
 
   def get_state_dir
@@ -185,19 +174,48 @@ end
 
 class Uploader
 
-  def initialize source_file, session_id
-    @state_reader = StateReader.new Shell.new
+  def initialize (source_file, session_id, state_reader = StateReader.new(Shell.new))
+    @state_reader = state_reader
     @state_reader.source_code_file = source_file
     @state_reader.session_id = session_id
   end
 
-  def upload
-    while @state_reader.has_next_state
-      p @state_reader.read_next_state
-    end
-
+  def upload_kata
+    RestClient.post "#{@@hostname}#{@@kata_path}", []
   end
 
+  def upload_states(kata_id)
+    while @state_reader.has_next_state
+      state = @state_reader.read_next_state
+      RestClient.post "#{@@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :created_at => state.time}
+    end
+  end
+
+  def upload_kata_and_states
+    kata = upload_kata
+    upload_states(XMLElementExtractor.extract('kata/id', kata))
+    "This is the link to review and comment your kata #{XMLElementExtractor.extract('kata/short-url', kata)}"
+  end
+
+  def upload
+    return upload_kata_and_states if @state_reader.enough_states?
+    return "You need at least two states"
+  end
+
+  private
+  @@hostname = 'http://localhost:3000'
+  @@kata_path = '/katas'
+  @@state_path = '/states'
+
+end
+
+class XMLElementExtractor
+  def self.extract element, xml_string
+    doc = REXML::Document.new xml_string
+    return doc.elements.each(element) do |found|
+      return found.text
+    end
+  end
 end
 
 class State
@@ -246,8 +264,7 @@ elsif ARGV[0] == "spec" then
 
 elsif ARGV[0] == "upload" && ARGV[1] && ARGV[2] then
   uploader = Uploader.new ARGV[1], ARGV[2]
-  uploader.upload
-  p "done"
+  p uploader.upload
 else
   print_help
 end
