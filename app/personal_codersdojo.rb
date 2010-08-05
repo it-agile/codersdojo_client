@@ -260,13 +260,21 @@ Examples:
   helptext
 end
 
+def do_upload args
+	if args[1] and args[2] then
+	  uploader = Uploader.new args[1], args[2]
+	  p uploader.upload
+	else
+		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{args[1]}' and Argument 2 was '#{args[2]}'."
+	end
+end
+
 if ARGV[0] == "start" then
   run_from_shell
 elsif ARGV[0] == "spec" then
 
-elsif ARGV[0] == "upload" && ARGV[1] && ARGV[2] then
-  uploader = Uploader.new ARGV[1], ARGV[2]
-  p uploader.upload
+elsif ARGV[0] == "upload" then
+	do_upload ARGV
 else
   print_help
 end
