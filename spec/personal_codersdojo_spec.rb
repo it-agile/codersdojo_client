@@ -94,7 +94,7 @@ describe Uploader do
   end
 
   it "should upload a kata through a rest-interface" do
-    RestClient.should_receive(:post).with('http://localhost:3000/katas', []).and_return '<id>222</id>'
+    RestClient.should_receive(:post).with('http://www.codersdojo.com/katas', []).and_return '<id>222</id>'
     @uploader.upload_kata
   end
 
@@ -104,7 +104,7 @@ describe Uploader do
     @state_reader_mock.should_receive(:read_next_state).and_return state
     state.should_receive(:code).and_return 'code'
     state.should_receive(:time).and_return 'time'
-    RestClient.should_receive(:post).with('http://localhost:3000/katas/kata_id/states', {:code=> 'code', :created_at=>'time'})
+    RestClient.should_receive(:post).with('http://www.codersdojo.com/katas/kata_id/states', {:code=> 'code', :created_at=>'time'})
 
     @state_reader_mock.should_receive(:has_next_state).and_return nil
     @uploader.upload_states "kata_id"
