@@ -203,7 +203,8 @@ class Uploader
   end
 
   private
-  @@hostname = 'http://localhost:3000'
+  @@hostname = 'http://www.codersdojo.com'
+  #@@hostname = 'http://localhost:3000'
   @@kata_path = '/katas'
   @@state_path = '/states'
 
@@ -250,9 +251,9 @@ Commands:
  help, -h, --help \t\t Print this help text.
 
 Examples:
- ruby personal_codersdojo.rb run prime.rb
+   :/personal_codersdojo/sandbox$ ruby ../app/personal_codersdojo.rb start prime.rb
    Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
- ruby personal_codersdojo.rb upload prime.rb /1271665711
+   :/personal_codersdojo/sandbox$ ruby ../app/personal_codersdojo.rb upload prime.rb /1271665711
    Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
 
   helptext
