@@ -244,17 +244,17 @@ end
 def print_help
   puts <<-helptext
 PersonalCodersDojo automatically runs your specs/tests of a code kata.
-Usage: ruby personal_codersdojo.rb command
+Usage: ruby personal_codersdojo.rb command [options]
 Commands:
  start <kata_file> \t\t Start the spec/test runner.
  upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
  help, -h, --help \t\t Print this help text.
 
 Examples:
-   :/personal_codersdojo/sandbox$ ruby ../app/personal_codersdojo.rb start prime.rb
+   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
       Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
-   :/personal_codersdojo/sandbox$ ruby ../app/personal_codersdojo.rb upload prime.rb /1271665711
+   :/dojo/my_kata$ ruby ../personal_codersdojo.rb upload prime.rb /1271665711
       Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
 
   helptext
