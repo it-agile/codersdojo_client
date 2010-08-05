@@ -231,6 +231,18 @@ class State
 
 end
 
+class ArgumentParser
+	
+	def parse args
+		command = args[0]
+		if ["help", "start", "upload"].include? command then 
+			return command 
+		end 
+		nil
+	end
+	
+end
+
 def run_from_shell
   file = ARGV[1]
   puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."

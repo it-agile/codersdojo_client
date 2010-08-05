@@ -133,11 +133,36 @@ describe Uploader do
 end
 
 describe XMLElementExtractor do
+	
   it "should extract first element from a xml string" do
-
     xmlString = "<?xml version='1.0' encoding='UTF-8'?>\n<kata>\n  <created-at type='datetime'>2010-07-16T16:02:00+02:00</created-at>\n  <end-date type='datetime' nil='true'/>\n  <id type='integer'>60</id>\n  <short-url nil='true'/>\n  <updated-at type='datetime'>2010-07-16T16:02:00+02:00</updated-at>\n  <uuid>2a5a83dc71b8ad6565bd99f15d01e41ec1a8f3f2</uuid>\n</kata>\n"
     element = XMLElementExtractor.extract 'kata/id', xmlString
     element.should == "60"
   end
 
+end
+
+describe ArgumentParser do
+	
+	before (:each) do
+		@parser = ArgumentParser.new
+	end
+	
+	it "should reject empty or unknown commands" do
+	  command = @parser.parse []
+	  command.should == nil
+	end
+	
+	it "should reject unknown command" do
+		command = @parser.parse ["unknown_command"]
+		command.should == nil
+	end
+	
+	it "should accept commands help, start, upload" do
+		["help", "start", "upload"].each do |command|
+			result = @parser.parse [command]
+			result.should == command
+		end
+	end
+	
 end
