@@ -10,5 +10,5 @@ class RomTest < Test::Unit::TestCase
 end
 
 def prime number
-	number == 1 ? [] : [2]
+	number == 1 ? [1] : [2]
 end

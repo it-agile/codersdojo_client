@@ -286,11 +286,11 @@ class Controller
 	end
 
 	def upload args
-		if args[1] and args[2] then
-		  uploader = Uploader.new args[1], args[2]
+		if args[0] and args[1] then
+		  uploader = Uploader.new args[0], args[1]
 		  p uploader.upload
 		else
-			puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{args[1]}' and Argument 2 was '#{args[2]}'."
+			puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{args[0]}' and Argument 2 was '#{args[1]}'."
 		end
 	end
 
