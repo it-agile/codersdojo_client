@@ -242,63 +242,65 @@ class ArgumentParser
 		if command.downcase == "help" then
 			@controller.help
 		elsif command.downcase == "upload" then
-			@controller.upload
+			@controller.upload args[1..-1]
 		elsif command.downcase == "start" then
 			@controller.start
+		elsif command.downcase == "spec" then
+			# for testing purpose: do nothing special
 		else
-			raise Exception.new
+			raise ArgumentError
 		end
 	end
 	
 end
 
-def run_from_shell
-  file = ARGV[1]
-  puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."
-  dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
-  dojo.file = file
-  dojo.run_command = "ruby"
-  scheduler = Scheduler.new dojo
-  scheduler.start
-end
+class Controller
 
-def print_help
-  puts <<-helptext
-PersonalCodersDojo automatically runs your specs/tests of a code kata.
-Usage: ruby personal_codersdojo.rb command [options]
-Commands:
- start <kata_file> \t\t Start the spec/test runner.
- upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
- help, -h, --help \t\t Print this help text.
+	def help
+	  puts <<-helptext
+	PersonalCodersDojo automatically runs your specs/tests of a code kata.
+	Usage: ruby personal_codersdojo.rb command [options]
+	Commands:
+	 start <kata_file> \t\t Start the spec/test runner.
+	 upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
+	 help, -h, --help \t\t Print this help text.
 
-Examples:
-   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
-      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
+	Examples:
+	   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
+	      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
-   :/dojo/my_kata$ ruby ../personal_codersdojo.rb upload prime.rb /1271665711
-      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
+	   :/dojo/my_kata$ ruby ../personal_codersdojo.rb upload prime.rb /1271665711
+	      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
 
-  helptext
-end
-
-def do_upload args
-	if args[1] and args[2] then
-	  uploader = Uploader.new args[1], args[2]
-	  p uploader.upload
-	else
-		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{args[1]}' and Argument 2 was '#{args[2]}'."
+	  helptext
 	end
+
+	def start
+	  file = ARGV[1]
+	  puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."
+	  dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
+	  dojo.file = file
+	  dojo.run_command = "ruby"
+	  scheduler = Scheduler.new dojo
+	  scheduler.start
+	end
+
+	def upload args
+		if args[1] and args[2] then
+		  uploader = Uploader.new args[1], args[2]
+		  p uploader.upload
+		else
+			puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{args[1]}' and Argument 2 was '#{args[2]}'."
+		end
+	end
+
 end
 
-arg_parser = ArgumentParser.new nil
-command = arg_parser.parse ARGV
-
-if command == "start" then
-  run_from_shell
-elsif command == "spec" then
-
-elsif command == "upload" then
-	do_upload ARGV
-else
-  print_help
+# entry from shell
+controller = Controller.new
+begin
+	arg_parser = ArgumentParser.new controller
+	command = arg_parser.parse ARGV
+rescue ArgumentError
+	Controller.help
 end

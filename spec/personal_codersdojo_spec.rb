@@ -149,15 +149,12 @@ describe ArgumentParser do
 		@parser = ArgumentParser.new @controller_mock
 	end
 	
-	it "should reject empty or unknown commands" do
-	  command = @parser.parse []
-	  command.should == nil
+	it "should reject empty command" do
+		lambda{@parser.parse []}.should raise_error
 	end
 	
 	it "should reject unknown command" do
-		command = @parser.parse ["unknown_command"]
-		command.should_throw_exception
-		command.should == nil
+		lambda{@parser.parse "unknown command"}.should raise_error
 	end
 	
 	it "should accept help command" do
@@ -171,8 +168,8 @@ describe ArgumentParser do
 	end
 	
 	it "should accept upload command" do
-		@controller_mock.should_receive(:upload).with()
-		@parser.parse ["upload"]
+		@controller_mock.should_receive(:upload).with [1,2]
+		@parser.parse ["upload", 1, 2]
 	end
 	
 	it "should accept uppercase commands" do
