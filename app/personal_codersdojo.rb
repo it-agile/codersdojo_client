@@ -233,12 +233,21 @@ end
 
 class ArgumentParser
 	
+	def initialize controller
+		@controller = controller
+	end
+	
 	def parse args
-		command = args[0]
-		if ["help", "start", "upload"].include? command then 
-			return command 
-		end 
-		nil
+		command = args[0] ? args[0] : ""
+		if command.downcase == "help" then
+			@controller.help
+		elsif command.downcase == "upload" then
+			@controller.upload
+		elsif command.downcase == "start" then
+			@controller.start
+		else
+			raise Exception.new
+		end
 	end
 	
 end
@@ -281,11 +290,14 @@ def do_upload args
 	end
 end
 
-if ARGV[0] == "start" then
-  run_from_shell
-elsif ARGV[0] == "spec" then
+arg_parser = ArgumentParser.new nil
+command = arg_parser.parse ARGV
 
-elsif ARGV[0] == "upload" then
+if command == "start" then
+  run_from_shell
+elsif command == "spec" then
+
+elsif command == "upload" then
 	do_upload ARGV
 else
   print_help

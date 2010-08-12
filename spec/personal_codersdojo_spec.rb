@@ -145,7 +145,8 @@ end
 describe ArgumentParser do
 	
 	before (:each) do
-		@parser = ArgumentParser.new
+		@controller_mock = mock.as_null_object
+		@parser = ArgumentParser.new @controller_mock
 	end
 	
 	it "should reject empty or unknown commands" do
@@ -155,14 +156,28 @@ describe ArgumentParser do
 	
 	it "should reject unknown command" do
 		command = @parser.parse ["unknown_command"]
+		command.should_throw_exception
 		command.should == nil
 	end
 	
-	it "should accept commands help, start, upload" do
-		["help", "start", "upload"].each do |command|
-			result = @parser.parse [command]
-			result.should == command
-		end
+	it "should accept help command" do
+		@controller_mock.should_receive(:help).with()
+		@parser.parse ["help"]
+	end
+	
+	it "should accept start command" do
+		@controller_mock.should_receive(:start).with()
+		@parser.parse ["start"]
+	end
+	
+	it "should accept upload command" do
+		@controller_mock.should_receive(:upload).with()
+		@parser.parse ["upload"]
+	end
+	
+	it "should accept uppercase commands" do
+		@controller_mock.should_receive(:help).with()
+		@parser.parse ["HELP"]
 	end
 	
 end
