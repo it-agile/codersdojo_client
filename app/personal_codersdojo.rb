@@ -256,28 +256,17 @@ end
 
 class Controller
 
+	def initialize view
+		@view = view
+	end
+
 	def help
-	  puts <<-helptext
-	PersonalCodersDojo automatically runs your specs/tests of a code kata.
-	Usage: ruby personal_codersdojo.rb command [options]
-	Commands:
-	 start <kata_file> \t\t Start the spec/test runner.
-	 upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
-	 help, -h, --help \t\t Print this help text.
-
-	Examples:
-	   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
-	      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
-
-	   :/dojo/my_kata$ ruby ../personal_codersdojo.rb upload prime.rb /1271665711
-	      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
-
-	  helptext
+		@view.show_help
 	end
 
 	def start
 	  file = ARGV[1]
-	  puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."
+	  @view.show_start_kata file
 	  dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
 	  dojo.file = file
 	  dojo.run_command = "ruby"
@@ -290,17 +279,56 @@ class Controller
 		  uploader = Uploader.new args[0], args[1]
 		  p uploader.upload
 		else
-			puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{args[0]}' and Argument 2 was '#{args[1]}'."
+			@view.show_missing_upload_arguments_error args[0], args[1]
 		end
 	end
 
 end
 
+
+class ConsoleView
+	
+	def show_help
+		puts <<-helptext
+		PersonalCodersDojo automatically runs your specs/tests of a code kata.
+		Usage: ruby personal_codersdojo.rb command [options]
+		Commands:
+		 start <kata_file> \t\t Start the spec/test runner.
+		 upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
+		 help, -h, --help \t\t Print this help text.
+
+		Examples:
+		   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
+		      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
+
+		   :/dojo/my_kata$ ruby ../personal_codersdojo.rb upload prime.rb /1271665711
+		      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
+
+		helptext
+	end
+	
+	def show_start_kata file
+	  puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."		
+	end
+	
+	def show_missing_upload_arguments_error arg1, arg2
+		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}' and Argument 2 was '#{arg2}'."
+	end
+	
+end
+
+def called_from_spec args
+	args[0] == "spec"
+end
+
 # entry from shell
-controller = Controller.new
-begin
-	arg_parser = ArgumentParser.new controller
-	command = arg_parser.parse ARGV
-rescue ArgumentError
-	Controller.help
+if not called_from_spec(ARGV) then
+	view = ConsoleView.new
+	controller = Controller.new view
+	begin
+		arg_parser = ArgumentParser.new controller
+		command = arg_parser.parse ARGV
+	rescue ArgumentError
+		controller.help
+	end
 end
