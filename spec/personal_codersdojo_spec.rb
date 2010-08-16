@@ -82,6 +82,7 @@ describe StateReader do
     state.result.should == "result"
     @state_reader.next_step.should == 1
   end
+
 end
 
 describe Uploader do
@@ -115,18 +116,6 @@ describe Uploader do
         @uploader.upload_kata
       end
 
-      it "should upload states through a rest interface" do
-        state = mock State
-        @state_reader_mock.should_receive(:has_next_state).and_return 'true'
-        @state_reader_mock.should_receive(:read_next_state).and_return state
-        state.should_receive(:code).and_return 'code'
-        state.should_receive(:time).and_return 'time'
-        RestClient.should_receive(:post).with('http://www.codersdojo.com/katas/kata_id/states', {:code=> 'code', :created_at=>'time'})
-
-        @state_reader_mock.should_receive(:has_next_state).and_return nil
-        @uploader.upload_states "kata_id"
-      end
-
       it "should upload kata and states" do
         @uploader.stub(:upload_kata).and_return 'kata_xml'
         XMLElementExtractor.should_receive(:extract).with('kata/id', 'kata_xml').and_return 'kata_id'
@@ -146,7 +135,36 @@ describe Uploader do
         help_text = @uploader.upload
         help_text.should == 'You need at least two states'
       end
+
+      context 'states' do
+        it "should read all states and starts/ends progress" do
+          @state_reader_mock.should_receive(:state_count).and_return(1)
+          Progress.should_receive(:wirite_empty_progress).with(1)
+
+          @state_reader_mock.should_receive(:has_next_state).and_return 'true'
+          @uploader.should_receive(:upload_state)
+          @state_reader_mock.should_receive(:has_next_state).and_return nil
+
+          Progress.should_receive(:end)
+
+          @uploader.upload_states "kata_id"
+        end
+
+
+        it "through a rest interface and log process" do
+          state = mock State
+          @state_reader_mock.should_receive(:read_next_state).and_return state
+          state.should_receive(:code).and_return 'code'
+          state.should_receive(:time).and_return 'time'
+          RestClient.should_receive(:post).with('http://www.codersdojo.com/katas/kata_id/states', {:code=> 'code', :created_at=>'time'})
+          Progress.should_receive(:next)
+          @uploader.upload_state "kata_id"
+        end
+
+      end
+
     end
+
   end
 
 describe XMLElementExtractor do
@@ -193,5 +211,27 @@ describe ArgumentParser do
 		@controller_mock.should_receive(:help).with()
 		@parser.parse ["HELP"]
 	end
-	
+
+end
+
+describe Progress do
+
+  it 'should print infos and empty progress in initialization' do
+    STDOUT.should_receive(:print).with("2 states to upload")
+    STDOUT.should_receive(:print).with("[  ]")
+    STDOUT.should_receive(:print).with("\b\b\b")
+    Progress.wirite_empty_progress 2
+  end
+
+  it 'should print dots and flush in next' do
+    STDOUT.should_receive(:print).with(".")
+    STDOUT.should_receive(:flush) 
+    Progress.next
+  end
+
+  it 'should print empty line in end' do
+    STDOUT.should_receive(:puts)
+    Progress.end
+  end
+
 end

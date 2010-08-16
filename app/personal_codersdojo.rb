@@ -117,9 +117,12 @@ class StateReader
     @next_step = 0
   end
 
+  def state_count
+    Dir.new(@filename_formatter.session_dir @session_id).count - 2
+  end
+
   def enough_states?
-    dir = Dir.new(@filename_formatter.session_dir @session_id)
-    dir.count >= 4
+    state_count >= 2
   end
 
   def get_state_dir
@@ -150,8 +153,8 @@ class FilenameFormatter
 
 
   def source_code_file state_dir
-       Dir.entries(state_dir).each{|file|
-        return state_file state_dir, file unless file =='..' || file == '.' ||file == RESULT_FILE }
+    Dir.entries(state_dir).each { |file|
+      return state_file state_dir, file unless file =='..' || file == '.' ||file == RESULT_FILE }
   end
 
   def result_file state_dir
@@ -168,27 +171,53 @@ class FilenameFormatter
   end
 
   def session_dir session_id
-	  "#{CODERSDOJO_WORKSPACE}/#{session_id}"
+    "#{CODERSDOJO_WORKSPACE}/#{session_id}"
   end
 
+end
+
+class Progress
+
+  def self.wirite_empty_progress states
+    STDOUT.print "#{states} states to upload"
+    STDOUT.print "["+" "*states+"]"
+    STDOUT.print "\b"*(states+1)
+    STDOUT.flush
+  end
+
+  def self.next
+    STDOUT.print "."
+    STDOUT.flush
+  end
+
+  def self.end
+    STDOUT.puts
+  end
 end
 
 class Uploader
 
   def initialize (session_dir, state_reader = StateReader.new(Shell.new))
     @state_reader = state_reader
-    @state_reader.session_id = session_dir.gsub('.codersdojo/','')
+    @state_reader.session_id = session_dir.gsub('.codersdojo/', '')
   end
 
   def upload_kata
     RestClient.post "#{@@hostname}#{@@kata_path}", []
   end
 
+  def upload_state(kata_id)
+    state = @state_reader.read_next_state
+    RestClient.post "#{@@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :created_at => state.time}
+    Progress.next
+  end
+
   def upload_states(kata_id)
+     Progress.wirite_empty_progress @state_reader.state_count
     while @state_reader.has_next_state
-      state = @state_reader.read_next_state
-      RestClient.post "#{@@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :created_at => state.time}
+      upload_state kata_id
     end
+    Progress.end
   end
 
   def upload_kata_and_states
@@ -198,7 +227,7 @@ class Uploader
   end
 
   def upload
-     begin
+    begin
       require 'rest_client'
     rescue LoadError
       return 'Cant find gem rest-client. Please install it.'
@@ -237,64 +266,64 @@ class State
 end
 
 class ArgumentParser
-	
-	def initialize controller
-		@controller = controller
-	end
-	
-	def parse args
-		command = args[0] ? args[0] : ""
-		if command.downcase == "help" then
-			@controller.help
-		elsif command.downcase == "upload" then
-			@controller.upload args[1..-1]
-		elsif command.downcase == "start" then
-			@controller.start
-		elsif command.downcase == "spec" then
-			# for testing purpose: do nothing special
-		else
-			raise ArgumentError
-		end
-	end
-	
+
+  def initialize controller
+    @controller = controller
+  end
+
+  def parse args
+    command = args[0] ? args[0] : ""
+    if command.downcase == "help" then
+      @controller.help
+    elsif command.downcase == "upload" then
+      @controller.upload args[1..-1]
+    elsif command.downcase == "start" then
+      @controller.start
+    elsif command.downcase == "spec" then
+      # for testing purpose: do nothing special
+    else
+      raise ArgumentError
+    end
+  end
+
 end
 
 class Controller
 
-	def initialize view
-		@view = view
-	end
+  def initialize view
+    @view = view
+  end
 
-	def help
-		@view.show_help
-	end
+  def help
+    @view.show_help
+  end
 
-	def start
-	  file = ARGV[1]
-	  @view.show_start_kata file
-	  dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
-	  dojo.file = file
-	  dojo.run_command = "ruby"
-	  scheduler = Scheduler.new dojo
-	  scheduler.start
-	end
+  def start
+    file = ARGV[1]
+    @view.show_start_kata file
+    dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
+    dojo.file = file
+    dojo.run_command = "ruby"
+    scheduler = Scheduler.new dojo
+    scheduler.start
+  end
 
-	def upload args
-		if args[0] then
-		  uploader = Uploader.new args[0]
-		  p uploader.upload
-		else
-			@view.show_missing_upload_arguments_error args[0]
-		end
-	end
+  def upload args
+    if args[0] then
+      uploader = Uploader.new args[0]
+      p uploader.upload
+    else
+      @view.show_missing_upload_arguments_error args[0]
+    end
+  end
 
 end
 
 
 class ConsoleView
-	
-	def show_help
-		puts <<-helptext
+
+  def show_help
+    puts <<-helptext
 		PersonalCodersDojo automatically runs your specs/tests of a code kata.
 		Usage: ruby personal_codersdojo.rb command [options]
 		Commands:
@@ -309,31 +338,31 @@ class ConsoleView
 		   :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb upload  ../sandbox/.codersdojo/1271665711
 		      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
 
-		helptext
-	end
-	
-	def show_start_kata file
-	  puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."		
-	end
-	
-	def show_missing_upload_arguments_error arg1, arg2
-		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}'."
-	end
-	
+    helptext
+  end
+
+  def show_start_kata file
+    puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."
+  end
+
+  def show_missing_upload_arguments_error arg1, arg2
+    puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}'."
+  end
+
 end
 
 def called_from_spec args
-	args[0] == "spec"
+  args[0] == "spec"
 end
 
 # entry from shell
 if not called_from_spec(ARGV) then
-	view = ConsoleView.new
-	controller = Controller.new view
-	begin
-		arg_parser = ArgumentParser.new controller
-		command = arg_parser.parse ARGV
-	rescue ArgumentError
-		controller.help
-	end
+  view = ConsoleView.new
+  controller = Controller.new view
+  begin
+    arg_parser = ArgumentParser.new controller
+    command = arg_parser.parse ARGV
+  rescue ArgumentError
+    controller.help
+  end
 end
