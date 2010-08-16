@@ -116,9 +116,12 @@ class StateReader
     @next_step = 0
   end
 
+  def state_count
+    Dir.new(@filename_formatter.session_dir @session_id).count - 2
+  end
+
   def enough_states?
-    dir = Dir.new(@filename_formatter.session_dir @session_id)
-    dir.count >= 4
+    state_count >= 2
   end
 
   def get_state_dir
@@ -143,13 +146,14 @@ end
 
 class FilenameFormatter
 
+  CODERSDOJO_WORKSPACE = ".codersdojo"
   RESULT_FILE = "result.txt"
   STATE_DIR_PREFIX = "state_"
 
 
   def source_code_file state_dir
-       Dir.entries(state_dir).each{|file|
-        return state_file state_dir, file unless file =='..' || file == '.' ||file == RESULT_FILE }
+    Dir.entries(state_dir).each { |file|
+      return state_file state_dir, file unless file =='..' || file == '.' ||file == RESULT_FILE }
   end
 
   def result_file state_dir
@@ -166,27 +170,53 @@ class FilenameFormatter
   end
 
   def session_dir session_id
-    "#{session_id}"
+    "#{CODERSDOJO_WORKSPACE}/#{session_id}"
   end
 
 end
 
+class Progress
+
+  def self.wirite_empty_progress states
+    STDOUT.print "#{states} states to upload"
+    STDOUT.print "["+" "*states+"]"
+    STDOUT.print "\b"*(states+1)
+    STDOUT.flush
+  end
+
+  def self.next
+    STDOUT.print "."
+    STDOUT.flush
+  end
+
+  def self.end
+    STDOUT.puts
+  end
+end
+
 class Uploader
 
-  def initialize (session_id, state_reader = StateReader.new(Shell.new))
+  def initialize (session_dir, state_reader = StateReader.new(Shell.new))
     @state_reader = state_reader
-    @state_reader.session_id = session_id
+    @state_reader.session_id = session_dir.gsub('.codersdojo/', '')
   end
 
   def upload_kata
     RestClient.post "#{@@hostname}#{@@kata_path}", []
   end
 
+  def upload_state(kata_id)
+    state = @state_reader.read_next_state
+    RestClient.post "#{@@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :created_at => state.time}
+    Progress.next
+  end
+
   def upload_states(kata_id)
+     Progress.wirite_empty_progress @state_reader.state_count
     while @state_reader.has_next_state
-      state = @state_reader.read_next_state
-      RestClient.post "#{@@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :created_at => state.time}
+      upload_state kata_id
     end
+    Progress.end
   end
 
   def upload_kata_and_states
@@ -196,7 +226,7 @@ class Uploader
   end
 
   def upload
-     begin
+    begin
       require 'rest_client'
     rescue LoadError
       return 'Cant find gem rest-client. Please install it.'
@@ -301,19 +331,19 @@ class ConsoleView
 	
 	def show_usage
 		puts <<-helptext
-		Usage: ruby personal_codersdojo.rb command [options]
-		Commands:
-		 start <kata_file> \t\t Start the spec/test runner.
-		 upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
-		 help, -h, --help \t\t Print this help text.
+Usage: ruby personal_codersdojo.rb command [options]
+Commands:
+  start <kata_file> \t\t Start the spec/test runner.
+  upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
+  help, -h, --help \t\t Print this help text.
 
-		Examples:
-		   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
-		      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
+Examples:
+    :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb start prime.rb
+      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
-		   :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb upload  ../sandbox/.codersdojo/1271665711
-		      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
-		helptext
+    :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb upload  ../sandbox/.codersdojo/1271665711
+      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
+helptext
 	end
 	
 	def show_start_kata file
@@ -341,7 +371,7 @@ class ConsoleView
 end
 
 def called_from_spec args
-	args[0] == "spec"
+  args[0] == "spec"
 end
 
 # entry from shell

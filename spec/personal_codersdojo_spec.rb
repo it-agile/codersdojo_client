@@ -7,8 +7,9 @@ require "spec"
 
 describe PersonalCodersDojo, "in run mode" do
 
+  WORKSPACE_DIR = ".codersdojo"
   SESSION_ID = "id0815"
-  SESSION_DIR = "#{SESSION_ID}"
+  SESSION_DIR = "#{WORKSPACE_DIR}/#{SESSION_ID}"
   STATE_DIR_PREFIX = "#{SESSION_DIR}/state_"
 
   before (:each) do
@@ -72,7 +73,7 @@ describe StateReader do
 
   it "should read a stored kata state" do
     @shell_mock.should_receive(:ctime).with("#{STATE_DIR_PREFIX}0").and_return @a_time
-    Dir.should_receive(:entries).with("id0815/state_0").and_return(['.','..','file.rb', 'result.txt'])
+    Dir.should_receive(:entries).with("#{STATE_DIR_PREFIX}0").and_return(['.','..','file.rb', 'result.txt'])
     @shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/file.rb").and_return "source code"
     @shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/result.txt").and_return "result"
     state = @state_reader.read_next_state
@@ -81,61 +82,90 @@ describe StateReader do
     state.result.should == "result"
     @state_reader.next_step.should == 1
   end
+
 end
 
 describe Uploader do
 
   before (:each) do
     @state_reader_mock = mock StateReader
-    @state_reader_mock.should_receive(:session_id=).with("session")
-    @uploader = Uploader.new "session", @state_reader_mock
   end
 
-  it "should return error message if rest-client not installed" do
-    @uploader.stub(:require).and_raise(LoadError)
-    message = @uploader.upload
-    message.should == 'Cant find gem rest-client. Please install it.'
+  it "should convert session-dir to session-id" do
+    @state_reader_mock.should_receive(:session_id=).with("session_id")
+    Uploader.new ".codersdojo/session_id", @state_reader_mock
   end
 
+    context'upload' do
 
-  it "should upload a kata through a rest-interface" do
-    RestClient.should_receive(:post).with('http://www.codersdojo.com/katas', []).and_return '<id>222</id>'
-    @uploader.upload_kata
+      before (:each) do
+        @state_reader_mock = mock StateReader
+        @state_reader_mock.should_receive(:session_id=).with("path_to_kata")
+        @uploader = Uploader.new "path_to_kata", @state_reader_mock
+      end
+
+      it "should return error message if rest-client not installed" do
+        @uploader.stub(:require).and_raise(LoadError)
+        message = @uploader.upload
+        message.should == 'Cant find gem rest-client. Please install it.'
+      end
+
+
+      it "should upload a kata through a rest-interface" do
+        RestClient.should_receive(:post).with('http://www.codersdojo.com/katas', []).and_return '<id>222</id>'
+        @uploader.upload_kata
+      end
+
+      it "should upload kata and states" do
+        @uploader.stub(:upload_kata).and_return 'kata_xml'
+        XMLElementExtractor.should_receive(:extract).with('kata/id', 'kata_xml').and_return 'kata_id'
+        @uploader.stub(:upload_states).with 'kata_id'
+        XMLElementExtractor.should_receive(:extract).with('kata/short-url', 'kata_xml').and_return 'short_url'
+        @uploader.upload_kata_and_states
+      end
+
+      it 'should upload if enugh states are there' do
+        @state_reader_mock.should_receive(:enough_states?).and_return 'true'
+        @uploader.stub!(:upload_kata_and_states).and_return 'kata_link'
+        @uploader.upload
+      end
+
+      it 'should return a helptext if not enught states are there' do
+        @state_reader_mock.should_receive(:enough_states?).and_return nil
+        help_text = @uploader.upload
+        help_text.should == 'You need at least two states'
+      end
+
+      context 'states' do
+        it "should read all states and starts/ends progress" do
+          @state_reader_mock.should_receive(:state_count).and_return(1)
+          Progress.should_receive(:wirite_empty_progress).with(1)
+
+          @state_reader_mock.should_receive(:has_next_state).and_return 'true'
+          @uploader.should_receive(:upload_state)
+          @state_reader_mock.should_receive(:has_next_state).and_return nil
+
+          Progress.should_receive(:end)
+
+          @uploader.upload_states "kata_id"
+        end
+
+
+        it "through a rest interface and log process" do
+          state = mock State
+          @state_reader_mock.should_receive(:read_next_state).and_return state
+          state.should_receive(:code).and_return 'code'
+          state.should_receive(:time).and_return 'time'
+          RestClient.should_receive(:post).with('http://www.codersdojo.com/katas/kata_id/states', {:code=> 'code', :created_at=>'time'})
+          Progress.should_receive(:next)
+          @uploader.upload_state "kata_id"
+        end
+
+      end
+
+    end
+
   end
-
-  it "should upload states through a rest interface" do
-    state = mock State
-    @state_reader_mock.should_receive(:has_next_state).and_return 'true'
-    @state_reader_mock.should_receive(:read_next_state).and_return state
-    state.should_receive(:code).and_return 'code'
-    state.should_receive(:time).and_return 'time'
-    RestClient.should_receive(:post).with('http://www.codersdojo.com/katas/kata_id/states', {:code=> 'code', :created_at=>'time'})
-
-    @state_reader_mock.should_receive(:has_next_state).and_return nil
-    @uploader.upload_states "kata_id"
-  end
-
-  it "should upload kata and states" do
-    @uploader.stub(:upload_kata).and_return 'kata_xml'
-    XMLElementExtractor.should_receive(:extract).with('kata/id', 'kata_xml').and_return 'kata_id'
-    @uploader.stub(:upload_states).with 'kata_id'
-    XMLElementExtractor.should_receive(:extract).with('kata/short-url', 'kata_xml').and_return 'short_url'
-    @uploader.upload_kata_and_states
-  end
-
-  it 'should upload if enugh states are there' do
-      @state_reader_mock.should_receive(:enough_states?).and_return 'true'
-      @uploader.stub!(:upload_kata_and_states).and_return 'kata_link'
-      @uploader.upload
-  end
-
-  it 'should return a helptext if not enught states are there' do
-      @state_reader_mock.should_receive(:enough_states?).and_return nil
-      help_text = @uploader.upload
-      help_text.should == 'You need at least two states'
-  end
-
-end
 
 describe XMLElementExtractor do
 	
@@ -181,5 +211,27 @@ describe ArgumentParser do
 		@controller_mock.should_receive(:help).with()
 		@parser.parse ["HELP"]
 	end
-	
+
+end
+
+describe Progress do
+
+  it 'should print infos and empty progress in initialization' do
+    STDOUT.should_receive(:print).with("2 states to upload")
+    STDOUT.should_receive(:print).with("[  ]")
+    STDOUT.should_receive(:print).with("\b\b\b")
+    Progress.wirite_empty_progress 2
+  end
+
+  it 'should print dots and flush in next' do
+    STDOUT.should_receive(:print).with(".")
+    STDOUT.should_receive(:flush) 
+    Progress.next
+  end
+
+  it 'should print empty line in end' do
+    STDOUT.should_receive(:puts)
+    Progress.end
+  end
+
 end
