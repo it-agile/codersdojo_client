@@ -21,7 +21,6 @@ end
 
 class PersonalCodersDojo
 
-
   attr_accessor :file, :run_command
 
   def initialize shell, session_provider
@@ -237,16 +236,16 @@ class ArgumentParser
 		@controller = controller
 	end
 	
-	def parse args
-		command = args[0] ? args[0] : ""
+	def parse params
+		command = params[0] ? params[0] : ""
 		if command.downcase == "help" then
 			@controller.help
 		elsif command.downcase == "upload" then
-			@controller.upload args[1..-1]
+			@controller.upload params[1], params[2]
 		elsif command.downcase == "start" then
-			@controller.start
+			@controller.start params[1]
 		elsif command.downcase == "spec" then
-			# for testing purpose: do nothing special
+			# 'spec" is for testing purpose only: do nothing special
 		else
 			raise ArgumentError
 		end
@@ -264,8 +263,11 @@ class Controller
 		@view.show_help
 	end
 
-	def start
-	  file = ARGV[1]
+	def start file
+		if not file then
+			@view.show_missing_start_argument_error
+			return
+		end
 	  @view.show_start_kata file
 	  dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
 	  dojo.file = file
@@ -274,12 +276,12 @@ class Controller
 	  scheduler.start
 	end
 
-	def upload args
-		if args[0] and args[1] then
-		  uploader = Uploader.new args[0], args[1]
-		  p uploader.upload
+	def upload source_file, session_directory
+		if source_file and session_directory then
+		  uploader = Uploader.new source_file, session_directory
+		  @view.show_upload_result uploader.upload
 		else
-			@view.show_missing_upload_arguments_error args[0], args[1]
+			@view.show_missing_upload_arguments_error source_file, session_directory
 		end
 	end
 
@@ -289,21 +291,24 @@ end
 class ConsoleView
 	
 	def show_help
+		puts "PersonalCodersDojo automatically runs your specs/tests of a code kata."
+		show_usage
+	end
+	
+	def show_usage
 		puts <<-helptext
-		PersonalCodersDojo automatically runs your specs/tests of a code kata.
-		Usage: ruby personal_codersdojo.rb command [options]
-		Commands:
-		 start <kata_file> \t\t Start the spec/test runner.
-		 upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
-		 help, -h, --help \t\t Print this help text.
+Usage: ruby personal_codersdojo.rb command [options]
+Commands:
+  start <kata_file> \t\t Start the spec/test runner.
+  upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
+  help, -h, --help \t\t Print this help text.
 
-		Examples:
-		   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
-		      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
+  Examples:
+    :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
+      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
-		   :/dojo/my_kata$ ruby ../personal_codersdojo.rb upload prime.rb /1271665711
-		      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
-
+    :/dojo/my_kata$ ruby ../personal_codersdojo.rb upload prime.rb /1271665711
+      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
 		helptext
 	end
 	
@@ -311,8 +316,22 @@ class ConsoleView
 	  puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."		
 	end
 	
+	def show_missing_start_argument_error
+		puts "Command <start> recognized but no argument was provided (one argument is required).\n\n"
+		show_usage
+	end
+	
 	def show_missing_upload_arguments_error arg1, arg2
-		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}' and Argument 2 was '#{arg2}'."
+		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}' and Argument 2 was '#{arg2}'.\n\n"
+		show_usage
+	end
+	
+	def show_upload_result result
+		puts result
+	end
+	
+	def show_socket_error command
+		puts "Encountered network error while <#{command}>."
 	end
 	
 end
@@ -330,5 +349,7 @@ if not called_from_spec(ARGV) then
 		command = arg_parser.parse ARGV
 	rescue ArgumentError
 		controller.help
+	rescue SocketError
+		view.show_socket_error ARGV[0]
 	end
 end

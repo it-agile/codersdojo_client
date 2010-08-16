@@ -163,12 +163,12 @@ describe ArgumentParser do
 	end
 	
 	it "should accept start command" do
-		@controller_mock.should_receive(:start).with()
-		@parser.parse ["start"]
+		@controller_mock.should_receive(:start).with("aFile")
+		@parser.parse ["start", "aFile"]
 	end
 	
 	it "should accept upload command" do
-		@controller_mock.should_receive(:upload).with [1,2]
+		@controller_mock.should_receive(:upload).with 1,2
 		@parser.parse ["upload", 1, 2]
 	end
 	
