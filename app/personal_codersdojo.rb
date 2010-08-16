@@ -144,6 +144,7 @@ end
 
 class FilenameFormatter
 
+  CODERSDOJO_WORKSPACE = ".codersdojo"
   RESULT_FILE = "result.txt"
   STATE_DIR_PREFIX = "state_"
 
@@ -167,16 +168,16 @@ class FilenameFormatter
   end
 
   def session_dir session_id
-    "#{session_id}"
+	  "#{CODERSDOJO_WORKSPACE}/#{session_id}"
   end
 
 end
 
 class Uploader
 
-  def initialize (session_id, state_reader = StateReader.new(Shell.new))
+  def initialize (session_dir, state_reader = StateReader.new(Shell.new))
     @state_reader = state_reader
-    @state_reader.session_id = session_id
+    @state_reader.session_id = session_dir.gsub('.codersdojo/','')
   end
 
   def upload_kata
@@ -302,7 +303,7 @@ class ConsoleView
 		 help, -h, --help \t\t Print this help text.
 
 		Examples:
-		   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
+		   :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb start prime.rb
 		      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
 		   :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb upload  ../sandbox/.codersdojo/1271665711
