@@ -299,7 +299,7 @@ class Controller
 
 	def start file
 		if not file then
-			@view.show_missing_start_argument_error
+			@view.show_missing_command_argument_error "start"
 			return
 		end
 	  @view.show_start_kata file
@@ -315,7 +315,7 @@ class Controller
 		  uploader = Uploader.new session_directory
 		  p uploader.upload
 		else
-			@view.show_missing_upload_arguments_error session_directory
+			@view.show_missing_command_argument_error "upload"
 		end
 	end
 
@@ -350,13 +350,8 @@ helptext
 	  puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."		
 	end
 	
-	def show_missing_start_argument_error
-		puts "Command <start> recognized but no argument was provided (one argument is required).\n\n"
-		show_usage
-	end
-	
-	def show_missing_upload_arguments_error arg1, arg2
-		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}'."
+	def show_missing_command_argument_error command
+		puts "Command <#{command}> recognized but no argument was provided (one argument is required).\n\n"
 		show_usage
 	end
 	
