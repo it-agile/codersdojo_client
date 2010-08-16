@@ -1,6 +1,5 @@
 require "rubygems"
 require "tempfile"
-require 'rest_client'
 require "rexml/document"
 
 class Scheduler
@@ -110,7 +109,7 @@ end
 
 class StateReader
 
-  attr_accessor :session_id, :next_step, :source_code_file
+  attr_accessor :session_id, :next_step
 
   def initialize shell
     @filename_formatter = FilenameFormatter.new
@@ -135,7 +134,7 @@ class StateReader
     state = State.new
     state_dir = get_state_dir
     state.time = @shell.ctime state_dir
-    state.code = @shell.read_file @filename_formatter.source_code_file(state_dir, @source_code_file)
+    state.code = @shell.read_file @filename_formatter.source_code_file(state_dir)
     state.result = @shell.read_file @filename_formatter.result_file(state_dir)
     @next_step += 1
     state
@@ -145,12 +144,13 @@ end
 
 class FilenameFormatter
 
-  CODERSDOJO_WORKSPACE = ".codersdojo"
   RESULT_FILE = "result.txt"
   STATE_DIR_PREFIX = "state_"
 
-  def source_code_file state_dir, source_code_file
-    state_file state_dir, source_code_file
+
+  def source_code_file state_dir
+       Dir.entries(state_dir).each{|file|
+        return state_file state_dir, file unless file =='..' || file == '.' ||file == RESULT_FILE }
   end
 
   def result_file state_dir
@@ -167,16 +167,15 @@ class FilenameFormatter
   end
 
   def session_dir session_id
-    "#{CODERSDOJO_WORKSPACE}/#{session_id}"
+    "#{session_id}"
   end
 
 end
 
 class Uploader
 
-  def initialize (source_file, session_id, state_reader = StateReader.new(Shell.new))
+  def initialize (session_id, state_reader = StateReader.new(Shell.new))
     @state_reader = state_reader
-    @state_reader.source_code_file = source_file
     @state_reader.session_id = session_id
   end
 
@@ -198,6 +197,11 @@ class Uploader
   end
 
   def upload
+     begin
+      require 'rest_client'
+    rescue LoadError
+      return 'Cant find gem rest-client. Please install it.'
+    end
     return upload_kata_and_states if @state_reader.enough_states?
     return "You need at least two states"
   end
@@ -275,11 +279,11 @@ class Controller
 	end
 
 	def upload args
-		if args[0] and args[1] then
-		  uploader = Uploader.new args[0], args[1]
+		if args[0] then
+		  uploader = Uploader.new args[0]
 		  p uploader.upload
 		else
-			@view.show_missing_upload_arguments_error args[0], args[1]
+			@view.show_missing_upload_arguments_error args[0]
 		end
 	end
 
@@ -301,7 +305,7 @@ class ConsoleView
 		   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
 		      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
-		   :/dojo/my_kata$ ruby ../personal_codersdojo.rb upload prime.rb /1271665711
+		   :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb upload  ../sandbox/.codersdojo/1271665711
 		      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
 
 		helptext
@@ -312,7 +316,7 @@ class ConsoleView
 	end
 	
 	def show_missing_upload_arguments_error arg1, arg2
-		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}' and Argument 2 was '#{arg2}'."
+		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}'."
 	end
 	
 end

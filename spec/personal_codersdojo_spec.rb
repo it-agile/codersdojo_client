@@ -7,9 +7,8 @@ require "spec"
 
 describe PersonalCodersDojo, "in run mode" do
 
-  WORKSPACE_DIR = ".codersdojo"
   SESSION_ID = "id0815"
-  SESSION_DIR = "#{WORKSPACE_DIR}/#{SESSION_ID}"
+  SESSION_DIR = "#{SESSION_ID}"
   STATE_DIR_PREFIX = "#{SESSION_DIR}/state_"
 
   before (:each) do
@@ -68,12 +67,12 @@ describe StateReader do
     @a_time = Time.new
     @shell_mock = mock
     @state_reader = StateReader.new @shell_mock
-    @state_reader.source_code_file = "file.rb"
     @state_reader.session_id = "id0815"
   end
 
   it "should read a stored kata state" do
     @shell_mock.should_receive(:ctime).with("#{STATE_DIR_PREFIX}0").and_return @a_time
+    Dir.should_receive(:entries).with("id0815/state_0").and_return(['.','..','file.rb', 'result.txt'])
     @shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/file.rb").and_return "source code"
     @shell_mock.should_receive(:read_file).with("#{STATE_DIR_PREFIX}0/result.txt").and_return "result"
     state = @state_reader.read_next_state
@@ -88,17 +87,23 @@ describe Uploader do
 
   before (:each) do
     @state_reader_mock = mock StateReader
-    @state_reader_mock.should_receive(:source_code_file=).with("ruby.file")
     @state_reader_mock.should_receive(:session_id=).with("session")
-    @uploader = Uploader.new "ruby.file", "session", @state_reader_mock
+    @uploader = Uploader.new "session", @state_reader_mock
   end
+
+  it "should return error message if rest-client not installed" do
+    @uploader.stub(:require).and_raise(LoadError)
+    message = @uploader.upload
+    message.should == 'Cant find gem rest-client. Please install it.'
+  end
+
 
   it "should upload a kata through a rest-interface" do
     RestClient.should_receive(:post).with('http://www.codersdojo.com/katas', []).and_return '<id>222</id>'
     @uploader.upload_kata
   end
 
-  it "should upload states throug a rest interface" do
+  it "should upload states through a rest interface" do
     state = mock State
     @state_reader_mock.should_receive(:has_next_state).and_return 'true'
     @state_reader_mock.should_receive(:read_next_state).and_return state
