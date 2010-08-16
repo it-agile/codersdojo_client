@@ -331,7 +331,7 @@ Commands:
 	end
 	
 	def show_socket_error command
-		puts "Encountered network error while <#{command}>."
+		puts "Encountered network error while <#{command}>. Is http://www.codersdojo.com down?"
 	end
 	
 end
