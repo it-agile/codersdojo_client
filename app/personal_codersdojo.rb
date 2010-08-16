@@ -1,6 +1,5 @@
 require "rubygems"
 require "tempfile"
-require 'rest_client'
 require "rexml/document"
 
 class Scheduler
@@ -109,7 +108,7 @@ end
 
 class StateReader
 
-  attr_accessor :session_id, :next_step, :source_code_file
+  attr_accessor :session_id, :next_step
 
   def initialize shell
     @filename_formatter = FilenameFormatter.new
@@ -134,7 +133,7 @@ class StateReader
     state = State.new
     state_dir = get_state_dir
     state.time = @shell.ctime state_dir
-    state.code = @shell.read_file @filename_formatter.source_code_file(state_dir, @source_code_file)
+    state.code = @shell.read_file @filename_formatter.source_code_file(state_dir)
     state.result = @shell.read_file @filename_formatter.result_file(state_dir)
     @next_step += 1
     state
@@ -144,12 +143,13 @@ end
 
 class FilenameFormatter
 
-  CODERSDOJO_WORKSPACE = ".codersdojo"
   RESULT_FILE = "result.txt"
   STATE_DIR_PREFIX = "state_"
 
-  def source_code_file state_dir, source_code_file
-    state_file state_dir, source_code_file
+
+  def source_code_file state_dir
+       Dir.entries(state_dir).each{|file|
+        return state_file state_dir, file unless file =='..' || file == '.' ||file == RESULT_FILE }
   end
 
   def result_file state_dir
@@ -166,16 +166,15 @@ class FilenameFormatter
   end
 
   def session_dir session_id
-    "#{CODERSDOJO_WORKSPACE}/#{session_id}"
+    "#{session_id}"
   end
 
 end
 
 class Uploader
 
-  def initialize (source_file, session_id, state_reader = StateReader.new(Shell.new))
+  def initialize (session_id, state_reader = StateReader.new(Shell.new))
     @state_reader = state_reader
-    @state_reader.source_code_file = source_file
     @state_reader.session_id = session_id
   end
 
@@ -197,6 +196,11 @@ class Uploader
   end
 
   def upload
+     begin
+      require 'rest_client'
+    rescue LoadError
+      return 'Cant find gem rest-client. Please install it.'
+    end
     return upload_kata_and_states if @state_reader.enough_states?
     return "You need at least two states"
   end
@@ -241,7 +245,7 @@ class ArgumentParser
 		if command.downcase == "help" then
 			@controller.help
 		elsif command.downcase == "upload" then
-			@controller.upload params[1], params[2]
+			@controller.upload params[1]
 		elsif command.downcase == "start" then
 			@controller.start params[1]
 		elsif command.downcase == "spec" then
@@ -276,12 +280,12 @@ class Controller
 	  scheduler.start
 	end
 
-	def upload source_file, session_directory
-		if source_file and session_directory then
-		  uploader = Uploader.new source_file, session_directory
-		  @view.show_upload_result uploader.upload
+	def upload session_directory
+		if session_directory then
+		  uploader = Uploader.new session_directory
+		  p uploader.upload
 		else
-			@view.show_missing_upload_arguments_error source_file, session_directory
+			@view.show_missing_upload_arguments_error session_directory
 		end
 	end
 
@@ -297,18 +301,18 @@ class ConsoleView
 	
 	def show_usage
 		puts <<-helptext
-Usage: ruby personal_codersdojo.rb command [options]
-Commands:
-  start <kata_file> \t\t Start the spec/test runner.
-  upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
-  help, -h, --help \t\t Print this help text.
+		Usage: ruby personal_codersdojo.rb command [options]
+		Commands:
+		 start <kata_file> \t\t Start the spec/test runner.
+		 upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
+		 help, -h, --help \t\t Print this help text.
 
-  Examples:
-    :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
-      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
+		Examples:
+		   :/dojo/my_kata$ ruby ../personal_codersdojo.rb start prime.rb
+		      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
-    :/dojo/my_kata$ ruby ../personal_codersdojo.rb upload prime.rb /1271665711
-      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
+		   :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb upload  ../sandbox/.codersdojo/1271665711
+		      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
 		helptext
 	end
 	
@@ -322,7 +326,7 @@ Commands:
 	end
 	
 	def show_missing_upload_arguments_error arg1, arg2
-		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}' and Argument 2 was '#{arg2}'.\n\n"
+		puts "Command <upload> recognized but not enough arguments given. Argument 1 was '#{arg1}'."
 		show_usage
 	end
 	
