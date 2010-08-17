@@ -18,7 +18,7 @@ class Scheduler
 
 end
 
-class PersonalCodersDojo
+class Runner
 
   attr_accessor :file, :run_command
 
@@ -100,9 +100,19 @@ end
 
 class SessionIdGenerator
 
-  def generate_id
-    Time.new.to_i.to_s
+  def generate_id time=Time.new
+		year = format_to_length time.year, 4
+		month = format_to_length time.month, 2
+		day = format_to_length time.day, 2
+		hour = format_to_length time.hour, 2
+		minute = format_to_length time.min, 2
+		second = format_to_length time.sec, 2
+    "#{year}-#{month}-#{day}_#{hour}-#{minute}-#{second}"
   end
+
+  def format_to_length value, len
+		value.to_s.rjust len,"0"
+	end
 
 end
 
@@ -303,7 +313,7 @@ class Controller
 			return
 		end
 	  @view.show_start_kata file
-	  dojo = PersonalCodersDojo.new Shell.new, SessionIdGenerator.new
+	  dojo = Runner.new Shell.new, SessionIdGenerator.new
 	  dojo.file = file
 	  dojo.run_command = "ruby"
 	  scheduler = Scheduler.new dojo

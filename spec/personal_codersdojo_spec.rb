@@ -5,7 +5,7 @@ require "restclient"
 require "spec"
 
 
-describe PersonalCodersDojo, "in run mode" do
+describe Runner, "in run mode" do
 
   WORKSPACE_DIR = ".codersdojo"
   SESSION_ID = "id0815"
@@ -16,7 +16,7 @@ describe PersonalCodersDojo, "in run mode" do
     @shell_mock = mock.as_null_object
     @session_id_provider_mock = mock.as_null_object
     @session_id_provider_mock.should_receive(:generate_id).and_return SESSION_ID
-    @runner = PersonalCodersDojo.new @shell_mock, @session_id_provider_mock
+    @runner = Runner.new @shell_mock, @session_id_provider_mock
     @runner.file = "my_file.rb"
     @runner.run_command = "ruby"
   end
@@ -60,6 +60,25 @@ describe PersonalCodersDojo, "in run mode" do
     @runner.start
   end
 
+end
+
+describe SessionIdGenerator do
+	
+	before (:each) do
+		@time_mock = mock
+		@generator = SessionIdGenerator.new
+	end
+	
+	it "should format id as yyyy-mm-dd_hh-mm-ss" do
+		@time_mock.should_receive(:year).and_return 2010
+		@time_mock.should_receive(:month).and_return 8
+		@time_mock.should_receive(:day).and_return 7
+		@time_mock.should_receive(:hour).and_return 6
+		@time_mock.should_receive(:min).and_return 5
+		@time_mock.should_receive(:sec).and_return 0
+		@generator.generate_id(@time_mock).should == "2010-08-07_06-05-00"
+	end
+	
 end
 
 describe StateReader do
