@@ -300,7 +300,7 @@ class ArgumentParser
 		if command.end_with?(".sh") then
 			"bash #{command}"
 		elsif command.end_with?(".bat") or command.end_with?(".cmd") then
-				"start #{command}"
+			"start #{command}"
 		else
 			command
 		end
