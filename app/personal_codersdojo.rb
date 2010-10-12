@@ -287,11 +287,22 @@ class ArgumentParser
 		elsif command.downcase == "upload" then
 			@controller.upload params[1]
 		elsif command.downcase == "start" then
-			@controller.start params[1]
+			run_command = expand_run_command params[1]
+			@controller.start run_command, params[2]
 		elsif command.downcase == "spec" then
 			# 'spec" is for testing purpose only: do nothing special
 		else
 			raise ArgumentError
+		end
+	end
+
+	def expand_run_command command
+		if command.end_with?(".sh") then
+			"bash #{command}"
+		elsif command.end_with?(".bat") or command.end_with?(".cmd") then
+				"start #{command}"
+		else
+			command
 		end
 	end
 	
@@ -307,15 +318,15 @@ class Controller
 		@view.show_help
 	end
 
-	def start file
-		if not file then
+	def start command, file
+		if not command or not file then
 			@view.show_missing_command_argument_error "start"
 			return
 		end
-	  @view.show_start_kata file
+	  @view.show_start_kata command, file
 	  dojo = Runner.new Shell.new, SessionIdGenerator.new
 	  dojo.file = file
-	  dojo.run_command = "ruby"
+	  dojo.run_command = command
 	  scheduler = Scheduler.new dojo
 	  scheduler.start
 	end
@@ -343,12 +354,12 @@ class ConsoleView
 		puts <<-helptext
 Usage: ruby personal_codersdojo.rb command [options]
 Commands:
-  start <kata_file> \t\t Start the spec/test runner.
+  start <shell-command> <kata_file> \t\t Start the spec/test runner.
   upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
   help, -h, --help \t\t Print this help text.
 
 Examples:
-    :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb start prime.rb
+    :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb start ruby prime.rb
       Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
     :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb upload  ../sandbox/.codersdojo/1271665711
@@ -356,12 +367,12 @@ Examples:
 helptext
 	end
 	
-	def show_start_kata file
-	  puts "Starting PersonalCodersDojo with kata file #{file}. Use Ctrl+C to finish the kata."		
+	def show_start_kata command, file
+	  puts "Starting PersonalCodersDojo with command #{command} and kata file #{file}. Use Ctrl+C to finish the kata."		
 	end
 	
 	def show_missing_command_argument_error command
-		puts "Command <#{command}> recognized but no argument was provided (one argument is required).\n\n"
+		puts "Command <#{command}> recognized but no argument was provided (at least one argument is required).\n\n"
 		show_usage
 	end
 	

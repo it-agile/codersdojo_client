@@ -62,6 +62,7 @@ describe Runner, "in run mode" do
 
 end
 
+
 describe SessionIdGenerator do
 	
 	before (:each) do
@@ -217,8 +218,23 @@ describe ArgumentParser do
 	end
 	
 	it "should accept start command" do
-		@controller_mock.should_receive(:start).with "aFile"
-		@parser.parse ["start", "aFile"]
+		@controller_mock.should_receive(:start).with "aCommand", "aFile"
+		@parser.parse ["start", "aCommand","aFile"]
+	end
+	
+	it "should prepend *.sh start scripts with 'bash'" do
+		@controller_mock.should_receive(:start).with "bash aCommand.sh", "aFile"
+		@parser.parse ["start", "aCommand.sh","aFile"]		
+	end
+	
+	it "should prepend *.bat start scripts with 'start'" do
+		@controller_mock.should_receive(:start).with "start aCommand.bat", "aFile"
+		@parser.parse ["start", "aCommand.bat","aFile"]		
+	end
+	
+	it "should prepend *.cmd start scripts with 'start'" do
+		@controller_mock.should_receive(:start).with "start aCommand.cmd", "aFile"
+		@parser.parse ["start", "aCommand.cmd","aFile"]		
 	end
 	
 	it "should accept upload command" do
