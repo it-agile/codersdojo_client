@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require "rubygems"
 require "tempfile"
 require "rexml/document"
@@ -187,7 +189,7 @@ end
 
 class Progress
 
-  def self.wirite_empty_progress states
+  def self.write_empty_progress states
     STDOUT.print "#{states} states to upload"
     STDOUT.print "["+" "*states+"]"
     STDOUT.print "\b"*(states+1)
@@ -218,12 +220,12 @@ class Uploader
 
   def upload_state kata_id
     state = @state_reader.read_next_state
-    RestClient.post "#{@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :created_at => state.time}
+    RestClient.post "#{@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :result => state.result, :created_at => state.time}
     Progress.next
   end
 
   def upload_states kata_id
-     Progress.wirite_empty_progress @state_reader.state_count
+    Progress.write_empty_progress @state_reader.state_count
     while @state_reader.has_next_state
       upload_state kata_id
     end
@@ -332,8 +334,9 @@ class Controller
 	end
 
 	def upload session_directory
+		@view.show_upload_start @hostname
 		if session_directory then
-		  uploader = Uploader.new hostname, session_directory
+		  uploader = Uploader.new @hostname, session_directory
 		  p uploader.upload
 		else
 			@view.show_missing_command_argument_error "upload"
@@ -376,6 +379,10 @@ helptext
 		show_usage
 	end
 	
+	def show_upload_start hostname
+		puts "Start upload to #{hostname}"
+	end
+	
 	def show_upload_result result
 		puts result
 	end
@@ -393,15 +400,15 @@ end
 # entry from shell
 if not called_from_spec(ARGV) then
 	view = ConsoleView.new
-	hostname = "http://www.codersdojo.com"
-	# hostname = "http://localhost:3000"
+	# hostname = "http://www.codersdojo.com"
+	hostname = "http://localhost:3000"
 	controller = Controller.new view, hostname
 	begin
 		arg_parser = ArgumentParser.new controller
 		command = arg_parser.parse ARGV
 	rescue ArgumentError
 		controller.help
-	rescue SocketError
-		view.show_socket_error ARGV[0]
+#	rescue Error
+#		view.show_socket_error ARGV[0]
 	end
 end
