@@ -113,7 +113,7 @@ describe Uploader do
 
   it "should convert session-dir to session-id" do
     @state_reader_mock.should_receive(:session_id=).with("session_id")
-    Uploader.new ".codersdojo/session_id", @state_reader_mock
+    Uploader.new "http://dummy_host", ".codersdojo/session_id", @state_reader_mock
   end
 
     context'upload' do
@@ -121,7 +121,7 @@ describe Uploader do
       before (:each) do
         @state_reader_mock = mock StateReader
         @state_reader_mock.should_receive(:session_id=).with("path_to_kata")
-        @uploader = Uploader.new "path_to_kata", @state_reader_mock
+        @uploader = Uploader.new "http://dummy_host", "path_to_kata", @state_reader_mock
       end
 
       it "should return error message if rest-client not installed" do
@@ -130,9 +130,8 @@ describe Uploader do
         message.should == 'Cant find gem rest-client. Please install it.'
       end
 
-
       it "should upload a kata through a rest-interface" do
-        RestClient.should_receive(:post).with('http://www.codersdojo.com/katas', []).and_return '<id>222</id>'
+        RestClient.should_receive(:post).with('http://dummy_host/katas', []).and_return '<id>222</id>'
         @uploader.upload_kata
       end
 
@@ -176,7 +175,7 @@ describe Uploader do
           @state_reader_mock.should_receive(:read_next_state).and_return state
           state.should_receive(:code).and_return 'code'
           state.should_receive(:time).and_return 'time'
-          RestClient.should_receive(:post).with('http://www.codersdojo.com/katas/kata_id/states', {:code=> 'code', :created_at=>'time'})
+          RestClient.should_receive(:post).with('http://dummy_host/katas/kata_id/states', {:code=> 'code', :created_at=>'time'})
           Progress.should_receive(:next)
           @uploader.upload_state "kata_id"
         end

@@ -206,22 +206,23 @@ end
 
 class Uploader
 
-  def initialize (session_dir, state_reader = StateReader.new(Shell.new))
+  def initialize hostname, session_dir, state_reader = StateReader.new(Shell.new)
     @state_reader = state_reader
     @state_reader.session_id = session_dir.gsub('.codersdojo/', '')
+		@hostname = hostname
   end
 
   def upload_kata
-    RestClient.post "#{@@hostname}#{@@kata_path}", []
+    RestClient.post "#{@hostname}#{@@kata_path}", []
   end
 
-  def upload_state(kata_id)
+  def upload_state kata_id
     state = @state_reader.read_next_state
-    RestClient.post "#{@@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :created_at => state.time}
+    RestClient.post "#{@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :created_at => state.time}
     Progress.next
   end
 
-  def upload_states(kata_id)
+  def upload_states kata_id
      Progress.wirite_empty_progress @state_reader.state_count
     while @state_reader.has_next_state
       upload_state kata_id
@@ -246,8 +247,6 @@ class Uploader
   end
 
   private
-  @@hostname = 'http://www.codersdojo.com'
-  #@@hostname = 'http://localhost:3000'
   @@kata_path = '/katas'
   @@state_path = '/states'
 
@@ -310,8 +309,9 @@ end
 
 class Controller
 
-	def initialize view
+	def initialize view, hostname
 		@view = view
+		@hostname = hostname
 	end
 
 	def help
@@ -333,7 +333,7 @@ class Controller
 
 	def upload session_directory
 		if session_directory then
-		  uploader = Uploader.new session_directory
+		  uploader = Uploader.new hostname, session_directory
 		  p uploader.upload
 		else
 			@view.show_missing_command_argument_error "upload"
@@ -393,7 +393,9 @@ end
 # entry from shell
 if not called_from_spec(ARGV) then
 	view = ConsoleView.new
-	controller = Controller.new view
+	hostname = "http://www.codersdojo.com"
+	# hostname = "http://localhost:3000"
+	controller = Controller.new view, hostname
 	begin
 		arg_parser = ArgumentParser.new controller
 		command = arg_parser.parse ARGV
