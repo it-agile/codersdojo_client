@@ -400,8 +400,8 @@ end
 # entry from shell
 if not called_from_spec(ARGV) then
 	view = ConsoleView.new
-	# hostname = "http://www.codersdojo.com"
-	hostname = "http://localhost:3000"
+	hostname = "http://www.codersdojo.com"
+	# hostname = "http://localhost:3000"
 	controller = Controller.new view, hostname
 	begin
 		arg_parser = ArgumentParser.new controller
