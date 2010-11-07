@@ -113,7 +113,7 @@ describe Uploader do
 
   it "should convert session-dir to session-id" do
     @state_reader_mock.should_receive(:session_id=).with("session_id")
-    Uploader.new "http://dummy_host", ".codersdojo/session_id", @state_reader_mock
+    Uploader.new "http://dummy_host", "dummy.framework", ".codersdojo/session_id", @state_reader_mock
   end
 
     context'upload' do
@@ -121,7 +121,7 @@ describe Uploader do
       before (:each) do
         @state_reader_mock = mock StateReader
         @state_reader_mock.should_receive(:session_id=).with("path_to_kata")
-        @uploader = Uploader.new "http://dummy_host", "path_to_kata", @state_reader_mock
+        @uploader = Uploader.new "http://dummy_host", "dummy.framework", "path_to_kata", @state_reader_mock
       end
 
       it "should return error message if rest-client not installed" do
@@ -131,7 +131,7 @@ describe Uploader do
       end
 
       it "should upload a kata through a rest-interface" do
-        RestClient.should_receive(:post).with('http://dummy_host/katas', []).and_return '<id>222</id>'
+        RestClient.should_receive(:post).with('http://dummy_host/katas', {:framework => "dummy.framework"}).and_return '<id>222</id>'
         @uploader.upload_kata
       end
 
@@ -158,7 +158,7 @@ describe Uploader do
       context 'states' do
         it "should read all states and starts/ends progress" do
           @state_reader_mock.should_receive(:state_count).and_return(1)
-          Progress.should_receive(:wirite_empty_progress).with(1)
+          Progress.should_receive(:write_empty_progress).with(1)
 
           @state_reader_mock.should_receive(:has_next_state).and_return 'true'
           @uploader.should_receive(:upload_state)
@@ -175,7 +175,8 @@ describe Uploader do
           @state_reader_mock.should_receive(:read_next_state).and_return state
           state.should_receive(:code).and_return 'code'
           state.should_receive(:time).and_return 'time'
-          RestClient.should_receive(:post).with('http://dummy_host/katas/kata_id/states', {:code=> 'code', :created_at=>'time'})
+          state.should_receive(:result).and_return 'result'
+          RestClient.should_receive(:post).with('http://dummy_host/katas/kata_id/states', {:code=> 'code', :result => 'result', :created_at => 'time'})
           Progress.should_receive(:next)
           @uploader.upload_state "kata_id"
         end
@@ -237,8 +238,8 @@ describe ArgumentParser do
 	end
 	
 	it "should accept upload command" do
-		@controller_mock.should_receive(:upload).with "dir"
-		@parser.parse ["upload", "dir"]
+		@controller_mock.should_receive(:upload).with "framework", "dir"
+		@parser.parse ["upload", "framework", "dir"]
 	end
 	
 	it "should accept uppercase commands" do
@@ -254,7 +255,7 @@ describe Progress do
     STDOUT.should_receive(:print).with("2 states to upload")
     STDOUT.should_receive(:print).with("[  ]")
     STDOUT.should_receive(:print).with("\b\b\b")
-    Progress.wirite_empty_progress 2
+    Progress.write_empty_progress 2
   end
 
   it 'should print dots and flush in next' do

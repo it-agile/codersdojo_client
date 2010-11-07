@@ -208,14 +208,15 @@ end
 
 class Uploader
 
-  def initialize hostname, session_dir, state_reader = StateReader.new(Shell.new)
+  def initialize hostname, framework, session_dir, state_reader = StateReader.new(Shell.new)
+		@hostname = hostname
+	  @framework = framework
     @state_reader = state_reader
     @state_reader.session_id = session_dir.gsub('.codersdojo/', '')
-		@hostname = hostname
   end
 
   def upload_kata
-    RestClient.post "#{@hostname}#{@@kata_path}", []
+    RestClient.post "#{@hostname}#{@@kata_path}", {:framework => @framework}
   end
 
   def upload_state kata_id
@@ -286,7 +287,7 @@ class ArgumentParser
 		if command.downcase == "help" then
 			@controller.help
 		elsif command.downcase == "upload" then
-			@controller.upload params[1]
+			@controller.upload params[1], params[2]
 		elsif command.downcase == "start" then
 			run_command = expand_run_command params[1]
 			@controller.start run_command, params[2]
@@ -333,10 +334,10 @@ class Controller
 	  scheduler.start
 	end
 
-	def upload session_directory
+	def upload framework, session_directory
 		@view.show_upload_start @hostname
 		if session_directory then
-		  uploader = Uploader.new @hostname, session_directory
+		  uploader = Uploader.new @hostname, framework, session_directory
 		  p uploader.upload
 		else
 			@view.show_missing_command_argument_error "upload"
@@ -349,7 +350,7 @@ end
 class ConsoleView
 	
 	def show_help
-		puts "PersonalCodersDojo automatically runs your specs/tests of a code kata."
+		puts "PersonalCodersDojo automatically runs your tests of a code kata."
 		show_usage
 	end
 	
@@ -357,16 +358,18 @@ class ConsoleView
 		puts <<-helptext
 Usage: ruby personal_codersdojo.rb command [options]
 Commands:
-  start <shell-command> <kata_file> \t\t Start the spec/test runner.
-  upload <session_directory> \t Upload the kata in <session_directory> to codersdojo.com. <session_directory> is relative to the working directory.
-  help, -h, --help \t\t Print this help text.
+  start <shell-command> <kata_file>        Start the test runner.
+  upload <framework> <session_directory>   Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
+                                           <session_directory> is relative to the working directory.
+                                           By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
+  help, -h, --help                         Print this help text.
 
 Examples:
-    :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb start ruby prime.rb
+    :/dojo/my_kata$ ruby personal_codersdojo.rb start ruby prime.rb
       Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
-    :/dojo/my_kata$ ruby ../app/personal_codersdojo.rb upload  ../sandbox/.codersdojo/1271665711
-      Upload the kata located in directory ".codersdojo/1271665711" to codersdojo.com.
+    :/dojo/my_kata$ ruby personal_codersdojo.rb upload  ruby.test/unit .codersdojo/2010-11-02_16-21-53
+      Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
 	
@@ -400,8 +403,8 @@ end
 # entry from shell
 if not called_from_spec(ARGV) then
 	view = ConsoleView.new
-	hostname = "http://www.codersdojo.com"
-	# hostname = "http://localhost:3000"
+	# hostname = "http://www.codersdojo.com"
+	hostname = "http://localhost:3000"
 	controller = Controller.new view, hostname
 	begin
 		arg_parser = ArgumentParser.new controller

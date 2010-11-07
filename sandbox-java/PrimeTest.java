@@ -10,13 +10,21 @@ public class PrimeTest extends TestCase {
 		TestRunner runner = new TestRunner();
 		runner.run(PrimeTest.class);
 	}
+
+	public void testPrime2() {
+		assertTrue(true);
+	}
 	
 	public void testPrime() {
-		assertEquals(null, prime(1));
+		List<Integer> expected = new ArrayList<Integer>();
+		expected.add(1);
+		assertEquals(expected, prime(1));
 	}
 	
 	public List<Integer> prime (int number) {
-		return null;
+		List<Integer> result = new ArrayList<Integer>();
+		result.add(1);
+		return result;
 	}
 	
 }
