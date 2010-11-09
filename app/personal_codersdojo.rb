@@ -368,6 +368,7 @@ Commands:
   upload <framework> <session_directory>   Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
                                            <session_directory> is relative to the working directory.
                                            By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
+                                           If you used another framework, use ??? and send an email to codersdojo@it-agile.de
   help, -h, --help                         Print this help text.
 
 Examples:
