@@ -349,8 +349,14 @@ end
 
 class ConsoleView
 	
+	@@VERSION = '0.9'
+	
 	def show_help
-		puts "PersonalCodersDojo automatically runs your tests of a code kata."
+		puts <<-helptext
+Personal CodersDojo, Version #{@@VERSION}, http://www.codersdojo.com, Copyright by it-agile GmbH (http://www.it-agile.de)
+PersonalCodersDojo automatically runs your tests of a code kata.
+
+helptext
 		show_usage
 	end
 	
