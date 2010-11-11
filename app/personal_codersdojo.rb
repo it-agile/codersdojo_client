@@ -364,7 +364,10 @@ helptext
 		puts <<-helptext
 Usage: ruby personal_codersdojo.rb command [options]
 Commands:
-  start <shell-command> <kata_file>        Start the test runner.
+  start <shell_command> <kata_file>        Start the continuous test runner, that runs <shell-command> whenever <kata_file>
+                                           changes. The <kata_file> has to include the whole source code of the kata.
+                                           Whenever the test runner is started, it creates a new session directory in the 
+                                           directory .codersdojo where it logs the steps of the kata.
   upload <framework> <session_directory>   Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
                                            <session_directory> is relative to the working directory.
                                            By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
