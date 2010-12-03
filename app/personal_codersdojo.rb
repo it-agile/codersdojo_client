@@ -362,7 +362,7 @@ helptext
 	
 	def show_usage
 		puts <<-helptext
-Usage: ruby personal_codersdojo.rb command [options]
+Usage: #{$0} command [options]
 Commands:
   start <shell_command> <kata_file>        Start the continuous test runner, that runs <shell-command> whenever <kata_file>
                                            changes. The <kata_file> has to include the whole source code of the kata.
@@ -375,10 +375,10 @@ Commands:
   help, -h, --help                         Print this help text.
 
 Examples:
-    :/dojo/my_kata$ ruby personal_codersdojo.rb start ruby prime.rb
+    :/dojo/my_kata$ #{$0} start ruby prime.rb
       Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
-    :/dojo/my_kata$ ruby personal_codersdojo.rb upload  ruby.test/unit .codersdojo/2010-11-02_16-21-53
+    :/dojo/my_kata$ #{$0} upload  ruby.test/unit .codersdojo/2010-11-02_16-21-53
       Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
@@ -413,8 +413,8 @@ end
 # entry from shell
 if not called_from_spec(ARGV) then
 	view = ConsoleView.new
-	# hostname = "http://www.codersdojo.com"
-	hostname = "http://localhost:3000"
+	hostname = "http://www.codersdojo.com"
+	#hostname = "http://localhost:3000"
 	controller = Controller.new view, hostname
 	begin
 		arg_parser = ArgumentParser.new controller
