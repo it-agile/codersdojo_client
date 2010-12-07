@@ -21,7 +21,6 @@
 	(is (= (prime-fac 8) [2 2 2]))
 	(is (= (prime-fac 9) [3 3]))
 	(is (= (prime-fac 10) [2 5]))
-	(is (= (prime-fac (* 2 3 3 5 7 11 11)) [2 3 3 5 7 11 11]))
 )
 
 (deftest foo []

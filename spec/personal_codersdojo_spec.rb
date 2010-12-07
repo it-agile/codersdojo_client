@@ -1,6 +1,6 @@
 ARGV[0] = "spec" # to be first line to suppress help text output of shell command
 require 'rubygems'
-require "../app/personal_codersdojo"
+require "app/personal_codersdojo"
 require "restclient"
 require "spec"
 
@@ -213,7 +213,7 @@ describe ArgumentParser do
 	end
 	
 	it "should accept help command" do
-		@controller_mock.should_receive(:help).with()
+		@controller_mock.should_receive(:help).with(nil)
 		@parser.parse ["help"]
 	end
 	
@@ -243,7 +243,7 @@ describe ArgumentParser do
 	end
 	
 	it "should accept uppercase commands" do
-		@controller_mock.should_receive(:help).with()
+		@controller_mock.should_receive(:help).with(nil)
 		@parser.parse ["HELP"]
 	end
 

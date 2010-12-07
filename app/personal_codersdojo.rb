@@ -285,7 +285,11 @@ class ArgumentParser
 	def parse params
 		command = params[0] ? params[0] : ""
 		if command.downcase == "help" then
-			@controller.help
+			@controller.help params[1]
+		elsif command.downcase == "show-examples" then
+				@controller.show_examples
+		elsif command.downcase == "generate" then
+			@controller.generate params[1], params[2] ? params[2] : '<kata_file>'
 		elsif command.downcase == "upload" then
 			@controller.upload params[1], params[2]
 		elsif command.downcase == "start" then
@@ -317,8 +321,21 @@ class Controller
 		@hostname = hostname
 	end
 
-	def help
-		@view.show_help
+	def help command
+		if command then
+			@view.show_detailed_help command.downcase
+		else
+			@view.show_help
+		end
+	end
+
+	def show_examples
+		@view.show_examples
+	end
+
+	def generate framework, kata_file
+		generator = GeneratorFactory.new.create_generator framework
+		generator.generate kata_file
 	end
 
 	def start command, file
@@ -364,22 +381,73 @@ helptext
 		puts <<-helptext
 Usage: #{$0} command [options]
 Commands:
-  start <shell_command> <kata_file>        Start the continuous test runner, that runs <shell-command> whenever <kata_file>
-                                           changes. The <kata_file> has to include the whole source code of the kata.
-                                           Whenever the test runner is started, it creates a new session directory in the 
-                                           directory .codersdojo where it logs the steps of the kata.
-  upload <framework> <session_directory>   Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
-                                           <session_directory> is relative to the working directory.
-                                           By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
-                                           If you used another framework, use ??? and send an email to codersdojo@it-agile.de
-  help, -h, --help                         Print this help text.
+  help, -h, --help                     Print this help text.
+  help <command>                       See the details of the command.
+  generate <framework> <kata_file>     Setup the environment for running the kata.
+  start <shell_command> <kata_file>    Start the continuous test runner.
+  upload <framework> <session_dir>     Upload the kata to http://www.codersdojo.org
+  show-examples                        Show some example usages.
 
+Report bugs to <codersdojo@it-agile.de>
+helptext
+	end
+
+	def show_examples
+		puts <<-helptext
 Examples:
+    :/dojo/my_kata% #{$0} generate ruby.test/unit prime
+      Show the instructions how to setup the environment for kata execution with ruby.
+
     :/dojo/my_kata$ #{$0} start ruby prime.rb
       Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
     :/dojo/my_kata$ #{$0} upload  ruby.test/unit .codersdojo/2010-11-02_16-21-53
       Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
+helptext
+	end
+
+	def show_detailed_help command
+		if command == 'generate' then
+			show_help_generate
+		elsif command == 'start' then
+			show_help_start
+		elsif command == 'upload' then
+			show_help_upload
+		else
+			show_help_unknown command
+		end
+	end
+
+	def show_help_generate
+			puts <<-helptext
+generate <framework> <kata_file_no_ext>  Generate a shell command for the given framework and kata file.
+	                                       The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
+	                                       By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
+	                                       Use ??? as framework if your framework isn't in the list.
+helptext
+	end
+
+	def show_help_start
+		puts <<-helptext
+start <shell_command> <kata_file>  Start the continuous test runner, that runs <shell-command> whenever <kata_file>
+                                   changes. The <kata_file> has to include the whole source code of the kata.
+                                   Whenever the test runner is started, it creates a new session directory in the 
+                                   directory .codersdojo where it logs the steps of the kata.
+helptext
+	end
+
+	def show_help_upload
+		puts <<-helptext
+upload <framework> <session_directory>  Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
+                                        <session_directory> is relative to the working directory.
+                                        Take a look at the generate command for the supported frameworks.
+                                        If you used another framework, use ??? and send an email to codersdojo@it-agile.de
+helptext
+	end
+	
+	def show_help_unknown command
+		puts <<-helptext
+Command #{command} not known. Try '#{$0} help' to list the supported commands.
 helptext
 	end
 	
@@ -404,6 +472,90 @@ helptext
 		puts "Encountered network error while <#{command}>. Is http://www.codersdojo.com down?"
 	end
 	
+end
+
+class GeneratorFactory
+		
+	def initialize
+		@frameworks = {"clojure.is-test" => ClosureGenerator.new,
+									 "java.junit" => JavaGenerator.new, 
+									 "ruby.test/unit" => RubyGenerator.new}	
+	end
+	
+	def create_generator framework
+		generator = @frameworks[framework]
+		return generator unless generator.nil?
+		AnyGenerator.new
+	end
+	
+end
+
+class AnyGenerator
+	def generate kata_file
+		puts <<-generate_help
+Create a shell script run-once.sh that runs the tests of your kata once.
+
+Create a second shell script run-endless.sh with this content:
+  #{$0} start run-once.sh #{kata_file}.<extension>
+
+Run run-endless.sh and start your kata.
+
+Assumptions:
+  - The whole kata source code is in the one #{kata_file}.<extension>.
+generate_help
+	end
+end
+
+class ClosureGenerator
+	def generate kata_file
+		puts <<-generate_help
+Create a shell script run-once.sh with this content:
+  java -cp clojure-contrib.jar:clojure.jar clojure.main #{kata_file}.clj
+
+Create a second shell script run-endless.sh with this content:
+  #{$0} start run-once.sh #{kata_file}.clj
+
+Run run-endless.sh and start your kata.
+
+Assumptions:
+  - Java is installed on your system and 'java' is in the path.
+  - clojure.jar and clojure-contrib.jar are placed in your work directory.
+generate_help
+	end
+end
+
+class JavaGenerator
+	def generate kata_file
+		puts <<-generate_help
+Create a shell script run-once.sh with this content:
+  rm #{kata_file}.class
+  javac -cp junit.jar:. #{kata_file}.java
+  java -cp junit.jar:. #{kata_file}
+
+Create a second shell script run-endless.sh with this content:
+  #{$0} start run-once.sh #{kata_file}.java
+
+Run run-endless.sh and start your kata.
+
+Assumptions:
+  - A Java JDK is installed on your system and 'java' and 'javac' are in the path.
+  - junit.jar is placed in your work directory.
+  - The kata source file is placed in the work directory.
+  - In the source file the classes are placed in the default package so that the class file is generated
+    in the work directory also.
+generate_help
+	end
+end
+
+class RubyGenerator
+	def generate kata_file
+		puts <<-generate_help
+Create a shell script run.sh with this content:
+  #{$0} start ruby #{kata_file}.rb
+
+Run run.sh and start your kata.
+generate_help
+	end
 end
 
 def called_from_spec args
