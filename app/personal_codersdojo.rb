@@ -554,9 +554,9 @@ class JavaGenerator
 	def generate kata_file
 <<-generate_help
 Create a shell script run-once.%sh% with this content:
-  %rm% #{kata_file}.class
-  javac -cp junit.jar%:%. #{kata_file}.java
-  java -cp junit.jar%:%. #{kata_file}
+  %rm% class/#{kata_file}.class
+  javac -cp lib/junit.jar%:%. #{kata_file}.java
+  java -cp lib/junit.jar%:%bin #{kata_file}
 
 Create a second shell script run-endless.sh with this content:
   #{$0} start run-once.%sh% #{kata_file}.java
@@ -565,10 +565,13 @@ Run run-endless.%sh% and start your kata.
 
 Assumptions:
   - A Java JDK is installed on your system and 'java' and 'javac' are in the path.
-  - junit.jar is placed in your work directory.
-  - The kata source file is placed in the work directory.
-  - In the source file the classes are placed in the default package so that the class file is generated
-    in the work directory also.
+  - junit.jar is placed in a directory named 'lib'.
+  - The kata source file is placed in the 'src' directory.
+  - The kata class file is generated into the 'class' directory.
+  - In the source file the classes are placed in the default package.
+  - The kata source file has a main method that starts the tests.
+  - If your IDE (like Eclipse) compiles the source file, you should remove the first two lines
+    in the run-once.%sh% file.
 generate_help
 	end
 end
