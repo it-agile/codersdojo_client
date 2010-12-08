@@ -404,12 +404,12 @@ helptext
 		puts <<-helptext
 Usage: #{$0} command [options]
 Commands:
-  help, -h, --help                     Print this help text.
-  help <command>                       See the details of the command.
-  generate <framework> <kata_file>     Setup the environment for running the kata.
-  start <shell_command> <kata_file>    Start the continuous test runner.
-  upload <framework> <session_dir>     Upload the kata to http://www.codersdojo.org
-  show-examples                        Show some example usages.
+  help, -h, --help                   Print this help text.
+  help <command>                     See the details of the command.
+  setup <framework> <kata_file>      Setup the environment for running the kata.
+  start <shell_command> <kata_file>  Start the continuous test runner.
+  upload <framework> <session_dir>   Upload the kata to http://www.codersdojo.org
+  show-examples                      Show some example usages.
 
 Report bugs to <codersdojo@it-agile.de>
 helptext
@@ -418,7 +418,7 @@ helptext
 	def show_examples
 		puts <<-helptext
 Examples:
-    :/dojo/my_kata% #{$0} generate ruby.test/unit prime
+    :/dojo/my_kata% #{$0} setup ruby.test/unit prime
       Show the instructions how to setup the environment for kata execution with ruby.
 
     :/dojo/my_kata$ #{$0} start ruby prime.rb
@@ -430,8 +430,8 @@ helptext
 	end
 
 	def show_detailed_help command
-		if command == 'generate' then
-			show_help_generate
+		if command == 'setup' then
+			show_help_setup
 		elsif command == 'start' then
 			show_help_start
 		elsif command == 'upload' then
@@ -441,12 +441,12 @@ helptext
 		end
 	end
 
-	def show_help_generate
+	def show_help_setup
 			puts <<-helptext
-generate <framework> <kata_file_no_ext>  Generate a shell command for the given framework and kata file.
-                                         The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
-                                         By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
-                                         Use ??? as framework if your framework isn't in the list.
+setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the given framework and kata file.
+                                      The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
+                                      By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
+                                      Use ??? as framework if your framework isn't in the list.
 helptext
 	end
 
@@ -600,7 +600,7 @@ if not called_from_spec(ARGV) then
 	begin
 		arg_parser = ArgumentParser.new controller
 		command = arg_parser.parse ARGV
-#	rescue ArgumentError
-#		controller.help
+	rescue ArgumentError
+		controller.help
 	end
 end
