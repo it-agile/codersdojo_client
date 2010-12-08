@@ -554,12 +554,12 @@ class JavaGenerator
 	def generate kata_file
 <<-generate_help
 Create a shell script run-once.%sh% with this content:
-  %rm% class/#{kata_file}.class
-  javac -cp lib/junit.jar%:%. #{kata_file}.java
+  %rm% bin/#{kata_file}.class
+  javac -cp lib/junit.jar -d bin #{kata_file}.java
   java -cp lib/junit.jar%:%bin #{kata_file}
 
 Create a second shell script run-endless.sh with this content:
-  #{$0} start run-once.%sh% #{kata_file}.java
+  #{$0} start run-once.%sh% src/#{kata_file}.java
 
 Run run-endless.%sh% and start your kata.
 

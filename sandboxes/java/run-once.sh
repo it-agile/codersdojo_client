@@ -1,3 +1,3 @@
-rm PrimeTest.class
-javac -cp junit-4.7.jar:. PrimeTest.java
-java -cp junit-4.7.jar:. PrimeTest
+rm bin/PrimeTest.class
+javac -cp lib/junit.jar -d bin src/PrimeTest.java
+java -cp lib/junit.jar:bin PrimeTest
