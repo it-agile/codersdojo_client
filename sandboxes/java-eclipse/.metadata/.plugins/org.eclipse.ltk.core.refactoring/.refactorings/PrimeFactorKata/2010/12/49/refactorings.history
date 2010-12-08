@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;PrimeFactorKata/lib/junit-4.7.jar&apos; to &apos;junit.jar&apos;" description="Rename resource &apos;junit-4.7.jar&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="lib/junit-4.7.jar" name="junit.jar" stamp="1291838613180" updateReferences="true"/>
-</session>
