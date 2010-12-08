@@ -98,6 +98,26 @@ class Shell
     File.new(filename).ctime
   end
 
+	def make_os_specific text
+		text.gsub('%sh%', shell_extension).gsub('%:%', path_separator).gsub('%rm%', remove_command_name)
+	end
+
+	def remove_command_name
+		windows? ? 'delete' : 'rm'
+	end
+
+	def shell_extension
+		windows? ? 'cmd' : 'sh'
+	end
+	
+	def path_separator
+		windows? ? ';' : ':'
+	end
+	
+	def windows?
+		RUBY_PLATFORM.downcase.include? "windows"
+	end
+
 end
 
 class SessionIdGenerator
@@ -321,7 +341,7 @@ class Controller
 		@hostname = hostname
 	end
 
-	def help command
+	def help command=nil
 		if command then
 			@view.show_detailed_help command.downcase
 		else
@@ -335,7 +355,10 @@ class Controller
 
 	def generate framework, kata_file
 		generator = GeneratorFactory.new.create_generator framework
-		generator.generate kata_file
+		shell = Shell.new
+		generator_text = generator.generate kata_file
+		generator_text = shell.make_os_specific generator_text
+		puts generator_text
 	end
 
 	def start command, file
@@ -421,9 +444,9 @@ helptext
 	def show_help_generate
 			puts <<-helptext
 generate <framework> <kata_file_no_ext>  Generate a shell command for the given framework and kata file.
-	                                       The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
-	                                       By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
-	                                       Use ??? as framework if your framework isn't in the list.
+                                         The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
+                                         By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
+                                         Use ??? as framework if your framework isn't in the list.
 helptext
 	end
 
@@ -477,28 +500,31 @@ end
 class GeneratorFactory
 		
 	def initialize
-		@frameworks = {"clojure.is-test" => ClosureGenerator.new,
-									 "java.junit" => JavaGenerator.new, 
-									 "ruby.test/unit" => RubyGenerator.new}	
+		@frameworks = {"clojure.is-test" => ClosureGenerator,
+									 "java.junit" => JavaGenerator, 
+									 "ruby.test/unit" => RubyGenerator}	
 	end
 	
 	def create_generator framework
-		generator = @frameworks[framework]
-		return generator unless generator.nil?
-		AnyGenerator.new
+		generator_class = @frameworks[framework]
+		if generator_class.nil? then
+			generator_class = AnyGenerator
+		end
+		generator_class.new
 	end
 	
 end
 
 class AnyGenerator
+	
 	def generate kata_file
-		puts <<-generate_help
-Create a shell script run-once.sh that runs the tests of your kata once.
+<<-generate_help
+Create a shell script run-once.%sh% that runs the tests of your kata once.
 
 Create a second shell script run-endless.sh with this content:
-  #{$0} start run-once.sh #{kata_file}.<extension>
+  #{$0} start run-once.%sh% #{kata_file}.<extension>
 
-Run run-endless.sh and start your kata.
+Run run-endless.%sh% and start your kata.
 
 Assumptions:
   - The whole kata source code is in the one #{kata_file}.<extension>.
@@ -508,14 +534,14 @@ end
 
 class ClosureGenerator
 	def generate kata_file
-		puts <<-generate_help
-Create a shell script run-once.sh with this content:
-  java -cp clojure-contrib.jar:clojure.jar clojure.main #{kata_file}.clj
+<<-generate_help
+Create a shell script run-once.%sh% with this content:
+  java -cp clojure-contrib.jar%:%clojure.jar clojure.main #{kata_file}.clj
 
 Create a second shell script run-endless.sh with this content:
-  #{$0} start run-once.sh #{kata_file}.clj
+  #{$0} start run-once.%sh% #{kata_file}.clj
 
-Run run-endless.sh and start your kata.
+Run run-endless.%sh% and start your kata.
 
 Assumptions:
   - Java is installed on your system and 'java' is in the path.
@@ -526,16 +552,16 @@ end
 
 class JavaGenerator
 	def generate kata_file
-		puts <<-generate_help
-Create a shell script run-once.sh with this content:
-  rm #{kata_file}.class
-  javac -cp junit.jar:. #{kata_file}.java
-  java -cp junit.jar:. #{kata_file}
+<<-generate_help
+Create a shell script run-once.%sh% with this content:
+  %rm% #{kata_file}.class
+  javac -cp junit.jar%:%. #{kata_file}.java
+  java -cp junit.jar%:%. #{kata_file}
 
 Create a second shell script run-endless.sh with this content:
-  #{$0} start run-once.sh #{kata_file}.java
+  #{$0} start run-once.%sh% #{kata_file}.java
 
-Run run-endless.sh and start your kata.
+Run run-endless.%sh% and start your kata.
 
 Assumptions:
   - A Java JDK is installed on your system and 'java' and 'javac' are in the path.
@@ -549,11 +575,11 @@ end
 
 class RubyGenerator
 	def generate kata_file
-		puts <<-generate_help
-Create a shell script run.sh with this content:
+<<-generate_help
+Create a shell script run-endless.%sh% with this content:
   #{$0} start ruby #{kata_file}.rb
 
-Run run.sh and start your kata.
+Run run-endless.%sh% and start your kata.
 generate_help
 	end
 end
@@ -571,9 +597,7 @@ if not called_from_spec(ARGV) then
 	begin
 		arg_parser = ArgumentParser.new controller
 		command = arg_parser.parse ARGV
-	rescue ArgumentError
-		controller.help
-#	rescue Error
-#		view.show_socket_error ARGV[0]
+#	rescue ArgumentError
+#		controller.help
 	end
 end

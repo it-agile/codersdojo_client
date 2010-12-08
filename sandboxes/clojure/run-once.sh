@@ -1,0 +1,1 @@
+java -cp /Users/sr/Documents/personal_codersdojo/sandboxes/clojure/clojure-contrib.jar:/System/Library/Frameworks/Clojure/clojure.jar clojure.main prime.clj
