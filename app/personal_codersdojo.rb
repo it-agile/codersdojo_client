@@ -308,7 +308,7 @@ class ArgumentParser
 			@controller.help params[1]
 		elsif command.downcase == "show-examples" then
 				@controller.show_examples
-		elsif command.downcase == "generate" then
+		elsif command.downcase == "setup" then
 			@controller.generate params[1], params[2] ? params[2] : '<kata_file>'
 		elsif command.downcase == "upload" then
 			@controller.upload params[1], params[2]
@@ -407,7 +407,6 @@ Commands:
   help, -h, --help                   Print this help text.
   help <command>                     See the details of the command.
   setup <framework> <kata_file>      Setup the environment for running the kata.
-  start <shell_command> <kata_file>  Start the continuous test runner.
   upload <framework> <session_dir>   Upload the kata to http://www.codersdojo.org
   show-examples                      Show some example usages.
 
@@ -445,7 +444,8 @@ helptext
 			puts <<-helptext
 setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the given framework and kata file.
                                       The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
-                                      By now <framework> is one of java.junit, ruby.test/unit, clojure.is-test
+                                      By now <framework> is one of clojure.is-test, java.junit, javascript.jspec, 
+                                      python.unittest, ruby.test/unit.
                                       Use ??? as framework if your framework isn't in the list.
 helptext
 	end
@@ -502,6 +502,8 @@ class GeneratorFactory
 	def initialize
 		@frameworks = {"clojure.is-test" => ClosureGenerator,
 									 "java.junit" => JavaGenerator, 
+								   "javascript.jspec" => JavascriptGenerator,
+									 "python.unittest" => PythonGenerator,
 									 "ruby.test/unit" => RubyGenerator}	
 	end
 	
@@ -519,10 +521,11 @@ class AnyGenerator
 	
 	def generate kata_file
 <<-generate_help
-Create a shell script run-once.%sh% that runs the tests of your kata once.
+You have to create two shell scripts manually:
+  Create a shell script run-once.%sh% that runs the tests of your kata once.
 
-Create a second shell script run-endless.sh with this content:
-  #{$0} start run-once.%sh% #{kata_file}.<extension>
+  Create a second shell script run-endless.sh with this content:
+    #{$0} start run-once.%sh% #{kata_file}.<extension>
 
 Run run-endless.%sh% and start your kata.
 
@@ -535,11 +538,12 @@ end
 class ClosureGenerator
 	def generate kata_file
 <<-generate_help
-Create a shell script run-once.%sh% with this content:
-  java -cp clojure-contrib.jar%:%clojure.jar clojure.main #{kata_file}.clj
+You have to create two shell scripts manually:
+  Create a shell script run-once.%sh% with this content:
+    java -cp clojure-contrib.jar%:%clojure.jar clojure.main #{kata_file}.clj
 
-Create a second shell script run-endless.sh with this content:
-  #{$0} start run-once.%sh% #{kata_file}.clj
+  Create a second shell script run-endless.sh with this content:
+    #{$0} start run-once.%sh% #{kata_file}.clj
 
 Run run-endless.%sh% and start your kata.
 
@@ -553,13 +557,14 @@ end
 class JavaGenerator
 	def generate kata_file
 <<-generate_help
-Create a shell script run-once.%sh% with this content:
-  %rm% bin/#{kata_file}.class
-  javac -cp lib/junit.jar -d bin #{kata_file}.java
-  java -cp lib/junit.jar%:%bin #{kata_file}
+You have to create two shell scripts manually:
+  Create a shell script run-once.%sh% with this content:
+    %rm% bin/#{kata_file}.class
+    javac -cp lib/junit.jar -d bin #{kata_file}.java
+    java -cp lib/junit.jar%:%bin #{kata_file}
 
-Create a second shell script run-endless.sh with this content:
-  #{$0} start run-once.%sh% src/#{kata_file}.java
+  Create a second shell script run-endless.sh with this content:
+    #{$0} start run-once.%sh% src/#{kata_file}.java
 
 Run run-endless.%sh% and start your kata.
 
@@ -576,11 +581,45 @@ generate_help
 	end
 end
 
+
+class JavascriptGenerator
+	def generate kata_file
+<<-generate_help
+You have to create two shell scripts manually:
+  Create a shell script run-once.%sh% with this content:
+    jspec --rhino run
+
+  Create a second shell script run-endless.sh with this content:
+    #{$0} start run-once.%sh% #{kata_file}.js
+
+Run run-endless.%sh% and start your kata.
+generate_help
+	end
+end
+
+
+class PythonGenerator
+	def generate kata_file
+<<-generate_help
+You have to create two shell scripts manually:
+  Create a shell script run-once.%sh% with this content:
+    python #{kata_file}.py
+
+  Create a second shell script run-endless.sh with this content:
+    #{$0} start run-once.%sh% #{kata_file}.py
+
+Run run-endless.%sh% and start your kata.
+generate_help
+	end
+end
+
+
 class RubyGenerator
 	def generate kata_file
 <<-generate_help
-Create a shell script run-endless.%sh% with this content:
-  #{$0} start ruby #{kata_file}.rb
+You have to create one shell script manually:
+  Create a shell script run-endless.%sh% with this content:
+    #{$0} start ruby #{kata_file}.rb
 
 Run run-endless.%sh% and start your kata.
 generate_help
