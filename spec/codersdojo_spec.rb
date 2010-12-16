@@ -1,6 +1,5 @@
 ARGV[0] = "spec" # to be first line to suppress help text output of shell command
-require 'rubygems'
-require "app/personal_codersdojo"
+require "app/codersdojo"
 require "restclient"
 require "spec"
 
@@ -122,12 +121,6 @@ describe Uploader do
         @state_reader_mock = mock StateReader
         @state_reader_mock.should_receive(:session_id=).with("path_to_kata")
         @uploader = Uploader.new "http://dummy_host", "dummy.framework", "path_to_kata", @state_reader_mock
-      end
-
-      it "should return error message if rest-client not installed" do
-        @uploader.stub(:require).and_raise(LoadError)
-        message = @uploader.upload
-        message.should == 'Cant find gem rest-client. Please install it.'
       end
 
       it "should upload a kata through a rest-interface" do

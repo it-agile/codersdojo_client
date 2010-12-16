@@ -1,1 +1,1 @@
-ruby ../../app/personal_codersdojo.rb start run-endless.sh prime.clj
+codersdojo start run-once.sh prime.clj

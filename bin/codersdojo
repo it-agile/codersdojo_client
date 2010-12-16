@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-codersdojo_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(rspec_dir) unless $LOAD_PATH.include?(codersdojo_dir)
-require 'app/codersdojo'
+codersdojo_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'app'))
+$LOAD_PATH.unshift(codersdojo_dir) unless $LOAD_PATH.include?(codersdojo_dir)
+require 'codersdojo'

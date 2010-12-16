@@ -1,9 +1,9 @@
-# create gem: gem build codersdojo.gemspec
-# push gem: gem push codersdojo-0.9.4.gem
+# create gem: build_gem.sh
+# push gem: gem push deploy/codersdojo-0.9.7.gem
 # install gem: sudo gem install codersdojo --no-ri --no-rdoc 
 
 Gem::Specification.new do |s|
-   s.version = "0.9.4"
+   s.version = "0.9.7"
    s.name = %q{codersdojo}
    s.date = %q{2010-12-10}
    s.authors = ["CodersDojo-Team"]
@@ -16,4 +16,5 @@ Gem::Specification.new do |s|
    s.has_rdoc = false
    s.test_files = Dir['spec/*']
    s.executables = ['codersdojo']
+   s.add_dependency('rest-client')
 end

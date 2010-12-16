@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require "rubygems"
 require "tempfile"
 require "rexml/document"
+require 'rest_client'
 
 class Scheduler
 
@@ -260,11 +260,6 @@ class Uploader
   end
 
   def upload
-    begin
-      require 'rest_client'
-    rescue LoadError
-      return 'Cant find gem rest-client. Please install it.'
-    end
     return upload_kata_and_states if @state_reader.enough_states?
     return "You need at least two states"
   end
@@ -419,9 +414,6 @@ helptext
 Examples:
     :/dojo/my_kata% #{$0} setup ruby.test/unit prime
       Show the instructions how to setup the environment for kata execution with ruby.
-
-    :/dojo/my_kata$ #{$0} start ruby prime.rb
-      Run the tests of prime.rb. The test runs automatically every second if prime.rb was modified.
 
     :/dojo/my_kata$ #{$0} upload  ruby.test/unit .codersdojo/2010-11-02_16-21-53
       Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
