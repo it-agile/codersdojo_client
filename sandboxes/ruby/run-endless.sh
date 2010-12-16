@@ -1,1 +1,1 @@
-ruby ../../app/personal_codersdojo.rb start ruby prime.rb
+codersdojo start ruby prime.rb
