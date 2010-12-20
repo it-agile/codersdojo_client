@@ -246,7 +246,6 @@ class Uploader
 
   def upload_state kata_id
     state = @state_reader.read_next_state
-puts "Upload state: #{state.time}"
     RestClient.post "#{@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :result => state.result, :created_at => state.time}
     Progress.next
   end
