@@ -1,5 +1,8 @@
 require 'rake'
+require 'spec/rake/spectask'
 
-task :deploy
-	cp 'app/personal_codersdojo.rb', '../codersdojo2/public/download'
-	
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_files = FileList['spec']
+end
+
+task :default  => :spec

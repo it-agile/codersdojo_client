@@ -149,12 +149,17 @@ class StateReader
   end
 
   def state_count
-    Dir.new(@filename_formatter.session_dir @session_id).count - 2
+	  dummy_dirs_current_and_parent = 2
+    Dir.new(@filename_formatter.session_dir @session_id).count - dummy_dirs_current_and_parent
   end
 
   def enough_states?
-    state_count >= 2
+    state_count >= states_needed_for_one_move
   end
+
+	def states_needed_for_one_move
+		2
+	end
 
   def get_state_dir
     @filename_formatter.state_dir(@session_id, @next_step)
@@ -241,6 +246,7 @@ class Uploader
 
   def upload_state kata_id
     state = @state_reader.read_next_state
+puts "Upload state: #{state.time}"
     RestClient.post "#{@hostname}#{@@kata_path}/#{kata_id}#{@@state_path}", {:code => state.code, :result => state.result, :created_at => state.time}
     Progress.next
   end
