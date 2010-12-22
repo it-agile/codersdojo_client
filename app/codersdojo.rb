@@ -98,6 +98,14 @@ class Shell
     File.new(filename).ctime
   end
 
+	def list_templates
+		file_path_elements = __FILE__.split '/' 
+		file_path_elements[-2..-1] = nil
+		template_path = (file_path_elements << 'templates').join '/'
+		current_and_parent = 2
+		Dir.new(template_path).entries.drop current_and_parent
+	end
+
 	def make_os_specific text
 		text.gsub('%sh%', shell_extension).gsub('%:%', path_separator).gsub('%rm%', remove_command_name)
 	end
@@ -495,7 +503,7 @@ class GeneratorFactory
 									 "java.junit" => JavaGenerator, 
 								   "javascript.jspec" => JavascriptGenerator,
 									 "python.unittest" => PythonGenerator,
-									 "ruby.test/unit" => RubyGenerator}	
+									 "ruby.test-unit" => RubyGenerator}	
 	end
 	
 	def create_generator framework
@@ -507,7 +515,7 @@ class GeneratorFactory
 	end
 	
 	def list_generators
-		@frameworks.keys.join(', ')
+		Shell.new.list_templates.join(', ')
 	end
 	
 end
