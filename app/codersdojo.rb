@@ -306,8 +306,6 @@ class ArgumentParser
 		command = params[0] ? params[0] : ""
 		if command.downcase == "help" then
 			@controller.help params[1]
-		elsif command.downcase == "show-examples" then
-				@controller.show_examples
 		elsif command.downcase == "setup" then
 			@controller.generate params[1], params[2] ? params[2] : '<kata_file>'
 		elsif command.downcase == "upload" then
@@ -347,10 +345,6 @@ class Controller
 		else
 			@view.show_help
 		end
-	end
-
-	def show_examples
-		@view.show_examples
 	end
 
 	def generate framework, kata_file
@@ -408,20 +402,8 @@ Commands:
   help <command>                     See the details of the command.
   setup <framework> <kata_file>      Setup the environment for running the kata.
   upload <framework> <session_dir>   Upload the kata to http://www.codersdojo.org
-  show-examples                      Show some example usages.
 
 Report bugs to <codersdojo@it-agile.de>
-helptext
-	end
-
-	def show_examples
-		puts <<-helptext
-Examples:
-    :/dojo/my_kata% #{$0} setup ruby.test/unit prime
-      Show the instructions how to setup the environment for kata execution with ruby.
-
-    :/dojo/my_kata$ #{$0} upload  ruby.test/unit .codersdojo/2010-11-02_16-21-53
-      Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
 
@@ -444,6 +426,10 @@ setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the
                                       By now <framework> is one of clojure.is-test, java.junit, javascript.jspec, 
                                       python.unittest, ruby.test/unit.
                                       Use ??? as framework if your framework isn't in the list.
+
+Example:
+    :/dojo/my_kata% #{$0} setup ruby.test/unit prime
+        Show the instructions how to setup the environment for kata execution with Ruby and test/unit.
 helptext
 	end
 
@@ -462,6 +448,10 @@ upload <framework> <session_directory>  Upload the kata written with <framework>
                                         <session_directory> is relative to the working directory.
                                         Take a look at the generate command for the supported frameworks.
                                         If you used another framework, use ??? and send an email to codersdojo@it-agile.de
+
+Example:
+    :/dojo/my_kata$ #{$0} upload ruby.test/unit .codersdojo/2010-11-02_16-21-53
+        Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
 	
@@ -631,7 +621,7 @@ end
 if not called_from_spec(ARGV) then
 	view = ConsoleView.new
 	hostname = "http://www.codersdojo.com"
-	#hostname = "http://localhost:3000"
+#	hostname = "http://localhost:3000"
 	controller = Controller.new view, hostname
 	begin
 		arg_parser = ArgumentParser.new controller
