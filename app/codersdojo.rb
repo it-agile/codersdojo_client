@@ -99,11 +99,26 @@ class Shell
   end
 
 	def list_templates
+		real_dir_entries template_path
+	end
+	
+	def scaffold template
+		dir_path = "#{template_path}/#{template}"
+		to_copy = real_dir_entries dir_path
+		to_copy.each do |item|
+			FileUtils.cp_r "#{dir_path}/#{item}", "."
+		end
+	end
+	
+	def template_path
 		file_path_elements = __FILE__.split '/' 
 		file_path_elements[-2..-1] = nil
-		template_path = (file_path_elements << 'templates').join '/'
+		(file_path_elements << 'templates').join '/'
+	end
+
+	def real_dir_entries dir
 		current_and_parent = 2
-		Dir.new(template_path).entries.drop current_and_parent
+		Dir.new(dir).entries.drop current_and_parent
 	end
 
 	def make_os_specific text
@@ -356,11 +371,13 @@ class Controller
 	end
 
 	def generate framework, kata_file
-		generator = GeneratorFactory.new.create_generator framework
 		shell = Shell.new
-		generator_text = generator.generate kata_file
+		shell.scaffold framework
+		generator_text = IO.readlines("README").to_s;
+		generator_text = generator_text.gsub('#{kata_file}', kata_file)
+		generator_text = generator_text.gsub('#{$0}', $0)
 		generator_text = shell.make_os_specific generator_text
-		puts generator_text
+		puts "\n" + generator_text
 	end
 
 	def start command, file

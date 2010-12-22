@@ -1,0 +1,8 @@
+You have to create two shell scripts manually:
+  Create a shell script run-once.%sh% with this content:
+    python #{kata_file}.py
+
+  Create a second shell script run-endless.sh with this content:
+    #{$0} start run-once.%sh% #{kata_file}.py
+
+Run run-endless.%sh% and start your kata.

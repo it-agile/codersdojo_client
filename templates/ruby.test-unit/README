@@ -1,0 +1,5 @@
+You have to create one shell script manually:
+  Create a shell script run-endless.%sh% with this content:
+    #{$0} start ruby #{kata_file}.rb
+
+Run run-endless.%sh% and start your kata.
