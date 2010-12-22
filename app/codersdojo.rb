@@ -60,6 +60,7 @@ end
 class Shell
 
   MAX_STDOUT_LENGTH = 100000
+  ANY_TEMPLATE = "any"
 
   def cp source, destination
     FileUtils.cp source, destination
@@ -99,15 +100,17 @@ class Shell
   end
 
 	def list_templates
-		real_dir_entries template_path
+		templates = real_dir_entries template_path
+		templates.delete ANY_TEMPLATE
+		templates.join(', ')
 	end
-	
+
 	def scaffold template
 		begin
 			dir_path = "#{template_path}/#{template}"
 			to_copy = real_dir_entries dir_path
 		rescue
-			dir_path = "#{template_path}/any"
+			dir_path = "#{template_path}/#{ANY_TEMPLATE}"
 			to_copy = real_dir_entries dir_path
 		end
 		to_copy.each do |item|
@@ -450,12 +453,12 @@ helptext
 	end
 
 	def show_help_setup
-			generators = GeneratorFactory.new.list_generators
+			templates = Shell.new.list_templates
 			puts <<-helptext
 			
 setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the given framework and kata file.
                                       The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
-                                      By now <framework> is one of #{generators}.
+                                      By now <framework> is one of #{templates}.
                                       Use ??? as framework if your framework isn't in the list.
 
 Example:
@@ -475,12 +478,12 @@ helptext
 	end
 
 	def show_help_upload
-		generators = GeneratorFactory.new.list_generators
+		templates = Shell.new.list_templates
 		puts <<-helptext
 		
 upload <framework> <session_directory>  Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
                                         <session_directory> is relative to the working directory.
-                                        By now <framework> is one of #{generators}.
+                                        By now <framework> is one of #{templates}.
                                         If you used another framework, use ??? and send an email to codersdojo@it-agile.de
 
 Example:
@@ -516,139 +519,6 @@ helptext
 		puts "Encountered network error while <#{command}>. Is http://www.codersdojo.com down?"
 	end
 	
-end
-
-class GeneratorFactory
-		
-	def initialize
-		@frameworks = {"clojure.is-test" => ClosureGenerator,
-									 "java.junit" => JavaGenerator, 
-								   "javascript.jspec" => JavascriptGenerator,
-									 "python.unittest" => PythonGenerator,
-									 "ruby.test-unit" => RubyGenerator}	
-	end
-	
-	def create_generator framework
-		generator_class = @frameworks[framework]
-		if generator_class.nil? then
-			generator_class = AnyGenerator
-		end
-		generator_class.new
-	end
-	
-	def list_generators
-		Shell.new.list_templates.join(', ')
-	end
-	
-end
-
-class AnyGenerator
-	
-	def generate kata_file
-<<-generate_help
-You have to create two shell scripts manually:
-  Create a shell script run-once.%sh% that runs the tests of your kata once.
-
-  Create a second shell script run-endless.sh with this content:
-    #{$0} start run-once.%sh% #{kata_file}.<extension>
-
-Run run-endless.%sh% and start your kata.
-
-Assumptions:
-  - The whole kata source code is in the one #{kata_file}.<extension>.
-generate_help
-	end
-end
-
-class ClosureGenerator
-	def generate kata_file
-<<-generate_help
-You have to create two shell scripts manually:
-  Create a shell script run-once.%sh% with this content:
-    java -cp clojure-contrib.jar%:%clojure.jar clojure.main #{kata_file}.clj
-
-  Create a second shell script run-endless.sh with this content:
-    #{$0} start run-once.%sh% #{kata_file}.clj
-
-Run run-endless.%sh% and start your kata.
-
-Assumptions:
-  - Java is installed on your system and 'java' is in the path.
-  - clojure.jar and clojure-contrib.jar are placed in your work directory.
-generate_help
-	end
-end
-
-class JavaGenerator
-	def generate kata_file
-<<-generate_help
-You have to create two shell scripts manually:
-  Create a shell script run-once.%sh% with this content:
-    %rm% bin/#{kata_file}.class
-    javac -cp lib/junit.jar -d bin #{kata_file}.java
-    java -cp lib/junit.jar%:%bin #{kata_file}
-
-  Create a second shell script run-endless.sh with this content:
-    #{$0} start run-once.%sh% src/#{kata_file}.java
-
-Run run-endless.%sh% and start your kata.
-
-Assumptions:
-  - A Java JDK is installed on your system and 'java' and 'javac' are in the path.
-  - junit.jar is placed in a directory named 'lib'.
-  - The kata source file is placed in the 'src' directory.
-  - The kata class file is generated into the 'class' directory.
-  - In the source file the classes are placed in the default package.
-  - The kata source file has a main method that starts the tests.
-  - If your IDE (like Eclipse) compiles the source file, you should remove the first two lines
-    in the run-once.%sh% file.
-generate_help
-	end
-end
-
-
-class JavascriptGenerator
-	def generate kata_file
-<<-generate_help
-You have to create two shell scripts manually:
-  Create a shell script run-once.%sh% with this content:
-    jspec --rhino run
-
-  Create a second shell script run-endless.sh with this content:
-    #{$0} start run-once.%sh% #{kata_file}.js
-
-Run run-endless.%sh% and start your kata.
-generate_help
-	end
-end
-
-
-class PythonGenerator
-	def generate kata_file
-<<-generate_help
-You have to create two shell scripts manually:
-  Create a shell script run-once.%sh% with this content:
-    python #{kata_file}.py
-
-  Create a second shell script run-endless.sh with this content:
-    #{$0} start run-once.%sh% #{kata_file}.py
-
-Run run-endless.%sh% and start your kata.
-generate_help
-	end
-end
-
-
-class RubyGenerator
-	def generate kata_file
-<<-generate_help
-You have to create one shell script manually:
-  Create a shell script run-endless.%sh% with this content:
-    #{$0} start ruby #{kata_file}.rb
-
-Run run-endless.%sh% and start your kata.
-generate_help
-	end
 end
 
 def called_from_spec args
