@@ -420,11 +420,12 @@ helptext
 	end
 
 	def show_help_setup
+			generators = GeneratorFactory.new.list_generators
 			puts <<-helptext
+			
 setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the given framework and kata file.
                                       The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
-                                      By now <framework> is one of clojure.is-test, java.junit, javascript.jspec, 
-                                      python.unittest, ruby.test/unit.
+                                      By now <framework> is one of #{generators}.
                                       Use ??? as framework if your framework isn't in the list.
 
 Example:
@@ -435,6 +436,7 @@ helptext
 
 	def show_help_start
 		puts <<-helptext
+		
 start <shell_command> <kata_file>  Start the continuous test runner, that runs <shell-command> whenever <kata_file>
                                    changes. The <kata_file> has to include the whole source code of the kata.
                                    Whenever the test runner is started, it creates a new session directory in the 
@@ -443,10 +445,12 @@ helptext
 	end
 
 	def show_help_upload
+		generators = GeneratorFactory.new.list_generators
 		puts <<-helptext
+		
 upload <framework> <session_directory>  Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
                                         <session_directory> is relative to the working directory.
-                                        Take a look at the generate command for the supported frameworks.
+                                        By now <framework> is one of #{generators}.
                                         If you used another framework, use ??? and send an email to codersdojo@it-agile.de
 
 Example:
@@ -500,6 +504,10 @@ class GeneratorFactory
 			generator_class = AnyGenerator
 		end
 		generator_class.new
+	end
+	
+	def list_generators
+		@frameworks.keys.join(', ')
 	end
 	
 end
