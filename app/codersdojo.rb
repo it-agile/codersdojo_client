@@ -103,8 +103,13 @@ class Shell
 	end
 	
 	def scaffold template
-		dir_path = "#{template_path}/#{template}"
-		to_copy = real_dir_entries dir_path
+		begin
+			dir_path = "#{template_path}/#{template}"
+			to_copy = real_dir_entries dir_path
+		rescue
+			dir_path = "#{template_path}/any"
+			to_copy = real_dir_entries dir_path
+		end
 		to_copy.each do |item|
 			FileUtils.cp_r "#{dir_path}/#{item}", "."
 		end
