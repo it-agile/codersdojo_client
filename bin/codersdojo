@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
 codersdojo_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'app'))
+infrastructure_dir = "#{codersdojo_dir}/infrastructure"
+models_dir = "#{codersdojo_dir}/models"
 $LOAD_PATH.unshift(codersdojo_dir) unless $LOAD_PATH.include?(codersdojo_dir)
+$LOAD_PATH.unshift(infrastructure_dir) unless $LOAD_PATH.include?(infrastructure_dir)
+$LOAD_PATH.unshift(models_dir) unless $LOAD_PATH.include?(models_dir)
 require 'codersdojo'

@@ -1,19 +1,14 @@
-You have to create two shell scripts manually:
-  Create a shell script run-once.%sh% with this content:
-    %rm% bin/#{kata_file}.class
-    javac -cp lib/junit.jar -d bin #{kata_file}.java
-    java -cp lib/junit.jar%:%bin #{kata_file}
+Two shell scripts were created:
+  run-once.%sh% runs your tests once
+  run-endless.%sh% runs your tests endlessly via run-once.%sh%
 
-  Create a second shell script run-endless.sh with this content:
-    #{$0} start run-once.%sh% src/#{kata_file}.java
-
-Run run-endless.%sh% and start your kata.
+Run run-endless.sh and start your kata.
 
 Assumptions:
   - A Java JDK is installed on your system and 'java' and 'javac' are in the path.
   - junit.jar is placed in a directory named 'lib'.
   - The kata source file is placed in the 'src' directory.
-  - The kata class file is generated into the 'class' directory.
+  - The kata class file is generated into the 'bin' directory.
   - In the source file the classes are placed in the default package.
   - The kata source file has a main method that starts the tests.
   - If your IDE (like Eclipse) compiles the source file, you should remove the first two lines
