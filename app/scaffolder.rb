@@ -1,4 +1,4 @@
-require 'file_transformer'
+require 'text_template_machine'
 
 class Scaffolder
 
@@ -6,7 +6,17 @@ class Scaffolder
 
 	def initialize shell
 		@shell = shell
-		@file_transformer = FileTransformer.new shell
+		@template_machine = create_template_machine
+	end
+
+	def create_template_machine
+		template_machine = TextTemplateMachine.new @shell
+		template_machine.placeholder_values = {
+			'sh' => @shell.shell_extension,
+			':' => @shell.path_separator,
+			'rm' => @shell.remove_command_name
+		}
+		template_machine
 	end
 
 	def list_templates
@@ -16,6 +26,7 @@ class Scaffolder
 	end
 
 	def scaffold template, kata_file
+		@template_machine.placeholder_values['kata_file'] = kata_file
 		begin
 			dir_path = "#{template_path}/#{template}"
 			to_copy = @shell.real_dir_entries dir_path
@@ -26,14 +37,14 @@ class Scaffolder
 		to_copy.each do |item|
 			file_path = "#{dir_path}/#{item}"
 			@shell.cp_r file_path, "."
-			transform_file item, kata_file
+			transform_file item
 		end
 	end
 	
-	def transform_file file, kata_file
+	def transform_file file
 		if file == "README" or file.end_with?(".sh")
 			content = @shell.read_file file
-			content = @file_transformer.transform content, kata_file
+			content = @template_machine.render content
 			@shell.write_file file, content
 		end
 	end

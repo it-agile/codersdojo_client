@@ -41,7 +41,7 @@ describe Scaffolder do
 		@shell_mock.should_receive(:cp_r).with "aDir/templates/a.template/README", "."
 		@shell_mock.should_receive(:cp_r).with "aDir/templates/a.template/run-once.sh", "."
 		@shell_mock.should_receive(:cp_r).with "aDir/templates/a.template/run-endless.sh", "."
-		@shell_mock.should_receive(:read_file).with("README").and_return '%rm% #{kata_file}\nb.%sh%\nc%:%d'
+		@shell_mock.should_receive(:read_file).with("README").and_return '%rm% %kata_file%\nb.%sh%\nc%:%d'
 		@shell_mock.should_receive(:write_file).with "README", 'del myKata\nb.cmd\nc;d'
 		@shell_mock.should_receive(:read_file).with("run-once.sh").and_return "%rm% a\nb.%sh%\nc%:%d"
 		@shell_mock.should_receive(:write_file).with "run-once.sh", "del a\nb.cmd\nc;d"
