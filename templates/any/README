@@ -1,10 +1,10 @@
-You have to create two shell scripts manually:
-  Create a shell script run-once.%sh% that runs the tests of your kata once.
+Two shell scripts were created:
+  run-once.%sh% runs your tests once
+  run-endless.%sh% runs your tests endlessly via run-once.%sh%
 
-  Create a second shell script run-endless.sh with this content:
-    #{$0} start run-once.%sh% #{kata_file}.<extension>
+run-once.%sh% is not implemented by now. You have to implement it appropriately.
 
 Run run-endless.%sh% and start your kata.
 
 Assumptions:
-  - The whole kata source code is in the one #{kata_file}.<extension>.
+  - The whole kata source code is in the one #{kata_file}.

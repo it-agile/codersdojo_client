@@ -1,3 +1,6 @@
+require 'session_id_generator'
+require 'runner'
+
 class ArgumentParser
 	
 	def initialize controller

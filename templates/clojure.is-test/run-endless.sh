@@ -1,1 +1,2 @@
-codersdojo start run-once.sh prime.clj
+codersdojo start run-once.sh %kata_file%.clj
+

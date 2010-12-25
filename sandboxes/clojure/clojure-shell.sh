@@ -1,1 +1,0 @@
-java -cp /System/Library/Frameworks/Clojure/clojure.jar:clojure-contrib.jar clojure.main

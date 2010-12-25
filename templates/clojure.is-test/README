@@ -1,12 +1,10 @@
-You have to create two shell scripts manually:
-  Create a shell script run-once.%sh% with this content:
-    java -cp clojure-contrib.jar%:%clojure.jar clojure.main #{kata_file}.clj
+Two shell scripts were created:
+  run-once.%sh% runs your tests once
+  run-endless.%sh% runs your tests endlessly via run-once.%sh%
 
-  Create a second shell script run-endless.sh with this content:
-    #{$0} start run-once.%sh% #{kata_file}.clj
-
-Run run-endless.%sh% and start your kata.
+Run run-endless.sh and start your kata.
 
 Assumptions:
+  - The whole kata source code is in the one %kata_file%.clj.
   - Java is installed on your system and 'java' is in the path.
-  - clojure.jar and clojure-contrib.jar are placed in your work directory.
+  - clojure.jar and clojure-contrib.jar are placed in the 'lib' directory.

@@ -1,3 +1,5 @@
+require 'scheduler'
+
 class Controller
 
 	def initialize shell, view, scaffolder, hostname

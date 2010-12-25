@@ -1,1 +1,1 @@
-echo "Modify shell script run-once.sh so that it runs your tests once."
+echo "Modify shell script run-once.%sh% so that it runs your tests once."

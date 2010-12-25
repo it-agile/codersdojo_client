@@ -1,5 +1,8 @@
-You have to create one shell script manually:
-  Create a shell script run-endless.%sh% with this content:
-    #{$0} start ruby #{kata_file}.rb
+Two shell scripts were created:
+  run-once.%sh% runs your tests once
+  run-endless.%sh% runs your tests endlessly via run-once.%sh%
 
 Run run-endless.%sh% and start your kata.
+
+Assumptions:
+  - The whole kata source code is in the one %kata_file%.rb.

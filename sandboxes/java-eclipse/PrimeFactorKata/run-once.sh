@@ -1,1 +1,0 @@
-java -cp lib/junit.jar:bin PrimeFactorTest
