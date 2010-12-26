@@ -22,7 +22,7 @@ if not called_from_spec(ARGV) then
 	begin
 		arg_parser = ArgumentParser.new controller
 		command = arg_parser.parse ARGV
-	rescue ArgumentError
+	rescue ShellArgumentException
 		controller.help
 	end
 end

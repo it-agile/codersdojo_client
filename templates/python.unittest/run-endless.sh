@@ -1,1 +1,1 @@
-codersdojo start run-once.sh %kata_file%.rb
+codersdojo start run-once.sh %kata_file%.py

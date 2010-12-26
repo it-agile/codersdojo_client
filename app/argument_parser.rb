@@ -1,5 +1,6 @@
 require 'session_id_generator'
 require 'runner'
+require 'shell_argument_exception'
 
 class ArgumentParser
 	
@@ -21,7 +22,7 @@ class ArgumentParser
 		elsif command.downcase == "spec" then
 			# 'spec" is for testing purpose only: do nothing special
 		else
-			raise ArgumentError
+			raise ShellArgumentException
 		end
 	end
 

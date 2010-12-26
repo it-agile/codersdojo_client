@@ -1,0 +1,3 @@
+class ShellArgumentException < Exception
+	
+end
