@@ -1,3 +1,3 @@
 rm bin/%Kata_file%Test.class
-javac -cp lib/junit.jar -d bin src/%Kata_file%Test.java
+javac -cp lib/junit.jar -d bin %Kata_file%Test.java
 java -cp lib/junit.jar:bin org.junit.runner.JUnitCore %Kata_file%Test
