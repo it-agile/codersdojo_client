@@ -6,7 +6,7 @@ class %Kata_file%Test < Test::Unit::TestCase
 
   def test_foo
     object_under_test = %Kata_file%.new
-    assert_equal("foo", object_under_test.bar)
+    assert_equal("foo", object_under_test.foo)
   end
 
 end

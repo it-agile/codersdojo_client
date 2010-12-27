@@ -1,4 +1,5 @@
 require 'scheduler'
+require 'uploader'
 
 class Controller
 
