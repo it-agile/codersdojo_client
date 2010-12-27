@@ -65,7 +65,7 @@ class ShellWrapper
 	end
 
 	def remove_command_name
-		windows? ? 'delete' : 'rm'
+		windows? ? 'del' : 'rm'
 	end
 
 	def shell_extension

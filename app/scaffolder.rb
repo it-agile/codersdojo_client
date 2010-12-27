@@ -41,11 +41,12 @@ class Scaffolder
 		end
 	end
 	
-	def transform_file file
-		if file == "README" or file.end_with?(".sh")
-			content = @shell.read_file file
+	def transform_file filename
+		if File.file?(filename)
+			content = @shell.read_file filename
 			content = @template_machine.render content
-			@shell.write_file file, content
+			new_filename = @template_machine.render filename
+			@shell.write_file new_filename, content
 		end
 	end
 		
