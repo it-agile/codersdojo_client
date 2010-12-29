@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>show_help_upload (ConsoleView)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File app/console_view.rb, line 74</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show_help_upload</span>
+                <span class="ruby-identifier">templates</span> = <span class="ruby-ivar">@scaffolder</span>.<span class="ruby-identifier">list_templates</span>
+                <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;\nupload &lt;framework&gt; &lt;session_directory&gt;  Upload the kata written with &lt;framework&gt; in &lt;session_directory&gt; to codersdojo.com.\n&lt;session_directory&gt; is relative to the working directory.\nBy now &lt;framework&gt; is one of \#{templates}.\nIf you used another framework, use ??? and send an email to codersdojo@it-agile.de\n\nExample:\n:/dojo/my_kata$ \#{$0} upload ruby.test-unit .codersdojo/2010-11-02_16-21-53\nUpload the kata (written in Ruby with the test/unit framework) located in directory \&quot;.codersdojo/2010-11-02_16-21-53\&quot; to codersdojo.com.\n&quot;</span>
+        <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

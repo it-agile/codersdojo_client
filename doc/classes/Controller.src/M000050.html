@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>start (Controller)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File app/controller.rb, line 26</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span> <span class="ruby-identifier">command</span>, <span class="ruby-identifier">file</span>
+                <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">command</span> <span class="ruby-keyword kw">or</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">file</span> <span class="ruby-keyword kw">then</span>
+                        <span class="ruby-ivar">@view</span>.<span class="ruby-identifier">show_missing_command_argument_error</span> <span class="ruby-value str">&quot;start&quot;</span>
+                        <span class="ruby-keyword kw">return</span>
+                <span class="ruby-keyword kw">end</span>
+          <span class="ruby-ivar">@view</span>.<span class="ruby-identifier">show_start_kata</span> <span class="ruby-identifier">command</span>, <span class="ruby-identifier">file</span>
+          <span class="ruby-identifier">dojo</span> = <span class="ruby-constant">Runner</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">ShellWrapper</span>.<span class="ruby-identifier">new</span>, <span class="ruby-constant">SessionIdGenerator</span>.<span class="ruby-identifier">new</span>
+          <span class="ruby-identifier">dojo</span>.<span class="ruby-identifier">file</span> = <span class="ruby-identifier">file</span>
+          <span class="ruby-identifier">dojo</span>.<span class="ruby-identifier">run_command</span> = <span class="ruby-identifier">command</span>
+          <span class="ruby-identifier">scheduler</span> = <span class="ruby-constant">Scheduler</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">dojo</span>
+          <span class="ruby-identifier">scheduler</span>.<span class="ruby-identifier">start</span>
+        <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>show_help_setup (ConsoleView)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File app/console_view.rb, line 47</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show_help_setup</span>
+                        <span class="ruby-identifier">templates</span> = <span class="ruby-ivar">@scaffolder</span>.<span class="ruby-identifier">list_templates</span>
+                        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;\nsetup &lt;framework&gt; &lt;kata_file_no_ext&gt;  Setup the environment for the kata for the given framework and kata file.\nThe kata_file should not have an extension. Use 'prime' and not 'prime.java'.\nBy now &lt;framework&gt; is one of \#{templates}.\nUse ??? as framework if your framework isn't in the list.\n\nExample:\n:/dojo/my_kata% \#{$0} setup ruby.test-unit prime\nShow the instructions how to setup the environment for kata execution with Ruby and test/unit.\n&quot;</span>
+        <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

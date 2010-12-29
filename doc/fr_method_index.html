@@ -1,0 +1,110 @@
+
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!--
+
+    Methods
+
+  -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Methods</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="rdoc-style.css" type="text/css" />
+  <base target="docwin" />
+</head>
+<body>
+<div id="index">
+  <h1 class="section-bar">Methods</h1>
+  <div id="index-entries">
+    <a href="classes/CodersDojo.html#M000080">called_from_spec? (CodersDojo)</a><br />
+    <a href="classes/ShellWrapper.html#M000022">cp (ShellWrapper)</a><br />
+    <a href="classes/ShellWrapper.html#M000023">cp_r (ShellWrapper)</a><br />
+    <a href="classes/Scaffolder.html#M000041">create_template_machine (Scaffolder)</a><br />
+    <a href="classes/ShellWrapper.html#M000031">ctime (ShellWrapper)</a><br />
+    <a href="classes/ShellWrapper.html#M000027">current_file (ShellWrapper)</a><br />
+    <a href="classes/Progress.html#M000015">end (Progress)</a><br />
+    <a href="classes/StateReader.html#M000003">enough_states? (StateReader)</a><br />
+    <a href="classes/Runner.html#M000057">execute (Runner)</a><br />
+    <a href="classes/ShellWrapper.html#M000028">execute (ShellWrapper)</a><br />
+    <a href="classes/ArgumentParser.html#M000084">expand_run_command (ArgumentParser)</a><br />
+    <a href="classes/XMLElementExtractor.html#M000081">extract (XMLElementExtractor)</a><br />
+    <a href="classes/ShellWrapper.html#M000035">file? (ShellWrapper)</a><br />
+    <a href="classes/SessionIdGenerator.html#M000012">format_to_length (SessionIdGenerator)</a><br />
+    <a href="classes/Controller.html#M000049">generate (Controller)</a><br />
+    <a href="classes/SessionIdGenerator.html#M000011">generate_id (SessionIdGenerator)</a><br />
+    <a href="classes/StateReader.html#M000005">get_state_dir (StateReader)</a><br />
+    <a href="classes/StateReader.html#M000006">has_next_state (StateReader)</a><br />
+    <a href="classes/Controller.html#M000048">help (Controller)</a><br />
+    <a href="classes/Runner.html#M000056">init_session (Runner)</a><br />
+    <a href="classes/Scaffolder.html#M000042">list_templates (Scaffolder)</a><br />
+    <a href="classes/ShellWrapper.html#M000024">mkdir (ShellWrapper)</a><br />
+    <a href="classes/ShellWrapper.html#M000025">mkdir_p (ShellWrapper)</a><br />
+    <a href="classes/State.html#M000064">new (State)</a><br />
+    <a href="classes/StateReader.html#M000001">new (StateReader)</a><br />
+    <a href="classes/Scheduler.html#M000052">new (Scheduler)</a><br />
+    <a href="classes/Controller.html#M000047">new (Controller)</a><br />
+    <a href="classes/ArgumentParser.html#M000082">new (ArgumentParser)</a><br />
+    <a href="classes/ConsoleView.html#M000065">new (ConsoleView)</a><br />
+    <a href="classes/Scaffolder.html#M000040">new (Scaffolder)</a><br />
+    <a href="classes/CodersDojo.html#M000078">new (CodersDojo)</a><br />
+    <a href="classes/Runner.html#M000054">new (Runner)</a><br />
+    <a href="classes/Uploader.html#M000016">new (Uploader)</a><br />
+    <a href="classes/TextTemplateMachine.html#M000008">new (TextTemplateMachine)</a><br />
+    <a href="classes/Progress.html#M000014">next (Progress)</a><br />
+    <a href="classes/ArgumentParser.html#M000083">parse (ArgumentParser)</a><br />
+    <a href="classes/ShellWrapper.html#M000038">path_separator (ShellWrapper)</a><br />
+    <a href="classes/ShellWrapper.html#M000030">read_file (ShellWrapper)</a><br />
+    <a href="classes/ShellWrapper.html#M000033">read_file (ShellWrapper)</a><br />
+    <a href="classes/StateReader.html#M000007">read_next_state (StateReader)</a><br />
+    <a href="classes/ShellWrapper.html#M000032">real_dir_entries (ShellWrapper)</a><br />
+    <a href="classes/ShellWrapper.html#M000036">remove_command_name (ShellWrapper)</a><br />
+    <a href="classes/ShellWrapper.html#M000026">rename (ShellWrapper)</a><br />
+    <a href="classes/TextTemplateMachine.html#M000009">render (TextTemplateMachine)</a><br />
+    <a href="classes/TextTemplateMachine.html#M000010">replace_placeholder (TextTemplateMachine)</a><br />
+    <a href="classes/FilenameFormatter.html#M000060">result_file (FilenameFormatter)</a><br />
+    <a href="classes/CodersDojo.html#M000079">run (CodersDojo)</a><br />
+    <a href="classes/Scaffolder.html#M000043">scaffold (Scaffolder)</a><br />
+    <a href="classes/FilenameFormatter.html#M000063">session_dir (FilenameFormatter)</a><br />
+    <a href="classes/ShellWrapper.html#M000037">shell_extension (ShellWrapper)</a><br />
+    <a href="classes/ConsoleView.html#M000068">show_detailed_help (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000066">show_help (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000069">show_help_setup (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000070">show_help_start (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000072">show_help_unknown (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000071">show_help_upload (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000074">show_missing_command_argument_error (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000077">show_socket_error (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000073">show_start_kata (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000076">show_upload_result (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000075">show_upload_start (ConsoleView)</a><br />
+    <a href="classes/ConsoleView.html#M000067">show_usage (ConsoleView)</a><br />
+    <a href="classes/FilenameFormatter.html#M000059">source_code_file (FilenameFormatter)</a><br />
+    <a href="classes/Scheduler.html#M000053">start (Scheduler)</a><br />
+    <a href="classes/Controller.html#M000050">start (Controller)</a><br />
+    <a href="classes/Runner.html#M000055">start (Runner)</a><br />
+    <a href="classes/StateReader.html#M000002">state_count (StateReader)</a><br />
+    <a href="classes/FilenameFormatter.html#M000062">state_dir (FilenameFormatter)</a><br />
+    <a href="classes/FilenameFormatter.html#M000058">state_dir_prefix (FilenameFormatter)</a><br />
+    <a href="classes/FilenameFormatter.html#M000061">state_file (FilenameFormatter)</a><br />
+    <a href="classes/StateReader.html#M000004">states_needed_for_one_move (StateReader)</a><br />
+    <a href="classes/Scaffolder.html#M000046">template_path (Scaffolder)</a><br />
+    <a href="classes/Scaffolder.html#M000044">transform_file_content (Scaffolder)</a><br />
+    <a href="classes/Scaffolder.html#M000045">transform_file_name (Scaffolder)</a><br />
+    <a href="classes/Controller.html#M000051">upload (Controller)</a><br />
+    <a href="classes/Uploader.html#M000021">upload (Uploader)</a><br />
+    <a href="classes/Uploader.html#M000017">upload_kata (Uploader)</a><br />
+    <a href="classes/Uploader.html#M000020">upload_kata_and_states (Uploader)</a><br />
+    <a href="classes/Uploader.html#M000018">upload_state (Uploader)</a><br />
+    <a href="classes/Uploader.html#M000019">upload_states (Uploader)</a><br />
+    <a href="classes/ShellWrapper.html#M000039">windows? (ShellWrapper)</a><br />
+    <a href="classes/Progress.html#M000013">write_empty_progress (Progress)</a><br />
+    <a href="classes/ShellWrapper.html#M000029">write_file (ShellWrapper)</a><br />
+    <a href="classes/ShellWrapper.html#M000034">write_file (ShellWrapper)</a><br />
+  </div>
+</div>
+</body>
+</html>
