@@ -7,10 +7,15 @@ public class %Kata_file%Test {
 	
 	@Test
 	public void testFoo() {
-		assertEquals("foo", foo());
+		%Kata_file% object_under_test = new %Kata_file%();
+		assertEquals("foo", object_under_test.foo());
 	}
 	
-	public void foo() {
+}
+
+class %Kata_file% {
+
+	public String foo() {
 		return "fixme";
 	}
 	
