@@ -37,18 +37,25 @@ class Scaffolder
 		to_copy.each do |item|
 			file_path = "#{dir_path}/#{item}"
 			@shell.cp_r file_path, "."
-			transform_file item
+			transform_file_content item
+			transform_file_name item
 		end
 	end
 	
-	def transform_file filename
-		if File.file?(filename)
+	def transform_file_content filename
+		if @shell.file?(filename)
 			content = @shell.read_file filename
 			content = @template_machine.render content
-			new_filename = @template_machine.render filename
-			@shell.write_file new_filename, content
+			@shell.write_file filename, content
 		end
 	end
+	
+	def transform_file_name filename
+		new_filename = @template_machine.render filename
+		if new_filename != filename
+			@shell.rename filename, new_filename
+		end
+  end
 		
 	def template_path
 		file_path_elements = @shell.current_file.split '/' 

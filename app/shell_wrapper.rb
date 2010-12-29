@@ -20,6 +20,10 @@ class ShellWrapper
     FileUtils.mkdir_p dirs
   end
 
+	def rename old_filename, new_filename
+		File.rename old_filename, new_filename
+	end
+
 	def current_file
 		__FILE__
 	end
@@ -64,6 +68,10 @@ class ShellWrapper
 		end
 	end
 
+  def file? filename
+		File.file? filename
+	end
+	
 	def remove_command_name
 		windows? ? 'del' : 'rm'
 	end
