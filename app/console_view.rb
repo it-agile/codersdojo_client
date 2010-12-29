@@ -52,7 +52,7 @@ setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the
                                       Use ??? as framework if your framework isn't in the list.
 
 Example:
-    :/dojo/my_kata% #{$0} setup ruby.test/unit prime
+    :/dojo/my_kata% #{$0} setup ruby.test-unit prime
         Show the instructions how to setup the environment for kata execution with Ruby and test/unit.
 helptext
 	end
@@ -77,7 +77,7 @@ upload <framework> <session_directory>  Upload the kata written with <framework>
                                         If you used another framework, use ??? and send an email to codersdojo@it-agile.de
 
 Example:
-    :/dojo/my_kata$ #{$0} upload ruby.test/unit .codersdojo/2010-11-02_16-21-53
+    :/dojo/my_kata$ #{$0} upload ruby.test-unit .codersdojo/2010-11-02_16-21-53
         Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
