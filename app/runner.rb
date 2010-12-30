@@ -26,7 +26,7 @@ class Runner
     if change_time == @previous_change_time then
       return
     end
-    result = @shell.execute "#{@run_command} #{@file}"
+    result = @shell.execute @run_command
     state_dir = @filename_formatter.state_dir @session_id, @step
     @shell.mkdir state_dir
     @shell.cp @file, state_dir

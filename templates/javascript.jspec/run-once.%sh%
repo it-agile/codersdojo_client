@@ -1,0 +1,1 @@
+jspec --rhino run

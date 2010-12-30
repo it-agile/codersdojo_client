@@ -13,7 +13,7 @@ describe Runner, "in run mode" do
     @session_id_provider_mock.should_receive(:generate_id).and_return SESSION_ID
     @runner = Runner.new @shell_mock, @session_id_provider_mock
     @runner.file = "my_file.rb"
-    @runner.run_command = "ruby"
+    @runner.run_command = "run-once.sh"
   end
 
   it "should create codersdojo directory if it doesn't exist with session sub-directory" do
@@ -22,7 +22,7 @@ describe Runner, "in run mode" do
   end
 
   it "should run ruby command on kata file given as argument" do
-    @shell_mock.should_receive(:execute).with "ruby my_file.rb"
+    @shell_mock.should_receive(:execute).with "run-once.sh"
     @runner.start
   end
 

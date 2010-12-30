@@ -1,4 +1,6 @@
 ; Adapt the code to your code kata %kata_file%.
+; Important: Test and production code has to be
+;            completely in this file.
 
 (use 'clojure.test)
 

@@ -30,13 +30,13 @@ describe ArgumentParser do
 		@parser.parse ["start", "aCommand.sh","aFile"]		
 	end
 	
-	it "should prepend *.bat start scripts with 'start'" do
-		@controller_mock.should_receive(:start).with "start aCommand.bat", "aFile"
+	it "should not prepend *.bat start scripts with anything" do
+		@controller_mock.should_receive(:start).with "aCommand.bat", "aFile"
 		@parser.parse ["start", "aCommand.bat","aFile"]		
 	end
 	
-	it "should prepend *.cmd start scripts with 'start'" do
-		@controller_mock.should_receive(:start).with "start aCommand.cmd", "aFile"
+	it "should not prepend *.cmd start scripts with anything" do
+		@controller_mock.should_receive(:start).with "aCommand.cmd", "aFile"
 		@parser.parse ["start", "aCommand.cmd","aFile"]		
 	end
 	

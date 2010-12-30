@@ -58,16 +58,6 @@ class ShellWrapper
 		Dir.new(dir).entries.drop current_and_parent
 	end
 
-	def read_file filename
-		generator_text = IO.readlines(filename).to_s;
-	end
-
-	def write_file filename, content
-		File.open(filename, 'w') do |f|  
-		  f.puts content 
-		end
-	end
-
   def file? filename
 		File.file? filename
 	end
@@ -85,7 +75,8 @@ class ShellWrapper
 	end
 	
 	def windows?
-		RUBY_PLATFORM.downcase.include? "windows"
+		platform = RUBY_PLATFORM.downcase
+		platform.include?("windows") or platform.include?("mingw32")
 	end
 
 end

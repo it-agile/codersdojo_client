@@ -1,2 +1,2 @@
-codersdojo start run-once.sh %kata_file%.clj
+codersdojo start run-once.%sh% %kata_file%.clj
 
