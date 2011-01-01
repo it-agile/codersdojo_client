@@ -4,10 +4,15 @@ describe TextConverter do
 
   before (:each) do
 		@escape_sequence_start = 0x1b.chr
-		@escape_sequence_end = 0x6b.chr
+		@escape_sequence_end = 0x6d.chr
     @text_converter = TextConverter.new
   end
 
+	it "should leave nil as nil" do
+		@text_converter.remove_escape_sequences(nil).should be_nil
+		
+	end
+	
   it "should leave text without escape sequences untouched" do
 		@text_converter.remove_escape_sequences("text without escape sequence").should == "text without escape sequence"
   end

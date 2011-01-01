@@ -1,4 +1,5 @@
 require "filename_formatter"
+require "text_converter"
 
 class Runner
 
@@ -27,6 +28,7 @@ class Runner
       return
     end
     result = @shell.execute @run_command
+		result = TextConverter.new.remove_escape_sequences result
     state_dir = @filename_formatter.state_dir @session_id, @step
     @shell.mkdir state_dir
     @shell.cp @file, state_dir

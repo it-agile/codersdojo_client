@@ -55,5 +55,11 @@ describe Runner, "in run mode" do
     @runner.start
   end
 
+	it "should remove escape sequences" do
+    @shell_mock.should_receive(:execute).and_return "#{TextConverter.ESCAPE_SEQUENCE_START}b#{TextConverter.ESCAPE_SEQUENCE_END}c"
+    @shell_mock.should_receive(:write_file).with "#{STATE_DIR_PREFIX}0/result.txt", "c"
+		@runner.start
+	end
+
 end
 
