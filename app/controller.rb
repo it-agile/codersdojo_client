@@ -19,8 +19,13 @@ class Controller
 	end
 
 	def generate framework, kata_file
-		@scaffolder.scaffold framework, kata_file
-		puts "\n" + @shell.read_file("README")
+		begin
+			@scaffolder.scaffold framework, kata_file
+		  puts "\n" + @shell.read_file("README")
+		rescue
+			puts "Unkown framework #{framework}. Possible frameworks:"
+			puts @scaffolder.list_templates
+		end		
 	end
 
 	def start command, file

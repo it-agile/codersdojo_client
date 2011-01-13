@@ -27,19 +27,15 @@ class Scaffolder
 
 	def scaffold template, kata_file
 		@template_machine.placeholder_values['kata_file'] = kata_file
-		begin
+		template = template == '???' ? ANY_TEMPLATE : template
 			dir_path = "#{template_path}/#{template}"
 			to_copy = @shell.real_dir_entries dir_path
-		rescue
-			dir_path = "#{template_path}/#{ANY_TEMPLATE}"
-			to_copy = @shell.real_dir_entries dir_path
-		end
-		to_copy.each do |item|
-			file_path = "#{dir_path}/#{item}"
-			@shell.cp_r file_path, "."
-			transform_file_content item
-			transform_file_name item
-		end
+			to_copy.each do |item|
+				file_path = "#{dir_path}/#{item}"
+				@shell.cp_r file_path, "."
+				transform_file_content item
+				transform_file_name item
+			end
 	end
 	
 	def transform_file_content filename

@@ -29,14 +29,6 @@ describe Scaffolder do
 		@scaffolder.scaffold "a.template", 'myKata'
 	end
 	
-	it "should use 'any' when the given template doesn't exist" do
-		@shell_mock.should_receive(:real_dir_entries).with("aDir/templates/unknown.template").and_throw Exception
-		@shell_mock.should_receive(:real_dir_entries).with("aDir/templates/any").and_return ["a"]
-		@shell_mock.should_receive(:cp_r).with "aDir/templates/any/a", "."
-		@shell_mock.should_receive(:file?).with("a").and_return false
-		@scaffolder.scaffold "unknown.template", 'myKata'
-	end
-	
 	it "should replace placeholder in template file README and shell scripts" do
 		@shell_mock.should_receive(:real_dir_entries).with("aDir/templates/a.template").
 			and_return ["a", "README", "run-once.sh", "run-endless.sh"]	
