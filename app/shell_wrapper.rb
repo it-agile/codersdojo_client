@@ -54,8 +54,7 @@ class ShellWrapper
   end
 
 	def real_dir_entries dir
-		current_and_parent = 2
-		Dir.new(dir).entries.drop current_and_parent
+		Dir.new(dir).entries - ["..", "."]
 	end
 
   def file? filename
