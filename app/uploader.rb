@@ -1,5 +1,6 @@
 require 'state_reader'
 require 'progress'
+require 'filename_formatter'
 require 'xml_element_extractor'
 require 'rest_client'
 
@@ -9,7 +10,7 @@ class Uploader
 		@hostname = hostname
 	  @framework = framework
     @state_reader = state_reader
-    @state_reader.session_id = session_dir.gsub('.codersdojo/', '')
+    @state_reader.session_dir = session_dir
   end
 
   def upload_kata

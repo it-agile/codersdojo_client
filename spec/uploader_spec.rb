@@ -7,7 +7,7 @@ describe Uploader do
   end
 
   it "should convert session-dir to session-id" do
-    @state_reader_mock.should_receive(:session_id=).with("session_id")
+    @state_reader_mock.should_receive(:session_dir=).with(".codersdojo/session_id")
     Uploader.new "http://dummy_host", "dummy.framework", ".codersdojo/session_id", @state_reader_mock
   end
 
@@ -15,7 +15,7 @@ describe Uploader do
 
       before (:each) do
         @state_reader_mock = mock StateReader
-        @state_reader_mock.should_receive(:session_id=).with("path_to_kata")
+        @state_reader_mock.should_receive(:session_dir=).with("path_to_kata")
         @uploader = Uploader.new "http://dummy_host", "dummy.framework", "path_to_kata", @state_reader_mock
       end
 

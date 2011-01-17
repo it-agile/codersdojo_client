@@ -12,7 +12,7 @@ describe StateReader do
   end
 
   it "should read a stored kata state" do
-    @shell_mock.should_receive(:ctime).with(".codersdojo/id0815/#{@state_dir_prefix}0").and_return @a_time
+    @shell_mock.should_receive(:creation_time).with(".codersdojo/id0815/#{@state_dir_prefix}0").and_return @a_time
     Dir.should_receive(:entries).with(".codersdojo/id0815/#{@state_dir_prefix}0").and_return(['.','..','file.rb', 'result.txt'])
     @shell_mock.should_receive(:read_file).with(".codersdojo/id0815/#{@state_dir_prefix}0/result.txt").and_return "result"
     @shell_mock.should_receive(:read_file).with(".codersdojo/id0815/#{@state_dir_prefix}0/file.rb").and_return "source code"

@@ -10,7 +10,7 @@ class FilenameFormatter
 
   def source_code_file state_dir
     Dir.entries(state_dir).each { |file|
-      return state_file state_dir, file unless file =='..' || file == '.' ||file == RESULT_FILE }
+      return state_file state_dir, file unless file =='..' || file == '.' || file == RESULT_FILE }
   end
 
   def result_file state_dir
@@ -29,6 +29,11 @@ class FilenameFormatter
   def session_dir session_id
     "#{CODERSDOJO_WORKSPACE}/#{session_id}"
   end
+
+  def extract_last_path_item dir_path
+	  last = dir_path.split(File::Separator).last
+		last.nil? ? "" : last
+	end
 
 end
 
