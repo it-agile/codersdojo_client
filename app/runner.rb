@@ -23,10 +23,12 @@ class Runner
   end
 
   def execute
-    change_time = @shell.ctime @file
+    change_time = @shell.modification_time @file
     if change_time == @previous_change_time then
+	 	  Progress.next
       return
     end
+    Progress.end
     result = @shell.execute @run_command
 		result = TextConverter.new.remove_escape_sequences result
     state_dir = @filename_formatter.state_dir @session_id, @step

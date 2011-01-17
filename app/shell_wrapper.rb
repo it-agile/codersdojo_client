@@ -49,8 +49,12 @@ class ShellWrapper
     content
   end
 
-  def ctime filename
+  def creation_time filename
     File.new(filename).ctime
+  end
+
+  def modification_time filename
+    File.new(filename).mtime
   end
 
 	def real_dir_entries dir
