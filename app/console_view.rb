@@ -2,16 +2,14 @@ require 'shell_wrapper'
 
 class ConsoleView
 	
-	@@VERSION = '0.9'
-	
 	def initialize scaffolder
 		@scaffolder = scaffolder
 	end
 	
 	def show_help
 		puts <<-helptext
-Personal CodersDojo, Version #{@@VERSION}, http://www.codersdojo.com, Copyright by it-agile GmbH (http://www.it-agile.de)
-PersonalCodersDojo automatically runs your tests of a code kata.
+CodersDojo-Client, http://www.codersdojo.org, Copyright by it-agile GmbH (http://www.it-agile.de)
+CodersDojo-Client automatically runs your code kata, logs the progress and uploads the kata to codersdojo.org.
 
 helptext
 		show_usage
