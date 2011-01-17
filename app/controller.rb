@@ -45,7 +45,7 @@ class Controller
 		@view.show_upload_start @hostname
 		if session_directory then
 		  uploader = Uploader.new @hostname, framework, session_directory
-		  p uploader.upload
+		  @view.show_upload_result uploader.upload
 		else
 			@view.show_missing_command_argument_error "upload"
 		end
