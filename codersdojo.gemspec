@@ -1,11 +1,11 @@
 # create gem: build_gem.sh
-# push gem: gem push deploy/codersdojo-1.0.14.gem
+# push gem: gem push deploy/codersdojo-1.0.15.gem
 # install gem: sudo gem install codersdojo --no-ri --no-rdoc 
 
 Gem::Specification.new do |s|
-   s.version = "1.0.14"
+   s.version = "1.0.15"
    s.name = %q{codersdojo}
-   s.date = %q{2011-01-01}
+   s.date = %q{2011-01-17}
    s.authors = ["CodersDojo-Team"]
    s.email = %q{codersdojo@it-agile.de}
    s.summary = %q{Client for CodersDojo.org}
