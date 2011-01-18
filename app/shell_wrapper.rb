@@ -50,11 +50,11 @@ class ShellWrapper
   end
 
   def creation_time filename
-    File.new(filename).ctime
+    File.ctime(filename)
   end
 
   def modification_time filename
-    File.new(filename).mtime
+    File.mtime(filename)
   end
 
 	def real_dir_entries dir

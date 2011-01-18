@@ -2,9 +2,9 @@
 # install gem: sudo gem install codersdojo
 
 Gem::Specification.new do |s|
-   s.version = "1.0.17"
+   s.version = "1.1.00"
    s.name = %q{codersdojo}
-   s.date = %q{2011-01-17}
+   s.date = %q{2011-01-18}
    s.authors = ["CodersDojo-Team"]
    s.email = %q{codersdojo@it-agile.de}
    s.summary = %q{Client for CodersDojo.org}
