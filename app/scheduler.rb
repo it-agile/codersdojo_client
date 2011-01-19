@@ -5,6 +5,7 @@ class Scheduler
   end
 
   def start
+		trap("INT") { puts; exit }
     @runner.start
     while true do
       sleep 1
