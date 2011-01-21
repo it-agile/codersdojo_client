@@ -1,6 +1,3 @@
-# create and push gem: build_gem.sh
-# install gem: sudo gem install codersdojo
-
 Gem::Specification.new do |s|
    s.version = "1.1.00"
    s.name = %q{codersdojo}
