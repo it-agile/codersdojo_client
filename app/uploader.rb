@@ -34,7 +34,9 @@ class Uploader
   def upload_kata_and_states
     kata = upload_kata
     upload_states(XMLElementExtractor.extract('kata/id', kata))
-    "This is the link to review and comment your kata #{XMLElementExtractor.extract('kata/short-url', kata)}"
+		finish_url = "#{@hostname}#{@@description_path}/#{XMLElementExtractor.extract('kata/uuid', kata)}"
+		summary_url = XMLElementExtractor.extract('kata/short-url', kata)
+    "Complete kata information at #{finish_url}"
   end
 
   def upload
@@ -45,6 +47,7 @@ class Uploader
   private
   @@kata_path = '/katas'
   @@state_path = '/states'
+	@@description_path = '/kata_description'
 
 end
 
