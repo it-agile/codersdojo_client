@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
-   s.version = "1.1.02"
-   s.name = %q{codersdojo}
+   s.version = "1.1.03"
    s.date = %q{2011-01-28}
+   s.name = %q{codersdojo}
    s.authors = ["CodersDojo-Team"]
    s.email = %q{codersdojo@it-agile.de}
    s.summary = %q{Client for CodersDojo.org}
@@ -12,5 +12,6 @@ Gem::Specification.new do |s|
    s.has_rdoc = true
    s.test_files = Dir['spec/*']
    s.executables = ['codersdojo']
+   s.required_ruby_version = '>= 1.8.7'
    s.add_dependency('rest-client')
 end
