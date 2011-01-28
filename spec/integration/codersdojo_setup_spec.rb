@@ -1,6 +1,6 @@
 require 'tempfile'
 
-codersdojo_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'app'))
+codersdojo_dir = File.expand_path(File.join(File.dirname(__FILE__), '../..', 'app'))
 $LOAD_PATH.unshift(codersdojo_dir) unless $LOAD_PATH.include?(codersdojo_dir)
 require 'codersdojo'
 
