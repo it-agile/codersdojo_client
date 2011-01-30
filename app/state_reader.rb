@@ -1,4 +1,5 @@
 require 'filename_formatter'
+require 'state'
 
 class StateReader
 
@@ -7,8 +8,12 @@ class StateReader
   def initialize shell
     @filename_formatter = FilenameFormatter.new
     @shell = shell
-    @next_step = 0
+		reset
   end
+
+	def reset
+		@next_step = 0
+	end
 
 	def session_dir= session_dir
 		@session_dir = session_dir
@@ -44,18 +49,6 @@ class StateReader
     state.result = @shell.read_file @filename_formatter.result_file(state_dir)
     @next_step += 1
     state
-  end
-
-end
-
-class State
-
-  attr_accessor :time, :code, :result
-
-  def initialize time=nil, code=nil, result=nil
-    @time = time
-    @code = code
-    @result = result
   end
 
 end
