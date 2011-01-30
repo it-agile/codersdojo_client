@@ -60,6 +60,13 @@ class ShellWrapper
 	def real_dir_entries dir
 		Dir.new(dir).entries - ["..", "."]
 	end
+	
+	def newest_dir_entry dir
+		Dir.new(dir).sort_by do |entry| 
+			complete_path = File.join dir, entry
+			File.mtime(complete_path)
+		end.last
+	end
 
   def file? filename
 		File.file? filename
