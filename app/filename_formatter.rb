@@ -8,6 +8,10 @@ class FilenameFormatter
 		STATE_DIR_PREFIX
 	end
 
+	def self.codersdojo_workspace
+		CODERSDOJO_WORKSPACE
+	end
+
   def source_code_file state_dir
     Dir.entries(state_dir).each { |file|
       return state_file state_dir, file unless file =='..' || file == '.' || file == RESULT_FILE }
