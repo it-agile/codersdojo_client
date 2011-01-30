@@ -7,19 +7,17 @@ require 'scaffolder'
 
 class CodersDojo
 	
-	def initialize params
+	def initialize params, hostname = "http://www.codersdojo.com"
 		@params = params
+		@hostname = hostname
 	end
 	
 	def run
 		if called_from_spec? then return end
-		hostname = "http://www.codersdojo.com"
-	#	hostname = "http://localhost:3000"
-
 		shell = ShellWrapper.new
 		scaffolder = Scaffolder.new shell
 		view = ConsoleView.new scaffolder
-		controller = Controller.new shell, view, scaffolder, hostname
+		controller = Controller.new shell, view, scaffolder, @hostname
 
 		begin
 			arg_parser = ArgumentParser.new controller
@@ -34,6 +32,3 @@ class CodersDojo
 	end
 	
 end
-
-# entry from shell
-CodersDojo.new(ARGV).run
