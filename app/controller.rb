@@ -42,13 +42,13 @@ class Controller
 	end
 
 	def upload framework, session_directory
-		@view.show_upload_start @hostname
-		if session_directory then
-		  uploader = Uploader.new @hostname, framework, session_directory
-		  @view.show_upload_result uploader.upload
-		else
-			@view.show_missing_command_argument_error "upload"
+		formatter = FilenameFormatter.new
+		if not session_directory then
+			session_directory = formatter.session_dir @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace) 
 		end
+		@view.show_upload_start session_directory, @hostname
+	  uploader = Uploader.new @hostname, framework, session_directory
+	  @view.show_upload_result uploader.upload
 	end
 
 end
