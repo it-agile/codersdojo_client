@@ -19,10 +19,10 @@ helptext
 		puts <<-helptext
 Usage: #{$0} command [options]
 Commands:
-  help, -h, --help                   Print this help text.
-  help <command>                     See the details of the command.
-  setup <framework> <kata_file>      Setup the environment for running the kata.
-  upload <framework> <session_dir>   Upload the kata to http://www.codersdojo.org
+  help, -h, --help                     Print this help text.
+  help <command>                       See the details of the command.
+  setup <framework> <kata_file>        Setup the environment for running the kata.
+  upload <framework> [<session_dir>]   Upload the kata to http://www.codersdojo.org
 
 Report bugs to <codersdojo@it-agile.de>
 helptext
@@ -69,10 +69,11 @@ helptext
 		templates = @scaffolder.list_templates
 		puts <<-helptext
 		
-upload <framework> <session_directory>  Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
-                                        <session_directory> is relative to the working directory.
-                                        By now <framework> is one of #{templates}.
-                                        If you used another framework, use ??? and send an email to codersdojo@it-agile.de
+upload <framework> [<session_directory>]  Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
+                                          <session_directory> is relative to the working directory.
+                                          If you don't specify a <session_directory> the newest session in .codersdojo is uploaded.
+                                          By now <framework> is one of #{templates}.
+                                          If you used another framework, use ??? and send an email to codersdojo@it-agile.de
 
 Example:
     :/dojo/my_kata$ #{$0} upload ruby.test-unit .codersdojo/2010-11-02_16-21-53
@@ -87,7 +88,7 @@ helptext
 	end
 	
 	def show_start_kata command, file
-	  puts "Starting PersonalCodersDojo with command #{command} and kata file #{file}. Use Ctrl+C to finish the kata."		
+	  puts "Starting CodersDojo-Client with command #{command} and kata file #{file}. Use Ctrl+C to finish the kata."		
 	end
 	
 	def show_missing_command_argument_error command
@@ -95,8 +96,8 @@ helptext
 		show_usage
 	end
 	
-	def show_upload_start hostname
-		puts "Start upload to #{hostname}"
+	def show_upload_start session_directory, hostname
+		puts "Start upload from #{session_directory} to #{hostname}"
 	end
 	
 	def show_upload_result result
