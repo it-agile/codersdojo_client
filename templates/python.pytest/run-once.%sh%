@@ -1,0 +1,1 @@
+py.test %kata_file%.py
