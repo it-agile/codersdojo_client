@@ -7,6 +7,8 @@ require 'rest_client'
 
 class Uploader
 
+	attr_reader :states
+
   def initialize hostname, framework, session_dir, state_reader = StateReader.new(ShellWrapper.new)
 	  @states = []
 		@hostname = hostname
@@ -37,7 +39,7 @@ class Uploader
 
   def upload_kata
 		kata_data = {:framework => @framework}
-		states_data = @states.each_with_index do |state,index|
+		states_data = states.each_with_index do |state,index|
 			kata_data["states[#{index}]"] = {:code => state.code, :result => state.result, :created_at => state.time}
 		end
     RestClient.post "#{@hostname}#{@@kata_path}", kata_data

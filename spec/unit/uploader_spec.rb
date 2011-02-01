@@ -25,15 +25,15 @@ describe Uploader do
       end
 
       it "should upload kata and states" do
+				@uploader.stub(:states).and_return [State.new, State.new]
+				@uploader.stub(:read_states)
         @uploader.stub(:upload_kata).and_return 'kata_xml'
-        XMLElementExtractor.should_receive(:extract).with('kata/id', 'kata_xml').and_return 'kata_id'
-        @uploader.stub(:upload_states).with 'kata_id'
         XMLElementExtractor.should_receive(:extract).with('kata/uuid', 'kata_xml').and_return 'describe_url'
         XMLElementExtractor.should_receive(:extract).with('kata/short-url', 'kata_xml').and_return 'short_url'
         @uploader.upload_kata_and_states
       end
 
-      it 'should upload if enugh states are there' do
+      it 'should upload if enough states are there' do
         @state_reader_mock.should_receive(:enough_states?).and_return 'true'
         @uploader.stub!(:upload_kata_and_states).and_return 'kata_link'
         @uploader.upload
@@ -45,32 +45,22 @@ describe Uploader do
         help_text.should == 'You need at least two states'
       end
 
-      context 'states' do
-        it "should read all states and starts/ends progress" do
-          @state_reader_mock.should_receive(:state_count).and_return(1)
-          Progress.should_receive(:write_empty_progress).with(1)
-
-          @state_reader_mock.should_receive(:has_next_state).and_return 'true'
-          @uploader.should_receive(:upload_state)
-          @state_reader_mock.should_receive(:has_next_state).and_return nil
-
-          Progress.should_receive(:end)
-
-          @uploader.upload_states "kata_id"
-        end
-
-
-        it "through a rest interface and log process" do
-          state = mock State
-          @state_reader_mock.should_receive(:read_next_state).and_return state
-          state.should_receive(:code).and_return 'code'
-          state.should_receive(:time).and_return 'time'
-          state.should_receive(:result).and_return 'result'
-          RestClient.should_receive(:post).with('http://dummy_host/katas/kata_id/states', {:code=> 'code', :result => 'result', :created_at => 'time'})
-          Progress.should_receive(:next)
-          @uploader.upload_state "kata_id"
-        end
-
+      it "through a rest interface and log process" do
+        states = [(mock State), (mock State)]
+				states.each_with_index {|state, index|
+	        state.should_receive(:code).and_return "code#{index}"
+	        state.should_receive(:time).and_return "time#{index}"
+	        state.should_receive(:result).and_return "result#{index}"
+				}
+				@state_reader_mock.should_receive(:reset)
+				@state_reader_mock.should_receive(:has_next_state).and_return true
+        @state_reader_mock.should_receive(:read_next_state).and_return states[0]
+				@state_reader_mock.should_receive(:has_next_state).and_return true
+        @state_reader_mock.should_receive(:read_next_state).and_return states[1]
+				@state_reader_mock.should_receive(:has_next_state).and_return false
+        RestClient.should_receive(:post).with('http://dummy_host/katas', 
+					{"states[1]"=>{:created_at=>"time1", :result=>"result1", :code=>"code1"}, "states[0]"=>{:created_at=>"time0", :result=>"result0", :code=>"code0"}, :framework=>"dummy.framework"})
+        @uploader.upload_kata_and_states
       end
 
     end
