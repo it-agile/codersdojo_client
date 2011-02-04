@@ -48,7 +48,10 @@ class Controller
 		end
 		@view.show_upload_start session_directory, @hostname
 	  uploader = Uploader.new @hostname, framework, session_directory
-	  @view.show_upload_result uploader.upload
+		upload_result = uploader.upload
+	  @view.show_upload_result upload_result
+		url = upload_result.split.last
+		@shell.open_with_default_app url
 	end
 
 end
