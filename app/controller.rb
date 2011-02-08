@@ -33,25 +33,40 @@ class Controller
 			@view.show_missing_command_argument_error "start"
 			return
 		end
-	  @view.show_start_kata command, file
-	  dojo = Runner.new ShellWrapper.new, SessionIdGenerator.new
+	  @view.show_start_kata command, file, framework_property
+	  dojo = Runner.new @shell, SessionIdGenerator.new
 	  dojo.file = file
 	  dojo.run_command = command
 	  scheduler = Scheduler.new dojo
 	  scheduler.start
 	end
 
-	def upload framework, session_directory
+	# merge with 'upload_with_framework' when the framework parameter is removed
+	def upload session_directory
+		upload_with_framework framework_property, session_directory
+	end
+
+	# framework parameter is obsolete since client version 1.1.08 (08-feb-2011)
+	# it stays here for compatibility reasons and will be removed in the near future
+	def upload_with_framework framework, session_directory 
 		formatter = FilenameFormatter.new
 		if not session_directory then
 			session_directory = formatter.session_dir @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace) 
 		end
-		@view.show_upload_start session_directory, @hostname
+		@view.show_upload_start session_directory, @hostname, framework
 	  uploader = Uploader.new @hostname, framework, session_directory
 		upload_result = uploader.upload
 	  @view.show_upload_result upload_result
 		url = upload_result.split.last
 		@shell.open_with_default_app url
+	end
+
+	def framework_property
+		properties['framework']
+	end
+
+	def properties
+		@shell.read_properties '.meta'
 	end
 
 end

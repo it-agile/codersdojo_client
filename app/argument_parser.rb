@@ -9,17 +9,19 @@ class ArgumentParser
 	end
 	
 	def parse params
-		command = params[0] ? params[0] : ""
-		if command.downcase == "help" then
+		command = params[0] ? params[0].downcase : ""
+		if command == "help" then
 			@controller.help params[1]
-		elsif command.downcase == "setup" then
+		elsif command == "setup" then
 			@controller.generate params[1], params[2] ? params[2] : '<kata_file>'
-		elsif command.downcase == "upload" then
-			@controller.upload params[1], params[2]
-		elsif command.downcase == "start" then
+		elsif command == "upload" then
+			@controller.upload params[1]
+		elsif command == "upload-with-framework" then
+			@controller.upload_with_framework params[1], params[2]
+		elsif command == "start" then
 			run_command = expand_run_command params[1]
 			@controller.start run_command, params[2]
-		elsif command.downcase == "spec" then
+		elsif command == "spec" then
 			# 'spec" is for testing purpose only: do nothing special
 		else
 			raise ShellArgumentException

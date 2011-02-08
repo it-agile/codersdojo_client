@@ -22,7 +22,13 @@ Commands:
   help, -h, --help                     Print this help text.
   help <command>                       See the details of the command.
   setup <framework> <kata_file>        Setup the environment for running the kata.
-  upload <framework> [<session_dir>]   Upload the kata to http://www.codersdojo.org
+  upload [<session_dir>]               Upload the kata to http://www.codersdojo.org
+  upload-with-framework <framework> [<session_dir>]   
+                                       Upload the kata to http://www.codersdojo.org
+                                       !!! This command exists for compatibility reasons only.
+                                       !!! It will be removed in the near future. 
+                                       !!! Please run 'setup' again to generate the .meta file
+                                       !!! and use 'upload' without the 'framework' parameter.
 
 Report bugs to <codersdojo@it-agile.de>
 helptext
@@ -35,6 +41,8 @@ helptext
 			show_help_start
 		elsif command == 'upload' then
 			show_help_upload
+		elsif command == 'upload-with-framework' then
+			show_help_upload_with_framework
 		else
 			show_help_unknown command
 		end
@@ -66,29 +74,46 @@ helptext
 	end
 
 	def show_help_upload
-		templates = @scaffolder.list_templates
 		puts <<-helptext
 		
-upload <framework> [<session_directory>]  Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
+upload                      Upload the newest kata session in .codersdojo to codersdojo.com.
+
+upload <session_directory>  Upload the kata <session_directory> to codersdojo.com. 
+                            <session_directory> is relative to the working directory.
+
+Examples:
+    :/dojo/my_kata$ #{$0} upload
+        Upload the newest kata located in directory ".codersdojo" to codersdojo.com.
+    :/dojo/my_kata$ #{$0} upload .codersdojo/2010-11-02_16-21-53
+        Upload the kata located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
+helptext
+	end
+	
+	def show_help_upload_with_framework
+		templates = @scaffolder.list_templates
+		puts <<-helptext
+
+upload-with-framework <framework> [<session_directory>]  
+                                          Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
                                           <session_directory> is relative to the working directory.
                                           If you don't specify a <session_directory> the newest session in .codersdojo is uploaded.
                                           By now <framework> is one of #{templates}.
                                           If you used another framework, use ??? and send an email to codersdojo@it-agile.de
 
 Example:
-    :/dojo/my_kata$ #{$0} upload ruby.test-unit .codersdojo/2010-11-02_16-21-53
+    :/dojo/my_kata$ #{$0} upload-with-framework ruby.test-unit .codersdojo/2010-11-02_16-21-53
         Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
-	
+
 	def show_help_unknown command
 		puts <<-helptext
 Command #{command} not known. Try '#{$0} help' to list the supported commands.
 helptext
 	end
 	
-	def show_start_kata command, file
-	  puts "Starting CodersDojo-Client with command #{command} and kata file #{file}. Use Ctrl+C to finish the kata."		
+	def show_start_kata command, file, framework
+	  puts "Starting CodersDojo-Client with command #{command} and kata file #{file} with framework #{framework}. Use Ctrl+C to finish the kata."		
 	end
 	
 	def show_missing_command_argument_error command
@@ -96,8 +121,8 @@ helptext
 		show_usage
 	end
 	
-	def show_upload_start session_directory, hostname
-		puts "Start upload from #{session_directory} to #{hostname}"
+	def show_upload_start session_directory, hostname, framework
+		puts "Start upload from #{session_directory} with framework #{framework} to #{hostname}"
 	end
 	
 	def show_upload_result result

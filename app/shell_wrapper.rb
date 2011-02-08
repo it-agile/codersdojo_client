@@ -77,6 +77,10 @@ class ShellWrapper
 		execute "#{open_command_name} #{filename}"
 	end
 	
+	def read_properties filename
+		YAML.load_file(filename)
+	end
+	
 	def remove_command_name
 		windows? ? 'del' : 'rm'
 	end
