@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
-   s.version = "1.1.10"
+   s.version = "1.1.11"
    s.date = %q{2011-02-08}
    s.name = %q{codersdojo}
    s.authors = ["CodersDojo-Team"]
    s.email = %q{codersdojo@it-agile.de}
    s.summary = %q{Client for CodersDojo.org}
    s.homepage = %q{http://www.codersdojo.org/}
-   s.description = %q{Client executes tests in an endless loop and logs source code and test result.}
+   s.description = %q{Client executes tests in an endless loop and logs source code and test result for later uplaod.}
    s.files = Dir["app/*.rb"] + Dir["templates/**/*"] + Dir["lib/*"]
    s.rubyforge_project = 'codersdojo'
    s.has_rdoc = true

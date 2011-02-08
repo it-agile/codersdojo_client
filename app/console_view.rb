@@ -19,7 +19,7 @@ helptext
 	
 	def show_usage
 		show <<-helptext
-Usage: #{$0} command [options]
+Usage: #{current_command_path} command [options]
 Commands:
   help, -h, --help                     Print this help text.
   help <command>                       See the details of the command.
@@ -60,7 +60,7 @@ setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the
                                       Use ??? as framework if your framework isn't in the list.
 
 Example:
-    :%/%dojo%/%my_kata$ #{$0} setup ruby.test-unit prime
+    :%/%dojo%/%my_kata$ #{current_command_path} setup ruby.test-unit prime
         Show the instructions how to setup the environment for kata execution with Ruby and test/unit.
 helptext
 	end
@@ -84,9 +84,9 @@ upload <session_directory>  Upload the kata <session_directory> to codersdojo.co
                             <session_directory> is relative to the working directory.
 
 Examples:
-    :%/%dojo%/%my_kata$ #{$0} upload
+    :%/%dojo%/%my_kata$ #{current_command_path} upload
         Upload the newest kata located in directory ".codersdojo" to codersdojo.com.
-    :%/%dojo%/%my_kata$ #{$0} upload .codersdojo%/%2010-11-02_16-21-53
+    :%/%dojo%/%my_kata$ #{current_command_path} upload .codersdojo%/%2010-11-02_16-21-53
         Upload the kata located in directory ".codersdojo%/%2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
@@ -103,14 +103,14 @@ upload-with-framework <framework> [<session_directory>]
                                           If you used another framework, use ??? and send an email to codersdojo@it-agile.de
 
 Example:
-    :%/%dojo%/%my_kata$ #{$0} upload-with-framework ruby.test-unit .codersdojo%/%2010-11-02_16-21-53
+    :%/%dojo%/%my_kata$ #{current_command_path} upload-with-framework ruby.test-unit .codersdojo%/%2010-11-02_16-21-53
         Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo%/%2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
 
 	def show_help_unknown command
 		show <<-helptext
-Command #{command} not known. Try '#{$0} help' to list the supported commands.
+Command #{command} not known. Try '#{current_command_path} help' to list the supported commands.
 helptext
 	end
 	
@@ -137,6 +137,10 @@ helptext
 	
 	def show text
 		puts @template_machine.render(text)
+	end
+
+	def current_command_path
+		$0.gsub '/', '%/%'
 	end
 	
 end
