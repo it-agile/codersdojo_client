@@ -1,4 +1,5 @@
 require 'tempfile'
+require 'shell_process'
 
 class ShellWrapper
 
@@ -29,12 +30,14 @@ class ShellWrapper
 	end
 
   def execute command
+		process = ShellProcess.new 
 	  redirect_stderr_to_stdout = "2>&1"
     spec_pipe = IO.popen("#{command} #{redirect_stderr_to_stdout}", "r")
-    result = spec_pipe.read MAX_STDOUT_LENGTH
+    process.output = spec_pipe.read MAX_STDOUT_LENGTH
     spec_pipe.close
-    puts result unless result.nil?
-    result
+		process.return_code = $?
+    puts process.output unless process.output.nil?
+    process
   end
 
   def write_file filename, content

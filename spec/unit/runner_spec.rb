@@ -1,3 +1,4 @@
+require 'shell_process'
 require 'runner'
 
 describe Runner, "in run mode" do
@@ -17,12 +18,12 @@ describe Runner, "in run mode" do
   end
 
   it "should create codersdojo directory if it doesn't exist with session sub-directory" do
-    @shell_mock.should_receive(:mkdir_p).with SESSION_DIR
+    @shell_mock.should_receive(:mkdir_p).with(SESSION_DIR).and_return ShellProcess.new
     @runner.start
   end
 
   it "should run ruby command on kata file given as argument" do
-    @shell_mock.should_receive(:execute).with "run-once.sh"
+    @shell_mock.should_receive(:execute).with("run-once.sh").and_return ShellProcess.new
     @runner.start
   end
 
@@ -50,13 +51,17 @@ describe Runner, "in run mode" do
   end
 
   it "should capture run result into state directory" do
-    @shell_mock.should_receive(:execute).and_return "spec result"
+		process = ShellProcess.new
+		process.output = "spec result"
+    @shell_mock.should_receive(:execute).and_return process
     @shell_mock.should_receive(:write_file).with "#{STATE_DIR_PREFIX}0/result.txt", "spec result"
     @runner.start
   end
 
 	it "should remove escape sequences" do
-    @shell_mock.should_receive(:execute).and_return "#{TextConverter.ESCAPE_SEQUENCE_START}b#{TextConverter.ESCAPE_SEQUENCE_END}c"
+		process = ShellProcess.new
+		process.output = "#{TextConverter.ESCAPE_SEQUENCE_START}b#{TextConverter.ESCAPE_SEQUENCE_END}c"
+    @shell_mock.should_receive(:execute).and_return process
     @shell_mock.should_receive(:write_file).with "#{STATE_DIR_PREFIX}0/result.txt", "c"
 		@runner.start
 	end

@@ -29,12 +29,13 @@ class Runner
       return
     end
     Progress.end
-    result = @shell.execute @run_command
-		result = TextConverter.new.remove_escape_sequences result
+    process = @shell.execute @run_command
+		result = TextConverter.new.remove_escape_sequences process.output
     state_dir = @filename_formatter.state_dir @session_id, @step
     @shell.mkdir state_dir
     @shell.cp @file, state_dir
     @shell.write_file @filename_formatter.result_file(state_dir), result
+    @shell.write_file @filename_formatter.info_file(state_dir), "return_code: #{process.return_code}"
     @step += 1
     @previous_change_time = change_time
   end

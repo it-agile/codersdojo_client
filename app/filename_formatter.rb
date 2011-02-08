@@ -2,6 +2,7 @@ class FilenameFormatter
 
   CODERSDOJO_WORKSPACE = ".codersdojo"
   RESULT_FILE = "result.txt"
+  INFO_FILE = "info.yml"
   STATE_DIR_PREFIX = "state_"
 
 	def self.state_dir_prefix
@@ -19,6 +20,10 @@ class FilenameFormatter
 
   def result_file state_dir
     state_file state_dir, RESULT_FILE
+  end
+
+  def info_file state_dir
+    state_file state_dir, INFO_FILE
   end
 
   def state_file state_dir, file
