@@ -6,17 +6,7 @@ class Scaffolder
 
 	def initialize shell
 		@shell = shell
-		@template_machine = create_template_machine
-	end
-
-	def create_template_machine
-		template_machine = TextTemplateMachine.new @shell
-		template_machine.placeholder_values = {
-			'sh' => @shell.shell_extension,
-			':' => @shell.path_separator,
-			'rm' => @shell.remove_command_name
-		}
-		template_machine
+		@template_machine = TextTemplateMachineFactory.create @shell
 	end
 
 	def list_templates

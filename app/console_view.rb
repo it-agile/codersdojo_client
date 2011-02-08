@@ -1,13 +1,15 @@
 require 'shell_wrapper'
+require 'text_template_machine'
 
 class ConsoleView
 	
 	def initialize scaffolder
 		@scaffolder = scaffolder
+		@template_machine = TextTemplateMachineFactory.create ShellWrapper.new
 	end
 	
 	def show_help
-		puts <<-helptext
+		show <<-helptext
 CodersDojo-Client, http://www.codersdojo.org, Copyright by it-agile GmbH (http://www.it-agile.de)
 CodersDojo-Client automatically runs your code kata, logs the progress and uploads the kata to codersdojo.org.
 
@@ -16,7 +18,7 @@ helptext
 	end
 	
 	def show_usage
-		puts <<-helptext
+		show <<-helptext
 Usage: #{$0} command [options]
 Commands:
   help, -h, --help                     Print this help text.
@@ -50,7 +52,7 @@ helptext
 
 	def show_help_setup
 			templates = @scaffolder.list_templates
-			puts <<-helptext
+			show <<-helptext
 			
 setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the given framework and kata file.
                                       The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
@@ -58,13 +60,13 @@ setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the
                                       Use ??? as framework if your framework isn't in the list.
 
 Example:
-    :/dojo/my_kata% #{$0} setup ruby.test-unit prime
+    :%/%dojo%/%my_kata$ #{$0} setup ruby.test-unit prime
         Show the instructions how to setup the environment for kata execution with Ruby and test/unit.
 helptext
 	end
 
 	def show_help_start
-		puts <<-helptext
+		show <<-helptext
 		
 start <shell_command> <kata_file>  Start the continuous test runner, that runs <shell-command> whenever <kata_file>
                                    changes. The <kata_file> has to include the whole source code of the kata.
@@ -74,7 +76,7 @@ helptext
 	end
 
 	def show_help_upload
-		puts <<-helptext
+		show <<-helptext
 		
 upload                      Upload the newest kata session in .codersdojo to codersdojo.com.
 
@@ -82,16 +84,16 @@ upload <session_directory>  Upload the kata <session_directory> to codersdojo.co
                             <session_directory> is relative to the working directory.
 
 Examples:
-    :/dojo/my_kata$ #{$0} upload
+    :%/%dojo%/%my_kata$ #{$0} upload
         Upload the newest kata located in directory ".codersdojo" to codersdojo.com.
-    :/dojo/my_kata$ #{$0} upload .codersdojo/2010-11-02_16-21-53
-        Upload the kata located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
+    :%/%dojo%/%my_kata$ #{$0} upload .codersdojo%/%2010-11-02_16-21-53
+        Upload the kata located in directory ".codersdojo%/%2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
 	
 	def show_help_upload_with_framework
 		templates = @scaffolder.list_templates
-		puts <<-helptext
+		show <<-helptext
 
 upload-with-framework <framework> [<session_directory>]  
                                           Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
@@ -101,36 +103,40 @@ upload-with-framework <framework> [<session_directory>]
                                           If you used another framework, use ??? and send an email to codersdojo@it-agile.de
 
 Example:
-    :/dojo/my_kata$ #{$0} upload-with-framework ruby.test-unit .codersdojo/2010-11-02_16-21-53
-        Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo/2010-11-02_16-21-53" to codersdojo.com.
+    :%/%dojo%/%my_kata$ #{$0} upload-with-framework ruby.test-unit .codersdojo%/%2010-11-02_16-21-53
+        Upload the kata (written in Ruby with the test/unit framework) located in directory ".codersdojo%/%2010-11-02_16-21-53" to codersdojo.com.
 helptext
 	end
 
 	def show_help_unknown command
-		puts <<-helptext
+		show <<-helptext
 Command #{command} not known. Try '#{$0} help' to list the supported commands.
 helptext
 	end
 	
 	def show_start_kata command, file, framework
-	  puts "Starting CodersDojo-Client with command #{command} and kata file #{file} with framework #{framework}. Use Ctrl+C to finish the kata."		
+	  show "Starting CodersDojo-Client with command #{command} and kata file #{file} with framework #{framework}. Use Ctrl+C to finish the kata."		
 	end
 	
 	def show_missing_command_argument_error command
-		puts "Command <#{command}> recognized but no argument was provided (at least one argument is required).\n\n"
+		show "Command <#{command}> recognized but no argument was provided (at least one argument is required).\n\n"
 		show_usage
 	end
 	
 	def show_upload_start session_directory, hostname, framework
-		puts "Start upload from #{session_directory} with framework #{framework} to #{hostname}"
+		show "Start upload from #{session_directory} with framework #{framework} to #{hostname}"
 	end
 	
 	def show_upload_result result
-		puts result
+		show result
 	end
 	
 	def show_socket_error command
-		puts "Encountered network error while <#{command}>. Is http://www.codersdojo.com down?"
+		show "Encountered network error while <#{command}>. Is http://www.codersdojo.com down?"
+	end
+	
+	def show text
+		puts @template_machine.render(text)
 	end
 	
 end

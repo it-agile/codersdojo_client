@@ -24,3 +24,18 @@ class TextTemplateMachine
 	end
 	
 end
+
+class TextTemplateMachineFactory
+	
+	def self.create shell
+		template_machine = TextTemplateMachine.new shell
+		template_machine.placeholder_values = {
+			'sh' => shell.shell_extension,
+			':' => shell.path_separator,
+			'/' => shell.dir_separator,
+			'rm' => shell.remove_command_name
+		}
+		template_machine
+	end
+
+end

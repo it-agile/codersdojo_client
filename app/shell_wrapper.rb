@@ -106,6 +106,10 @@ class ShellWrapper
 		windows? ? ';' : ':'
 	end
 	
+	def dir_separator
+		File::ALT_SEPARATOR ? File::ALT_SEPARATOR : File::SEPARATOR
+	end
+	
 	def windows?
 		platform = RUBY_PLATFORM.downcase
 		platform.include?("windows") or platform.include?("mingw32")

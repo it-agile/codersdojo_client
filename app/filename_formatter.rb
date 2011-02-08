@@ -40,12 +40,8 @@ class FilenameFormatter
   end
 
   def extract_last_path_item dir_path
-	  last = dir_path.split(dir_separator).last
+	  last = dir_path.split(ShellWrapper.new.dir_separator).last
 		last.nil? ? "" : last
-	end
-	
-	def dir_separator
-		File::ALT_SEPARATOR ? File::ALT_SEPARATOR : File::SEPARATOR
 	end
 
 end
