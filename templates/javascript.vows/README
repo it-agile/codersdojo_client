@@ -1,7 +1,8 @@
-One shell scripts were created:
+These files were created:
+  README is what you are currently reading
   run-endless.%sh% runs your tests endlessly.
 
-Run run-endless.%sh% and start your kata.
+Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-endless.%sh%.)
 
 Assumptions:
   - The whole kata source code is in the one %kata_file%.js.

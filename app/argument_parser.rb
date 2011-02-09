@@ -8,7 +8,7 @@ class ArgumentParser
 		@controller = controller
 	end
 	
-	def parse params
+	def parse params		
 		command = params[0] ? params[0].downcase : ""
 		if command == "help" then
 			@controller.help params[1]

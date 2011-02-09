@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
-   s.version = "1.1.11"
-   s.date = %q{2011-02-08}
+   s.version = "1.1.12"
+   s.date = %q{2011-02-09}
    s.name = %q{codersdojo}
    s.authors = ["CodersDojo-Team"]
    s.email = %q{codersdojo@it-agile.de}
@@ -14,4 +14,5 @@ Gem::Specification.new do |s|
    s.executables = ['codersdojo']
    s.required_ruby_version = '>= 1.8.7'
    s.add_dependency('rest-client', '>= 1.6.1')
+   s.add_dependency('term-ansicolor', '>= 1.0.5')
 end

@@ -1,5 +1,6 @@
 require 'tempfile'
 require 'shell_process'
+require 'yaml'
 
 class ShellWrapper
 
