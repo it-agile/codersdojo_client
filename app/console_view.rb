@@ -135,8 +135,26 @@ helptext
 		show "Encountered network error while <#{command}>. Is http://www.codersdojo.com down?"
 	end
 	
+	def show_kata_exit_message
+		show <<-msg 
+
+You finished your kata. Choose your next action:
+  u) Upload the kata to http://www.codersdojo.com.
+  e) Exit without uploading.
+  r) Resume the kata.
+msg
+	end
+		
+	def show_kata_upload_hint
+		show "You finished your kata. Now upload it with 'codersdojo upload'."
+	end
+		
 	def show text
 		puts @template_machine.render(text)
+	end
+
+	def read_user_input
+		STDIN.gets
 	end
 
 	def current_command_path

@@ -37,8 +37,11 @@ class Controller
 	  dojo = Runner.new @shell, SessionIdGenerator.new
 	  dojo.file = file
 	  dojo.run_command = command
-	  scheduler = Scheduler.new dojo
+	  scheduler = Scheduler.new dojo, @view
 	  scheduler.start
+		if scheduler.last_action_was_upload? then
+			upload nil
+		end
 	end
 
 	# merge with 'upload_with_framework' when the framework parameter is removed
