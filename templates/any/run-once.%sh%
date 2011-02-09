@@ -1,1 +1,5 @@
 echo "Modify shell script run-once.%sh% so that it runs your tests once."
+echo "Shell script may look similar to the one for Java with JUnit:"
+echo "  %rm% bin/%Kata_file%Test.class                        <- you don't need this if the language is interpreted"
+echo "  javac -cp lib/junit.jar -d bin %Kata_file%Test.java   <- you don't need this if the language is interpreted"
+echo "  java -cp lib/junit.jar:bin org.junit.runner.JUnitCore %Kata_file%Test"

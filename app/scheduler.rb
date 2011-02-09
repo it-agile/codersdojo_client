@@ -1,7 +1,5 @@
 class Scheduler
 
-	attr_reader :last_action
-
   def initialize runner, view
     @runner = runner
 		@view = view
@@ -10,15 +8,19 @@ class Scheduler
 
   def start
 		@last_action = ""
-		trap("INT") {
-			interrupt_kata
-		}
+		register_interrupt_listener
     @runner.start
     while continue? do
       sleep 1
       @runner.execute
     end
   end
+
+	def register_interrupt_listener
+		trap("INT") {
+			interrupt_kata
+		}
+	end
 
 	def interrupt_kata
 		@view.show_kata_exit_message 
