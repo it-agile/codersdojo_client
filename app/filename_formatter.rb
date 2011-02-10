@@ -39,6 +39,14 @@ class FilenameFormatter
     "#{CODERSDOJO_WORKSPACE}/#{session_id}"
   end
 
+	def without_extension filename
+		if filename.include? '.' then
+			filename.split('.')[0..-2].join('.')
+		else
+			filename
+		end
+	end
+
   def extract_last_path_item dir_path
 	  last = dir_path.split(ShellWrapper.new.dir_separator).last
 		last.nil? ? "" : last

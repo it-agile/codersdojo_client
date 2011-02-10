@@ -8,4 +8,4 @@ run-once.%sh% is not implemented by now. You have to implement it appropriately.
 Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-endless.%sh%.)
 
 Assumptions:
-  - The whole kata source code is in the one %kata_file%.
+  - The whole kata source code is in the one %kata_file.ext%.

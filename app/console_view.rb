@@ -54,10 +54,9 @@ helptext
 			templates = @scaffolder.list_templates
 			show <<-helptext
 			
-setup <framework> <kata_file_no_ext>  Setup the environment for the kata for the given framework and kata file.
-                                      The kata_file should not have an extension. Use 'prime' and not 'prime.java'.
-                                      By now <framework> is one of #{templates}.
-                                      Use ??? as framework if your framework isn't in the list.
+setup <framework> <kata_file>  Setup the environment for the kata for the given framework and kata file.
+                               By now <framework> is one of #{templates}.
+                               Use ??? as framework if your framework isn't in the list.
 
 Example:
     :%/%dojo%/%my_kata$ #{current_command_path} setup ruby.test-unit prime

@@ -1,5 +1,6 @@
 require 'scheduler'
 require 'uploader'
+require 'filename_formatter'
 
 class Controller
 
@@ -8,6 +9,7 @@ class Controller
 		@view = view
 		@scaffolder = scaffolder
 		@hostname = hostname
+		@filename_formatter = FilenameFormatter.new
 	end
 
 	def help command=nil

@@ -7,6 +7,7 @@ class Scaffolder
 	def initialize shell
 		@shell = shell
 		@template_machine = TextTemplateMachineFactory.create @shell
+		@filename_formatter = FilenameFormatter.new
 	end
 
 	def list_templates
@@ -16,7 +17,8 @@ class Scaffolder
 	end
 
 	def scaffold template, kata_file
-		@template_machine.placeholder_values['kata_file'] = kata_file
+		@template_machine.placeholder_values['kata_file.ext'] = kata_file
+		@template_machine.placeholder_values['kata_file'] = @filename_formatter.without_extension kata_file
 		template = template == '???' ? ANY_TEMPLATE : template
 			dir_path = "#{template_path}/#{template}"
 			to_copy = @shell.real_dir_entries dir_path
