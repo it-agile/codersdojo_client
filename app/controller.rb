@@ -19,12 +19,15 @@ class Controller
 	end
 
 	def generate framework, kata_file
+		if not kata_file then
+			@view.show_missing_command_argument_error "setup", "kata_file"
+			return
+		end
 		begin
 			@scaffolder.scaffold framework, kata_file
-		  puts "\n" + @shell.read_file("README")
+			@view.show "\n" + @shell.read_file("README")
 		rescue
-			puts "Unkown framework #{framework}. Possible frameworks:"
-			puts @scaffolder.list_templates
+			@view.show_unknown_framework_error framework, @scaffolder.list_templates
 		end		
 	end
 

@@ -118,9 +118,9 @@ helptext
 	  show "Starting CodersDojo-Client with command #{command} and kata file #{file} with framework #{framework}. Use Ctrl+C to finish the kata."		
 	end
 	
-	def show_missing_command_argument_error command
-		show "Command <#{command}> recognized but no argument was provided (at least one argument is required).\n\n"
-		show_usage
+	def show_missing_command_argument_error command, missing_argument
+		show "Command <#{command}> recognized but argument <#{missing_argument}> was missing.\n"
+		eval "show_help_#{command}"
 	end
 	
 	def show_upload_start session_directory, hostname, framework
@@ -133,6 +133,12 @@ helptext
 	
 	def show_socket_error command
 		show "Encountered network error while <#{command}>. Is http://www.codersdojo.com down?"
+	end
+	
+	def show_unknown_framework_error framework, templates
+		show "Unkown framework #{framework}. Possible frameworks:"
+		show templates
+		show "Use ??? as framework if your framework isn't in the list."
 	end
 	
 	def show_kata_exit_message

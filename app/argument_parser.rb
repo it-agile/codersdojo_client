@@ -13,7 +13,7 @@ class ArgumentParser
 		if command == "help" then
 			@controller.help params[1]
 		elsif command == "setup" then
-			@controller.generate params[1], params[2] ? params[2] : '<kata_file>'
+			@controller.generate params[1], params[2]
 		elsif command == "upload" then
 			@controller.upload params[1]
 		elsif command == "upload-with-framework" then
