@@ -24,6 +24,8 @@ class CodersDojo
 			command = arg_parser.parse @params
 		rescue ShellArgumentException
 			controller.help
+		rescue PropertyFileMissingException => e
+			view.show_properties_file_missing_error e.filename
 		end
   end
 

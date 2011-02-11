@@ -82,7 +82,11 @@ class ShellWrapper
 	end
 	
 	def read_properties filename
-		YAML.load_file(filename)
+		begin
+			YAML.load_file filename
+		rescue
+			raise PropertyFileMissingException.new filename
+		end
 	end
 	
 	def remove_command_name

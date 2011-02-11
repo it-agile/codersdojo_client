@@ -1,5 +1,6 @@
 require 'shell_wrapper'
 require 'text_template_machine'
+require 'property_file_missing_exception'
 
 class ConsoleView
 	
@@ -147,6 +148,14 @@ You finished your kata. Choose your next action:
   u) Upload the kata to http://www.codersdojo.com.
   e) Exit without uploading.
   r) Resume the kata.
+msg
+	end
+
+	def show_properties_file_missing_error filename
+		show <<-msg
+Property file #{filename} is missing.
+Maybe you created the directory structure with an older version of CodersDojo?
+Recreate the directory structure with the current version with 'codersdojo setup ...'.
 msg
 	end
 		

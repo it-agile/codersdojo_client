@@ -5,6 +5,7 @@ require 'filename_formatter'
 class Controller
 
 	def initialize shell, view, scaffolder, hostname
+		@property_filename = '.meta'
 		@shell = shell
 		@view = view
 		@scaffolder = scaffolder
@@ -74,7 +75,7 @@ class Controller
 	end
 
 	def properties
-		@shell.read_properties '.meta'
+	  @shell.read_properties @property_filename
 	end
 
 end
