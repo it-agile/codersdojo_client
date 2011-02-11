@@ -10,9 +10,6 @@ to install all needed gems
 
 COMMON TASKS WHEN DEVELOPING
 ============================
-Run all the spec-tests: 
-   cd app; bundle exec rspec ../spec
-
 Create a new gem of the codersdojo client and install it just locally 
    gem build codersdojo.gemspec && 
      sudo gem install codersdojo-*.gem && 
