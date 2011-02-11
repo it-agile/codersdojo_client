@@ -66,6 +66,13 @@ class ShellWrapper
 		Dir.new(dir).entries - ["..", "."]
 	end
 	
+	def files_in_dir dir
+		Dir.new(dir).entries.find_all{|entry|
+			File.file? entry
+		}
+	end
+		
+	
 	def newest_dir_entry dir
 		Dir.new(dir).sort_by do |entry| 
 			complete_path = File.join dir, entry

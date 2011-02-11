@@ -1,1 +1,2 @@
 framework: forth.tester
+source_files: .*\.fth

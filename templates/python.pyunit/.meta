@@ -1,1 +1,3 @@
 framework: python.pyunit
+source_files: .*\.py
+

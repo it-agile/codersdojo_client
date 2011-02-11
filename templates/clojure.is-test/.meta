@@ -1,1 +1,3 @@
 framework: clojure.is-test
+source_files: .*\.clj
+

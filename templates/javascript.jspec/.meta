@@ -1,1 +1,2 @@
 framework: javascript.jspec
+source_files: .*\.js
