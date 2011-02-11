@@ -24,7 +24,7 @@ class ArgumentParser
 		elsif command == "spec" then
 			# 'spec" is for testing purpose only: do nothing special
 		else
-			raise ShellArgumentException
+			raise ShellArgumentException.new command
 		end
 	end
 

@@ -22,8 +22,8 @@ class CodersDojo
 		begin
 			arg_parser = ArgumentParser.new controller
 			command = arg_parser.parse @params
-		rescue ShellArgumentException
-			controller.help
+		rescue ShellArgumentException => e
+			view.show_unknwon_command_message e.command
 		rescue PropertyFileMissingException => e
 			view.show_properties_file_missing_error e.filename
 		end
