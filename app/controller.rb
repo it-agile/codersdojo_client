@@ -67,7 +67,9 @@ class Controller
 		upload_result = uploader.upload
 	  @view.show_upload_result upload_result
 		url = upload_result.split.last
-		@shell.open_with_default_app url
+		if open_browser then 
+			@shell.open_with_default_app url
+		end
 	end
 
 	def framework_property
