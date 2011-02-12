@@ -25,7 +25,8 @@ Commands:
   help, -h, --help                     Print this help text.
   help <command>                       See the details of the command.
   setup <framework> <kata_file>        Setup the environment for running the kata.
-  upload [<session_dir>]               Upload the kata to http://www.codersdojo.org
+  upload [<session_dir>]               Upload the kata to http://www.codersdojo.org and open the kata in a browser.
+  upload-no-open [<session_dir>]       Upload the kata to http://www.codersdojo.org
   upload-with-framework <framework> [<session_dir>]   
                                        Upload the kata to http://www.codersdojo.org
                                        !!! This command exists for compatibility reasons only.
@@ -44,6 +45,8 @@ helptext
 			show_help_start
 		elsif command == 'upload' then
 			show_help_upload
+		elsif command == 'upload-no-open' then
+			show_help_upload_no_open
 		elsif command == 'upload-with-framework' then
 			show_help_upload_with_framework
 		else
@@ -79,6 +82,7 @@ helptext
 		show <<-helptext
 		
 upload                      Upload the newest kata session in .codersdojo to codersdojo.com.
+                            After the kata is uploaded the browser is started with the URL of the uploaded kata.
 
 upload <session_directory>  Upload the kata <session_directory> to codersdojo.com. 
                             <session_directory> is relative to the working directory.
@@ -91,16 +95,33 @@ Examples:
 helptext
 	end
 	
+	def show_help_upload_no_open
+		show <<-helptext
+
+upload-no-open                      Upload the newest kata session in .codersdojo to codersdojo.com.
+
+upload-no-opem <session_directory>  Upload the kata <session_directory> to codersdojo.com. 
+                                    <session_directory> is relative to the working directory.
+
+Examples:
+    :%/%dojo%/%my_kata$ #{current_command_path} upload-no-open
+        Upload the newest kata located in directory ".codersdojo" to codersdojo.com.
+    :%/%dojo%/%my_kata$ #{current_command_path} upload-no-open .codersdojo%/%2010-11-02_16-21-53
+        Upload the kata located in directory ".codersdojo%/%2010-11-02_16-21-53" to codersdojo.com.
+helptext
+	end
+
 	def show_help_upload_with_framework
 		templates = @scaffolder.list_templates
 		show <<-helptext
 
-upload-with-framework <framework> [<session_directory>]  
+upload-with-framework <framework> [<session_directory>]
                                           Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
                                           <session_directory> is relative to the working directory.
                                           If you don't specify a <session_directory> the newest session in .codersdojo is uploaded.
                                           By now <framework> is one of #{templates}.
                                           If you used another framework, use ??? and send an email to codersdojo@it-agile.de
+																					After the kata is uploaded the browser is started with the URL of the uploaded kata.
 
 Example:
     :%/%dojo%/%my_kata$ #{current_command_path} upload-with-framework ruby.test-unit .codersdojo%/%2010-11-02_16-21-53

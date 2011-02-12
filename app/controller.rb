@@ -51,13 +51,13 @@ class Controller
 	end
 
 	# merge with 'upload_with_framework' when the framework parameter is removed
-	def upload session_directory
-		upload_with_framework framework_property, session_directory
+	def upload session_directory, open_browser
+		upload_with_framework framework_property, session_directory, open_browser=true
 	end
 
 	# framework parameter is obsolete since client version 1.1.08 (08-feb-2011)
 	# it stays here for compatibility reasons and will be removed in the near future
-	def upload_with_framework framework, session_directory 
+	def upload_with_framework framework, session_directory , open_browser=true
 		formatter = FilenameFormatter.new
 		if not session_directory then
 			session_directory = formatter.session_dir @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace) 
