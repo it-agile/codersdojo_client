@@ -1,1 +1,1 @@
-codersdojo start vows %kata_file%.js
+codersdojo start "vows %kata_file%.js" %kata_file%.js
