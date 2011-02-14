@@ -48,8 +48,16 @@ class FilenameFormatter
 	end
 
   def extract_last_path_item dir_path
-	  last = dir_path.split(ShellWrapper.new.dir_separator).last
-		last.nil? ? "" : last
+	  last_separated_by_slash = dir_path.split('/').last
+	  last_separated_by_native = dir_path.split(ShellWrapper.new.dir_separator).last
+	  last = [last_separated_by_slash, last_separated_by_native].min_by {|item| item.nil? ? 0 : item.size}
+		nil_to_empty_string last
+	end
+	
+	private
+	
+	def nil_to_empty_string object
+		object.nil? ? "" : object
 	end
 
 end

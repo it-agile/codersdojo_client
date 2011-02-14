@@ -72,7 +72,6 @@ class ShellWrapper
 		}
 	end
 		
-	
 	def newest_dir_entry dir
 		Dir.new(dir).sort_by do |entry| 
 			complete_path = File.join dir, entry
