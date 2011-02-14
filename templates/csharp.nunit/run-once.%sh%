@@ -1,3 +1,3 @@
-%rm% %KataFile%.dll
-csc /nologo /target:library /reference:nunit.framework.dll %KataFile%.cs
-nunit-console %KataFile%.dll /nologo
+%rm% %Kata_file%.dll
+csc /nologo /target:library /reference:nunit.framework.dll %Kata_file%.cs
+nunit-console %Kata_file%.dll /nologo

@@ -10,5 +10,5 @@ Assumptions:
   - in the Path variable:
       csc              (possible path=C:\Windows\Microsoft.NET\Framework\v4.0.30319\)
       nunit-console    (possible path=C:\Programme\NUnit 2.5.9\bin\net-2.0\)
-  - nunit.framework.dll is in the same directory as %kata_file%.cs.
-  - The whole kata source code is in the one %kata_file%.cs.
+  - nunit.framework.dll is in the same directory as %Kata_file%.cs.
+  - The whole kata source code is in the one %Kata_file%.cs.

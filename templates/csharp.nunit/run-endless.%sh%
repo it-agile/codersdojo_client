@@ -1,1 +1,1 @@
-codersdojo start run-once.cmd %KataFile%.cs
+codersdojo start run-once.cmd %Kata_file%.cs
