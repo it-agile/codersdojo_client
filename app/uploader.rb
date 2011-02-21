@@ -25,8 +25,7 @@ class Uploader
   def upload_kata_and_states
 		read_states
     kata = upload_kata
-		finish_url = "#{@hostname}#{@@description_path}/#{XMLElementExtractor.extract('kata/uuid', kata)}"
-		summary_url = XMLElementExtractor.extract('kata/short-url', kata)
+		finish_url = "#{@hostname}#{@@description_path}/#{XMLElementExtractor.extract('kata/private-uuid', kata)}"
     "Complete kata information at #{finish_url}"
   end
 

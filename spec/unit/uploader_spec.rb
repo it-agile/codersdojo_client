@@ -28,8 +28,7 @@ describe Uploader do
 				@uploader.stub(:states).and_return [State.new, State.new]
 				@uploader.stub(:read_states)
         @uploader.stub(:upload_kata).and_return 'kata_xml'
-        XMLElementExtractor.should_receive(:extract).with('kata/uuid', 'kata_xml').and_return 'describe_url'
-        XMLElementExtractor.should_receive(:extract).with('kata/short-url', 'kata_xml').and_return 'short_url'
+        XMLElementExtractor.should_receive(:extract).with('kata/private-uuid', 'kata_xml').and_return 'describe_url'
         @uploader.upload_kata_and_states
       end
 
