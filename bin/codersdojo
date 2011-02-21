@@ -1,4 +1,19 @@
 #!/usr/bin/env ruby
+
+def show_update_message_when_old 
+	threshold = 30
+	last_update = File.mtime(__FILE__)
+	installation_age_in_days = ((Time.new - last_update)/60/60/24).round
+	if installation_age_in_days > threshold then
+	  puts <<-msg 
+Your installation of CodersDojo is more than #{threshold} days old (actual #{installation_age_in_days} days).
+You should consider updating with "sudo gem install codersdojo" (Mac/Linux) or "gem install codersdojo" (Windows),
+especially if you encounter strange behaviour of CodersDojo during kata execution or upload.
+msg
+  end
+end
+
+show_update_message_when_old
 codersdojo_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'app'))
 $LOAD_PATH.unshift(codersdojo_dir) unless $LOAD_PATH.include?(codersdojo_dir)
 require 'codersdojo'
