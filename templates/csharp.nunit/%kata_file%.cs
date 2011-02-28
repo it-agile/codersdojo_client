@@ -7,7 +7,7 @@ public class %Kata_file%Test
     [Test]
     public void testFoo()
     {
-        Test object_under_test = new Test();
+        %Kata_file% object_under_test = new %Kata_file%();
         Assert.AreEqual("foo", object_under_test.foo());
     }
 }
