@@ -1,3 +1,4 @@
+require "info_property_file"
 require "filename_formatter"
 require "text_converter"
 
@@ -35,7 +36,7 @@ class Runner
     @shell.mkdir state_dir
     @shell.cp @file, state_dir
     @shell.write_file @filename_formatter.result_file(state_dir), result
-    @shell.write_file @filename_formatter.info_file(state_dir), "return_code: #{process.return_code}"
+    @shell.write_file @filename_formatter.info_file(state_dir), "#{InfoPropertyFile.RETURN_CODE_PROPERTY}: #{process.return_code}"
     @step += 1
     @previous_change_time = change_time
   end
