@@ -186,7 +186,7 @@ msg
 	end
 		
 	def show_kata_upload_hint
-		show "You finished your kata. Now upload it with 'codersdojo upload'."
+		show "You finished your kata. You can upload it with 'codersdojo upload'."
 	end
 		
 	def show text
