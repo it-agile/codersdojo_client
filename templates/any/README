@@ -3,7 +3,7 @@ These files were created:
   run-once.%sh% runs your tests once
   run-endless.%sh% runs your tests endlessly via run-once.%sh%
 
-run-once.%sh% is not implemented by now. You have to implement it appropriately.
+run-once.%sh% is not implemented by now. You have to implement it appropriately. The return code of the script has to be 0 if the tests succeeded and another value if the tests failed.
 
 Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-endless.%sh%.)
 
