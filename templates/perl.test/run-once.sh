@@ -1,0 +1,1 @@
+perl %kata_file%.pl

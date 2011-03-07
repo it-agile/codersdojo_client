@@ -1,0 +1,2 @@
+framework: perl.test
+source_files: .*\.pl
