@@ -1,0 +1,3 @@
+framework: scala.junit
+source_files: .*\.scala
+

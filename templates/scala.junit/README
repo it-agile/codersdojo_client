@@ -1,0 +1,17 @@
+These files were created:
+  README is what you are currently reading
+  run-once.%sh% runs your tests once
+  run-endless.%sh% runs your tests endlessly via run-once.%sh%
+
+Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-endless.%sh%.)
+
+Assumptions:
+  - A Java JDK is installed on your system and 'java' and 'javac' are in the path.
+  - scala-library.jar, junit.jar, scalatest.jar and org.hamcrest.core.jar are placed in the 'lib' directory.
+  - junit.jar contains JUnit 4.
+  - The whole kata source code is in the one %Kata_file%Test.scala.
+  - The kata class file is generated into the 'bin' directory.
+  - In the source file the classes are placed in the default package.
+  - The kata source file has a main method that starts the tests.
+  - If your IDE (like Eclipse) compiles the source file, you should remove the first two lines
+    in the run-once.%sh% file.
