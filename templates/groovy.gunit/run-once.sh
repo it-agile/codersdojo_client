@@ -1,1 +1,1 @@
-groovy -cp lib/groovy.jar %Kata_file%.groovy
+groovy -cp lib/groovy.jar %Kata_file%Test.groovy
