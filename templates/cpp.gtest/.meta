@@ -1,0 +1,2 @@
+framework: cpp.gtest
+source_files: .*\.cc
