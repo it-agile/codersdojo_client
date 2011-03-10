@@ -9,3 +9,6 @@ Assumptions:
   - make and a C++ compiler (like gcc) is installed on your system and is in the PATH
   - The whole kata source code is in the one %Kata_file%.cc.
   - The GTest framework is in the directory gtest.
+  - If your IDE does the compilation and linking, you should remove the first 3 lines
+    in the run-once.%sh% file.
+

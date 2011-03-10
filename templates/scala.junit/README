@@ -7,7 +7,7 @@ Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-e
 
 Assumptions:
   - A Java JDK is installed on your system and 'java' and 'javac' are in the path.
-  - scala-library.jar, junit.jar, scalatest.jar and org.hamcrest.core.jar are placed in the 'lib' directory.
+  - scala-library.jar, junit.jar and org.hamcrest.core.jar are placed in the 'lib' directory.
   - junit.jar contains JUnit 4.
   - The whole kata source code is in the one %Kata_file%Test.scala.
   - The kata class file is generated into the 'bin' directory.

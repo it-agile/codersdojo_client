@@ -2,21 +2,19 @@
 // Important: Test and production code has to be
 //            completely in this file.
 
-import org.scalatest.junit.JUnitSuite
-import org.scalatest.junit.ShouldMatchersForJUnit
-import org.junit.Test
-import Primes._
+import org.scalatest.junit.JUnitTest
+import org.junit.Assert
 
-class PrimesTest extends JUnitSuite with ShouldMatchersForJUnit {
+class %Kata_file%Test {
 
   @Test
-  def verifyThatOneIsPrime() = {
-    foo() should be("fixed")
+  def verifyThatFooIsFixed() = {
+    assertEquals("foo", foo())
   }
 
 }
 
-object Primes {
+object %Kata_file% {
 
   def foo() = {
     "fixme"
