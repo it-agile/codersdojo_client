@@ -2,19 +2,20 @@
 // Important: Test and production code has to be
 //            completely in this file.
 
-import org.scalatest.junit.JUnitTest
-import org.junit.Assert
+import org.junit.Test
+import org.junit.Assert._
 
 class %Kata_file%Test {
 
   @Test
   def verifyThatFooIsFixed() = {
-    assertEquals("foo", foo())
+    val objectUnderTest = new %Kata_file%()
+    assertEquals("foo", objectUnderTest.foo())
   }
 
 }
 
-object %Kata_file% {
+private class %Kata_file% {
 
   def foo() = {
     "fixme"
