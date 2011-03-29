@@ -9,7 +9,7 @@ class ArgumentParser
 	end
 	
 	def parse params		
-		command = params[0] ? params[0].downcase : ""
+		command = params[0] ? params[0].downcase : "help"
 		if command == "help" then
 			@controller.help params[1]
 		elsif command == "setup" then

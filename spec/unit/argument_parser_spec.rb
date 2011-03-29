@@ -7,10 +7,6 @@ describe ArgumentParser do
 		@parser = ArgumentParser.new @controller_mock
 	end
 	
-	it "should reject empty command" do
-		lambda{@parser.parse []}.should raise_error
-	end
-	
 	it "should reject unknown command" do
 		lambda{@parser.parse "unknown command"}.should raise_error
 	end
@@ -18,6 +14,11 @@ describe ArgumentParser do
 	it "should accept help command" do
 		@controller_mock.should_receive(:help).with(nil)
 		@parser.parse ["help"]
+	end
+	
+	it "should accept empty command as help command" do
+		@controller_mock.should_receive(:help).with(nil)
+		@parser.parse []
 	end
 	
 	it "should accept start command" do

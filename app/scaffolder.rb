@@ -16,6 +16,13 @@ class Scaffolder
 		templates.join(', ')
 	end
 
+	def list_templates_as_dotted_list indentation
+		templates = @shell.real_dir_entries template_path
+		templates.delete ANY_TEMPLATE
+		indent_string = ' '*indentation
+		"#{indent_string}* " + templates.join("\n#{indent_string}* ")
+	end
+
 	def scaffold template, kata_file
 		@template_machine.placeholder_values['kata_file.ext'] = kata_file
 		@template_machine.placeholder_values['kata_file'] = @filename_formatter.without_extension kata_file

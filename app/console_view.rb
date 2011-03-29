@@ -3,6 +3,8 @@ require 'text_template_machine'
 require 'property_file_missing_exception'
 
 class ConsoleView
+
+	FRAMEWORK_LIST_INDENTATION = 6
 	
 	def initialize scaffolder
 		@scaffolder = scaffolder
@@ -55,37 +57,45 @@ helptext
 	end
 
 	def show_help_setup
-			templates = @scaffolder.list_templates
+			templates = @scaffolder.list_templates_as_dotted_list FRAMEWORK_LIST_INDENTATION
 			show <<-helptext
 			
-setup <framework> <kata_file>  Setup the environment for the kata for the given framework and kata file.
-                               By now <framework> is one of #{templates}.
-                               Use ??? as framework if your framework isn't in the list.
+setup <framework> <kata_file>  
+    Setup the environment for the kata for the given framework and kata file.
+    The <kata_file> is the one file that will contain the source code of the code kata.
+    If <kata_file> does not have an extension it will be added automatically 
+    - except if <framework> is ??? (see below).
+    By now <framework> is one of these:
+#{templates}.
+    Use ??? as framework if your framework isn't in the list.
 
 Example:
     :%/%dojo%/%my_kata$ #{current_command_path} setup ruby.test-unit prime
-        Show the instructions how to setup the environment for kata execution with Ruby and test/unit.
+        Setup the the environment for executing a code kata in kata file 'prime' with Ruby and test/unit.
 helptext
 	end
 
 	def show_help_start
 		show <<-helptext
 		
-start <shell_command> <kata_file>  Start the continuous test runner, that runs <shell-command> whenever <kata_file>
-                                   changes. The <kata_file> has to include the whole source code of the kata.
-                                   Whenever the test runner is started, it creates a new session directory in the 
-                                   directory .codersdojo where it logs the steps of the kata.
+start <shell_command> <kata_file>  
+    Start the continuous test runner, that runs <shell-command> whenever <kata_file>
+    changes. The <kata_file> has to include the whole source code of the kata.
+    Whenever the test runner is started, it creates a new session directory in the 
+    directory .codersdojo where it logs the steps of the kata.
 helptext
 	end
 
 	def show_help_upload
 		show <<-helptext
 		
-upload                      Upload the newest kata session in .codersdojo to codersdojo.com.
-                            After the kata is uploaded the browser is started with the URL of the uploaded kata.
+upload                      
+    Upload the newest kata session in .codersdojo to codersdojo.com.
+    After the kata is uploaded the browser is started with the URL of the uploaded kata.
 
-upload <session_directory>  Upload the kata <session_directory> to codersdojo.com. 
-                            <session_directory> is relative to the working directory.
+upload <session_directory>  
+    Upload the kata <session_directory> to codersdojo.com. 
+    <session_directory> is relative to the working directory.
 
 Examples:
     :%/%dojo%/%my_kata$ #{current_command_path} upload
@@ -98,10 +108,12 @@ helptext
 	def show_help_upload_no_open
 		show <<-helptext
 
-upload-no-open                      Upload the newest kata session in .codersdojo to codersdojo.com.
+upload-no-open                      
+    Upload the newest kata session in .codersdojo to codersdojo.com.
 
-upload-no-opem <session_directory>  Upload the kata <session_directory> to codersdojo.com. 
-                                    <session_directory> is relative to the working directory.
+upload-no-opem <session_directory>  
+    Upload the kata <session_directory> to codersdojo.com. 
+    <session_directory> is relative to the working directory.
 
 Examples:
     :%/%dojo%/%my_kata$ #{current_command_path} upload-no-open
@@ -112,16 +124,17 @@ helptext
 	end
 
 	def show_help_upload_with_framework
-		templates = @scaffolder.list_templates
+		templates = @scaffolder.list_templates_as_dotted_list FRAMEWORK_LIST_INDENTATION
 		show <<-helptext
 
 upload-with-framework <framework> [<session_directory>]
-                                          Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
-                                          <session_directory> is relative to the working directory.
-                                          If you don't specify a <session_directory> the newest session in .codersdojo is uploaded.
-                                          By now <framework> is one of #{templates}.
-                                          If you used another framework, use ??? and send an email to codersdojo@it-agile.de
-																					After the kata is uploaded the browser is started with the URL of the uploaded kata.
+    Upload the kata written with <framework> in <session_directory> to codersdojo.com. 
+    <session_directory> is relative to the working directory.
+    If you don't specify a <session_directory> the newest session in .codersdojo is uploaded.
+    By now <framework> is one of these
+#{templates}.
+    If you used another framework, use ??? and send an email to codersdojo@it-agile.de
+    After the kata is uploaded the browser is started with the URL of the uploaded kata.
 
 Example:
     :%/%dojo%/%my_kata$ #{current_command_path} upload-with-framework ruby.test-unit .codersdojo%/%2010-11-02_16-21-53
