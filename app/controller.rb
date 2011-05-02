@@ -1,9 +1,12 @@
 require 'scheduler'
 require 'uploader'
 require 'filename_formatter'
+require 'upload_command'
 
 class Controller
 
+	attr_accessor :uploader
+	
 	def initialize shell, view, scaffolder, hostname
 		@property_filename = '.meta'
 		@shell = shell
@@ -11,6 +14,7 @@ class Controller
 		@scaffolder = scaffolder
 		@hostname = hostname
 		@filename_formatter = FilenameFormatter.new
+		@uploader = Uploader.new(hostname, '', '')
 	end
 
 	def help command=nil
@@ -58,18 +62,8 @@ class Controller
 	# framework parameter is obsolete since client version 1.1.08 (08-feb-2011)
 	# it stays here for compatibility reasons and will be removed in the near future
 	def upload_with_framework framework, session_directory , open_browser=true
-		formatter = FilenameFormatter.new
-		if not session_directory then
-			session_directory = formatter.session_dir @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace) 
-		end
-		@view.show_upload_start session_directory, @hostname, framework
-	  uploader = Uploader.new @hostname, framework, session_directory
-		upload_result = uploader.upload
-	  @view.show_upload_result upload_result
-		url = upload_result.split.last
-		if open_browser then 
-			@shell.open_with_default_app url
-		end
+		upload_command = UploadCommand.new @shell, @view, @hostname
+		upload_command.upload
 	end
 
 	def framework_property

@@ -4,11 +4,13 @@ require 'progress'
 require 'filename_formatter'
 require 'xml_element_extractor'
 require 'rest_client'
+require 'shell_wrapper'
 
 class Uploader
 
 	attr_reader :states
-
+	attr_accessor :framework
+	
   def initialize hostname, framework, session_dir, state_reader = StateReader.new(ShellWrapper.new)
 	  @states = []
 		@hostname = hostname
@@ -16,6 +18,10 @@ class Uploader
     @state_reader = state_reader
     @state_reader.session_dir = session_dir
   end
+
+	def session_dir= dir
+		@state_reader.session_dir = dir
+	end
 
   def upload
     return upload_kata_and_states if @state_reader.enough_states?
