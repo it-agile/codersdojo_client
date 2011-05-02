@@ -1,9 +1,10 @@
 class Scheduler
 
-  def initialize runner, view
+  def initialize runner, view, commands
     @runner = runner
 		@view = view
 		@last_action = ""
+		@commands = commands
   end
 
   def start
@@ -25,6 +26,11 @@ class Scheduler
 	def interrupt_kata
 		@view.show_kata_exit_message 
 		@last_action = @view.read_user_input.downcase
+		@commands.each do |command|
+			if @last_action == command.command_key
+				command.execute
+			end
+		end
 		if last_action_was_exit? then
 			@view.show_kata_upload_hint
 		end
@@ -40,10 +46,6 @@ class Scheduler
 
 	def last_action_was_exit?
 		@last_action.start_with? 'e'
-	end
-
-	def last_action_was_upload?
-		@last_action.start_with? 'u'
 	end
 
 end

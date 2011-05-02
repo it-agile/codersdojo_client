@@ -31,7 +31,7 @@ class ArgumentParser
 	end
 
 	def expand_run_command command
-		if command.end_with?(".sh") then
+		if command and command.end_with?(".sh") then
 			"bash #{command}"
 		else
 			command
