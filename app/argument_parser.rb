@@ -18,8 +18,6 @@ class ArgumentParser
 			@controller.upload params[1]
 		elsif command == "upload-no-open" then
 			@controller.upload params[1], false
-		elsif command == "upload-with-framework" then
-			@controller.upload_with_framework params[1], params[2]
 		elsif command == "start" then
 			run_command = expand_run_command params[1]
 			@controller.start run_command, params[2]

@@ -28,15 +28,8 @@ class Controller
 		@start_command.start command, file
 	end
 
-	# merge with 'upload_with_framework' when the framework parameter is removed
 	def upload session_directory, open_browser=true
 		upload_with_framework nil, session_directory, open_browser
-	end
-
-	# framework parameter is obsolete since client version 1.1.08 (08-feb-2011)
-	# it stays here for compatibility reasons and will be removed in the near future
-	def upload_with_framework framework, session_directory , open_browser=true
-		@upload_command.upload framework, session_directory, open_browser
 	end
 
 end

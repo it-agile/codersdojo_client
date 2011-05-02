@@ -46,11 +46,6 @@ describe ArgumentParser do
 		@parser.parse ["upload", "dir"]
 	end
 	
-	it "should accept upload-with-framework command" do
-		@controller_mock.should_receive(:upload_with_framework).with "framework", "dir"
-		@parser.parse ["upload-with-framework", "framework", "dir"]
-	end
-	
 	it "should accept uppercase commands" do
 		@controller_mock.should_receive(:help).with(nil)
 		@parser.parse ["HELP"]
