@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'console_view'
-require 'controller'
 require 'argument_parser'
 require 'scaffolder'
 
@@ -17,10 +16,9 @@ class CodersDojo
 		shell = ShellWrapper.new
 		scaffolder = Scaffolder.new shell
 		view = ConsoleView.new scaffolder
-		controller = Controller.new shell, view, scaffolder, @hostname
 
 		begin
-			arg_parser = ArgumentParser.new controller
+			arg_parser = ArgumentParser.new shell, view, scaffolder, @hostname
 			command = arg_parser.parse @params
 		rescue ShellArgumentException => e
 			view.show_unknwon_command_message e.command

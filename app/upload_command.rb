@@ -17,9 +17,13 @@ class UploadCommand
 		upload nil, nil
 	end
 
-	def upload framework, session_directory, open_browser=true
+	def execute_from_shell params
+		upload params[1]
+	end
+
+	def upload session_directory, open_browser=true
 		formatter = FilenameFormatter.new
-		framework = framework_property unless framework
+		framework = framework_property
 		if not session_directory then
 			session_directory = formatter.session_dir @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace) 
 		end
@@ -36,6 +40,10 @@ class UploadCommand
 	
 	def command_key
 		'u'
+	end
+	
+	def accepts_shell_command? command
+		command == 'upload'
 	end
 	
 	def framework_property
