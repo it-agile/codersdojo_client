@@ -22,8 +22,7 @@ class StateReader
 	end
 
   def state_count
-	  dummy_dirs_current_and_parent = 2
-    Dir.new(@filename_formatter.session_dir @session_id).count - dummy_dirs_current_and_parent
+	  @shell.real_dir_entries(@filename_formatter.session_dir @session_id).count
   end
 
   def enough_states?

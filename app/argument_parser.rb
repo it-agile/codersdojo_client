@@ -18,7 +18,6 @@ class ArgumentParser
 		@generate_command = GenerateCommand.new shell, view, scaffolder
 		@start_command = StartCommand.new shell, view, @upload_command
 		@commands = [@help_command, @generate_command, @start_command, @upload_command, @upload_no_open_command]
-		@commands = [@help_command]
 	end
 	
 	def parse params

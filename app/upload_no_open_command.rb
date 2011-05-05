@@ -13,7 +13,7 @@ class UploadNoOpenCommand
 	end
 	
 	def accepts_shell_command? command
-		command = 'upload-no-open'
+		command == 'upload-no-open'
 	end
 	
 end
