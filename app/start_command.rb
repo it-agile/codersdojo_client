@@ -33,5 +33,13 @@ class StartCommand
 			command
 		end
 	end
+	
+	def framework_property
+		properties['framework']
+	end
+
+	def properties
+	  @shell.read_properties PROPERTY_FILENAME
+	end
 
 end

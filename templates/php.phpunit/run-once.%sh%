@@ -1,0 +1,1 @@
+phpunit %Kata_file%Test %kata_file%.php

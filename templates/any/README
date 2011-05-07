@@ -5,6 +5,10 @@ These files were created:
 
 run-once.%sh% is not implemented by now. You have to implement it appropriately. The return code of the script has to be 0 if the tests succeeded and another value if the tests failed.
 
+You have to adapt the .meta file:
+'framework' consists of two parts, the programming language and the test framework seperated by a dot. A valid framework would be java.junit.
+'source_files' is a regular expression that match the source files of the kata. A valid source_files definition would be .*\.java for all files ending with .java.
+
 Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-endless.%sh%.)
 
 Assumptions:

@@ -1,0 +1,3 @@
+framework: php.phpunit
+source_files: .*\.php
+

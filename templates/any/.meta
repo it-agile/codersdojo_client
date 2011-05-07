@@ -1,1 +1,2 @@
-framework: ???
+framework: <language>.<testframework>
+source_files: .*\.<extension>
