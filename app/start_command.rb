@@ -1,4 +1,5 @@
 require 'meta_config_file'
+require 'scheduler'
 
 class StartCommand
 	

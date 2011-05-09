@@ -27,7 +27,7 @@ class Scheduler
 		@view.show_kata_exit_message 
 		@last_action = @view.read_user_input.downcase
 		@commands.each do |command|
-			if @last_action == command.command_key
+			if @last_action.start_with? command.command_key
 				command.execute
 			end
 		end

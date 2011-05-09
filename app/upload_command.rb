@@ -14,7 +14,7 @@ class UploadCommand
 	end
 
 	def execute
-		upload nil, nil
+		upload nil
 	end
 
 	def execute_from_shell params
