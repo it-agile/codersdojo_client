@@ -6,3 +6,5 @@ Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-e
 
 Assumptions:
   - The whole kata source code is in the one %kata_file%.js.
+
+The support for JavaScript/Vows was contributed by Matthias Lübken.

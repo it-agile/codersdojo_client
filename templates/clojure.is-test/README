@@ -9,3 +9,5 @@ Assumptions:
   - The whole kata source code is in the one %kata_file%.clj.
   - Java is installed on your system and 'java' is in the path.
   - clojure.jar and clojure-contrib.jar are placed in the 'lib' directory.
+
+The support for Clojure/Is-Test was contributed by Stefan Roock.

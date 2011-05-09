@@ -12,3 +12,4 @@ Assumptions:
   - If your IDE does the compilation and linking, you should remove the first 3 lines
     in the run-once.%sh% file.
 
+The support for C++/GTest was contributed by Stefan Roock.

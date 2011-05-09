@@ -1,8 +1,7 @@
+require 'meta_config_file'
 require 'uploader'
 
 class UploadCommand
-
-	PROPERTY_FILENAME = '.meta'
 
 	attr_accessor :uploader
 
@@ -11,6 +10,7 @@ class UploadCommand
 		@view = view
 		@hostname = hostname
 		@uploader = Uploader.new(hostname, '', '')
+		@meta_file = MetaConfigFile.new @shell
 	end
 
 	def execute
@@ -23,7 +23,7 @@ class UploadCommand
 
 	def upload session_directory, open_browser=true
 		formatter = FilenameFormatter.new
-		framework = framework_property
+		framework = @meta_file.framework_property
 		if not session_directory then
 			session_directory = formatter.session_dir @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace) 
 		end
@@ -44,14 +44,6 @@ class UploadCommand
 	
 	def accepts_shell_command? command
 		command == 'upload'
-	end
-	
-	def framework_property
-		properties['framework']
-	end
-
-	def properties
-	  @shell.read_properties PROPERTY_FILENAME
 	end
 	
 end

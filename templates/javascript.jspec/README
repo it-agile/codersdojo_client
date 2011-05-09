@@ -7,3 +7,5 @@ Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-e
 
 Assumptions:
   - The whole kata source code is in the one spec.js.
+
+The support for JavaScript/JSpec was contributed by Marko Schulz.

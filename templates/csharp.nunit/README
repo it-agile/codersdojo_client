@@ -12,3 +12,5 @@ Assumptions:
       nunit-console    (possible path=C:\Programme\NUnit 2.5.9\bin\net-2.0\)
   - nunit.framework.dll is in the same directory as %Kata_file%.cs.
   - The whole kata source code is in the one %Kata_file%.cs.
+
+The support for C#/NUnit was contributed by Meike Mertsch.

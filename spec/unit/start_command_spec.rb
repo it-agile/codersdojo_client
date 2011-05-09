@@ -21,6 +21,14 @@ describe StartCommand do
 		@command.expand_run_command('aCommand.cmd').should == 'aCommand.cmd'
 	end
 	
+	it "should start scheduler" do
+		@shell_mock.should_receive(:read_properties).with('.meta').and_return 'aFramework'
+		scheduler_mock = mock
+		Scheduler.should_receive(:new).and_return scheduler_mock
+		scheduler_mock.should_receive(:start)
+		@command.start 'aCommand.sh', 'primes.rb'
+	end
+	
 
 
 end

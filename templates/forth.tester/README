@@ -7,3 +7,5 @@ Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-e
 
 Assumptions:
   - The whole kata source code is in the one %kata_file%.fth.
+
+The support for Forth/Tester was contributed by Stefan Roock.

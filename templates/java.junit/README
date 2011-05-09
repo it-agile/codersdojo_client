@@ -15,3 +15,5 @@ Assumptions:
   - The kata source file has a main method that starts the tests.
   - If your IDE (like Eclipse) compiles the source file, you should remove the first two lines
     in the run-once.%sh% file.
+
+The support for Java/JUnit was contributed by Stefan Roock.

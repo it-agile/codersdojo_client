@@ -1,8 +1,11 @@
+require 'meta_config_file'
+
 class StartCommand
 	
 	def initialize shell, view, upload_command
 		@shell = shell
 		@view = view
+		@meta_file = MetaConfigFile.new @shell
 		@upload_command = upload_command
 	end
 	
@@ -14,7 +17,7 @@ class StartCommand
 		unless command then @view.show_missing_command_argument_error "start", "shell_command"; return end
 		unless file then @view.show_missing_command_argument_error "start", "kata_file"; return end
 		command = expand_run_command command
-	  @view.show_start_kata command, file, framework_property
+	  @view.show_start_kata command, file, @meta_file.framework_property
 	  dojo = Runner.new @shell, SessionIdGenerator.new
 	  dojo.file = file
 	  dojo.run_command = command
@@ -34,12 +37,4 @@ class StartCommand
 		end
 	end
 	
-	def framework_property
-		properties['framework']
-	end
-
-	def properties
-	  @shell.read_properties PROPERTY_FILENAME
-	end
-
 end
