@@ -6,6 +6,6 @@ These files were created:
 Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-endless.%sh%.)
 
 Assumptions:
-  - The whole kata source code is in the one %kata_file%.py.
+  - The whole kata source code is in the one %kata_file%.m.
 
-The support for Python/PyUnit was contributed by Steven Collins (Twitter: @lomin).
+The support for Objective-C/OCUnit was contributed by Sven Günther.
