@@ -13,14 +13,16 @@ class Runner
   end
 
   def start
-    init_session
+    init_session 
     execute
   end
 
   def init_session
     @step = 0
     @session_id = @session_provider.generate_id
-    @shell.mkdir_p(@filename_formatter.session_dir @session_id)
+		session_dir = @filename_formatter.session_dir @session_id
+    @shell.mkdir_p(session_dir)
+		session_dir
   end
 
   def execute

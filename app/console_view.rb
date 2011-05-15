@@ -174,6 +174,10 @@ msg
 	def show_kata_upload_hint
 		show "You finished your kata. You can upload it with 'codersdojo upload'."
 	end
+	
+	def show_init_session_result session_dir
+		show "Session directory created: #{session_dir}"
+	end
 		
 	def show text
 		puts @template_machine.render(text)

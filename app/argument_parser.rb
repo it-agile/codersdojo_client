@@ -5,6 +5,7 @@ require 'shell_wrapper'
 require 'console_view'
 require 'help_command'
 require 'generate_command'
+require 'init_session_command'
 require 'upload_command'
 require 'upload_no_open_command'
 require 'start_command'
@@ -13,11 +14,13 @@ class ArgumentParser
 	
 	def initialize shell, view, scaffolder, hostname
 		@help_command = HelpCommand.new view
+		@generate_command = GenerateCommand.new shell, view, scaffolder
 		@upload_command = UploadCommand.new shell, view, hostname
 		@upload_no_open_command = UploadNoOpenCommand.new @upload_command
-		@generate_command = GenerateCommand.new shell, view, scaffolder
+		@init_session_command = InitSessionCommand.new shell, view
 		@start_command = StartCommand.new shell, view, @upload_command
-		@commands = [@help_command, @generate_command, @start_command, @upload_command, @upload_no_open_command]
+		@commands = [@help_command, @generate_command, @init_session_command, @start_command, @upload_command, 
+			@upload_no_open_command]
 	end
 	
 	def parse params
