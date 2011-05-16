@@ -26,6 +26,7 @@ Usage: #{current_command_path} command [options]
 Commands:
   help, -h, --help                     Print this help text.
   help <command>                       See the details of the command.
+  xhelp                                Print help text for advanced commands.
   setup <framework> <kata_file>        Setup the environment for running the kata.
   upload [<session_dir>]               Upload the kata to http://www.codersdojo.org and open the kata in a browser.
   upload-no-open [<session_dir>]       Upload the kata to http://www.codersdojo.org
@@ -33,6 +34,17 @@ Commands:
 Report bugs to <codersdojo@it-agile.de>
 helptext
 	end
+	
+	def show_extended_help
+		show <<-helptext
+Usage: #{current_command_path} command [options]
+Commands:
+  help <command>                                    See the details of the command.
+  init-session                                      Create a new session dir within the .codersdojo dir.
+  capture-single-run <shell_command> <kata_file>    Capture a single run.
+  start <shell_command> <kata_file>                 Start the continuous test loop.
+helptext
+  end
 
 	def show_detailed_help command
 		command = command.gsub('-', '_')
