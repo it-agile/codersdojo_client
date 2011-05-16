@@ -32,16 +32,24 @@ class Runner
       return
     end
     Progress.end
-    process = @shell.execute @run_command
-		result = TextConverter.new.remove_escape_sequences process.output
-    state_dir = @filename_formatter.state_dir @session_id, @step
-    @shell.mkdir state_dir
-    @shell.cp @file, state_dir
-    @shell.write_file @filename_formatter.result_file(state_dir), result
-    @shell.write_file @filename_formatter.info_file(state_dir), "#{InfoPropertyFile.RETURN_CODE_PROPERTY}: #{process.return_code}"
+		execute_once @file, @session_id, @step
     @step += 1
     @previous_change_time = change_time
   end
+
+	def execute_once file, session_id, step
+		process = @shell.execute @run_command
+		result = TextConverter.new.remove_escape_sequences process.output
+    state_dir = @filename_formatter.state_dir session_id, step
+    @shell.mkdir state_dir
+    @shell.cp file, state_dir
+    @shell.write_file @filename_formatter.result_file(state_dir), result
+    @shell.write_file @filename_formatter.info_file(state_dir), "#{InfoPropertyFile.RETURN_CODE_PROPERTY}: #{process.return_code}"
+	end
+	
+	def run_command= command
+		@run_command = @shell.expand_run_command command
+	end
 
 end
 

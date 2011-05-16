@@ -6,6 +6,7 @@ require 'console_view'
 require 'help_command'
 require 'generate_command'
 require 'init_session_command'
+require 'capture_single_run_command'
 require 'upload_command'
 require 'upload_no_open_command'
 require 'start_command'
@@ -18,9 +19,10 @@ class ArgumentParser
 		@upload_command = UploadCommand.new shell, view, hostname
 		@upload_no_open_command = UploadNoOpenCommand.new @upload_command
 		@init_session_command = InitSessionCommand.new shell, view
+		@capture_single_run_command = CaptureSingleRunCommand.new shell, view
 		@start_command = StartCommand.new shell, view, @upload_command
-		@commands = [@help_command, @generate_command, @init_session_command, @start_command, @upload_command, 
-			@upload_no_open_command]
+		@commands = [@help_command, @generate_command, @init_session_command, @capture_single_run_command,
+			@start_command, @upload_command, @upload_no_open_command]
 	end
 	
 	def parse params

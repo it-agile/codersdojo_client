@@ -10,6 +10,7 @@ describe Runner, "in run mode" do
 
   before (:each) do
     @shell_mock = mock.as_null_object
+		@shell_mock.should_receive(:expand_run_command).with('run-once.sh').and_return 'bash run_once.sh'
     @session_id_provider_mock = mock.as_null_object
     @session_id_provider_mock.should_receive(:generate_id).and_return SESSION_ID
     @runner = Runner.new @shell_mock, @session_id_provider_mock
@@ -18,12 +19,16 @@ describe Runner, "in run mode" do
   end
 
   it "should create codersdojo directory if it doesn't exist with session sub-directory" do
-    @shell_mock.should_receive(:mkdir_p).with(SESSION_DIR).and_return ShellProcess.new
+		process_mock = mock
+    @shell_mock.should_receive(:mkdir_p).with(SESSION_DIR).and_return process_mock
     @runner.start
   end
 
   it "should run ruby command on kata file given as argument" do
-    @shell_mock.should_receive(:execute).with("run-once.sh").and_return ShellProcess.new
+		process_mock = mock
+		process_mock.should_receive(:output).and_return ''
+		process_mock.should_receive(:return_code).and_return 0
+    @shell_mock.should_receive(:execute).and_return process_mock
     @runner.start
   end
 

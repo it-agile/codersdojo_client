@@ -35,6 +35,10 @@ class FilenameFormatter
     "#{session_directory}/#{STATE_DIR_PREFIX}#{step}"
   end
 
+	def step_number_from_state_dir state_dir
+		state_dir.delete(STATE_DIR_PREFIX).to_i
+	end
+
   def session_dir session_id
     "#{CODERSDOJO_WORKSPACE}/#{session_id}"
   end

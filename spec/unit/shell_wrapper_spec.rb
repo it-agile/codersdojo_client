@@ -17,5 +17,19 @@ describe ShellWrapper do
 		File.should_receive(:mtime).with('foo/bar2').and_return 1
 		@shell.newest_dir_entry('foo').should == "bar"
 	end
+	
+	it "should prepend *.sh start scripts with 'bash'" do
+		@shell.expand_run_command('aCommand.sh').should == 'bash aCommand.sh'
+	end
+	
+	it "should not prepend *.bat start scripts with anything" do
+		@shell.expand_run_command('aCommand.bat').should == 'aCommand.bat'
+	end
+	
+	it "should not prepend *.cmd start scripts with anything" do
+		@shell.expand_run_command('aCommand.cmd').should == 'aCommand.cmd'
+	end
+	
+	
 
 end

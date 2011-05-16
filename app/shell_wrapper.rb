@@ -109,6 +109,14 @@ class ShellWrapper
 		end
 	end
 
+	def expand_run_command command
+		if command.end_with?(".sh") then
+			"bash #{command}"
+		else
+			command
+		end
+	end
+
 	def shell_extension
 		windows? ? 'cmd' : 'sh'
 	end
