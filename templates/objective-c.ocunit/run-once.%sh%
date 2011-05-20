@@ -1,1 +1,1 @@
-xcodebuild -target "%Kata_file%Tests"
+mkdir -p %Kata_file%Tests.octest/Contents/MacOS/ && gcc -x objective-c -std=gnu99 -isysroot /Developer/SDKs/MacOSX10.6.sdk -fobjc-gc -F/Developer/Library/Frameworks -c %Kata_file%Tests.m -o %Kata_file%Tests.o && gcc -bundle -isysroot /Developer/SDKs/MacOSX10.6.sdk -F/Developer/Library/Frameworks -framework SenTestingKit -framework Cocoa %Kata_file%Tests.o -o %Kata_file%Tests.octest/Contents/MacOS/%Kata_file%Tests && /Developer/Tools/otest %Kata_file%Tests.octest
