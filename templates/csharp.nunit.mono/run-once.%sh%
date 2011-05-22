@@ -1,0 +1,3 @@
+%rm% %Kata_file%.dll
+gmcs /nologo /target:library /reference:nunit.framework.dll %Kata_file%.cs
+nunit-console %Kata_file%.dll -nologo

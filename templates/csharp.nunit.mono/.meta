@@ -1,0 +1,2 @@
+framework: csharp.nunit
+source_files: .*\.cs
