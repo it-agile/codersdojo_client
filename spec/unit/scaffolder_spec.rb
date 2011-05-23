@@ -50,5 +50,9 @@ describe Scaffolder do
 		@scaffolder.scaffold "a.template", 'myKata'
 	end
 
+	it "should format dotted list with indentation" do
+		@scaffolder.as_dotted_list(2, ["a.b", "a.c", "b.d", "e"]).should == "  * a.b, a.c\n  * b.d\n  * e"
+	end
+
 end
 

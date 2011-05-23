@@ -1,4 +1,5 @@
 require 'text_template_machine'
+require 'filename_formatter'
 
 class Scaffolder
 
@@ -19,8 +20,14 @@ class Scaffolder
 	def list_templates_as_dotted_list indentation
 		templates = @shell.real_dir_entries template_path
 		templates.delete ANY_TEMPLATE
+		as_dotted_list indentation, templates
+	end
+	
+	def as_dotted_list indentation, items
 		indent_string = ' '*indentation
-		"#{indent_string}* " + templates.join("\n#{indent_string}* ")
+		grouped_items = items.group_by{|item| item.split('.').first}
+		group_strings = grouped_items.collect{|group| group.last.join ', '}
+		"#{indent_string}* " + group_strings.join("\n#{indent_string}* ")
 	end
 
 	def scaffold template, kata_file

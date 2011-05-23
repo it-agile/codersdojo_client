@@ -65,7 +65,7 @@ setup <framework> <kata_file>
     If <kata_file> does not have an extension it will be added automatically 
     - except if <framework> is ??? (see below).
     By now <framework> is one of these:
-#{templates}.
+#{templates}
     Use ??? as framework if your framework isn't in the list.
 
 Example:
