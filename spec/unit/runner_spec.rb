@@ -15,7 +15,6 @@ describe Runner, "in run mode" do
     @session_id_provider_mock.should_receive(:generate_id).and_return SESSION_ID
 		@view_mock = mock.as_null_object
     @runner = Runner.new @shell_mock, @session_id_provider_mock, @view_mock
-    @runner.file = "my_file.rb"
     @runner.run_command = "run-once.sh"
   end
 
@@ -34,27 +33,29 @@ describe Runner, "in run mode" do
   end
 
   it "should create a state directory for every state" do
+	  @shell_mock.should_receive(:files_in_dir_tree).twice.and_return ['my_file.rb']
 	  @shell_mock.should_receive(:newest_dir_entry).twice.and_return 'my_file.rb'
     @shell_mock.should_receive(:modification_time).with("my_file.rb").and_return 1
     @shell_mock.should_receive(:mkdir).with "#{STATE_DIR_PREFIX}0"
-    @shell_mock.should_receive(:cp).with "my_file.rb", "#{STATE_DIR_PREFIX}0"
+    @shell_mock.should_receive(:cp_r).with ["my_file.rb"], "#{STATE_DIR_PREFIX}0"
     @runner.start
     @shell_mock.should_receive(:modification_time).with("my_file.rb").and_return 2
     @shell_mock.should_receive(:mkdir).with "#{STATE_DIR_PREFIX}1"
-    @shell_mock.should_receive(:cp).with "my_file.rb", "#{STATE_DIR_PREFIX}1"
+    @shell_mock.should_receive(:cp_r).with ["my_file.rb"], "#{STATE_DIR_PREFIX}1"
     @runner.execute
   end
 
   it "should not run if the kata file wasn't modified" do
     a_time = Time.new
+	  @shell_mock.should_receive(:files_in_dir_tree).twice.and_return ['my_file.rb']
 	  @shell_mock.should_receive(:newest_dir_entry).twice.and_return 'my_file.rb'
     @shell_mock.should_receive(:modification_time).with("my_file.rb").and_return a_time
     @shell_mock.should_receive(:mkdir).with "#{STATE_DIR_PREFIX}0"
-    @shell_mock.should_receive(:cp).with "my_file.rb", "#{STATE_DIR_PREFIX}0"
+    @shell_mock.should_receive(:cp_r).with ["my_file.rb"], "#{STATE_DIR_PREFIX}0"
     @runner.start
     @shell_mock.should_receive(:modification_time).with("my_file.rb").and_return a_time
     @shell_mock.should_not_receive(:mkdir).with "#{STATE_DIR_PREFIX}1"
-    @shell_mock.should_not_receive(:cp).with "my_file.rb", "#{STATE_DIR_PREFIX}1"
+    @shell_mock.should_not_receive(:cp_r).with ["my_file.rb"], "#{STATE_DIR_PREFIX}1"
     @runner.execute
   end
 
