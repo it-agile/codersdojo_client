@@ -1,1 +1,1 @@
-codersdojo start run-once.sh %Kata_file%Test.groovy
+codersdojo start run-once.sh

@@ -1,7 +1,5 @@
 <?php
 // Adapt the code to your code kata %kata_file%.
-// Important: Test and production code has to be
-//            completely in this file.
 
 require_once 'PHPUnit/Autoload.php';
 

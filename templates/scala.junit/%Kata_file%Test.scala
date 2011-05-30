@@ -1,6 +1,4 @@
 // Adapt the code to your code kata primes.
-// Important: Test and production code has to be
-//            completely in this file.
 
 import org.junit.Test
 import org.junit.Assert._

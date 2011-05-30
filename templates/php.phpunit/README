@@ -5,7 +5,4 @@ These files were created:
 
 Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-endless.%sh%.)
 
-Assumptions:
-  - The whole kata source code is in the one %kata_file%.php.
-
 The support for PHP/PHP-Unit was contributed by Gregor Gramlich.

@@ -6,7 +6,6 @@ These files were created:
 Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-endless.%sh%.)
 
 Assumptions:
-  - The whole kata source code is in the one %kata_file%.sh.
   - shunit2 is in your path.
 
 The support for Shell/ShUnit was contributed by Stefan Roock (Twitter: StefanRoock, http://stefanroock.de).

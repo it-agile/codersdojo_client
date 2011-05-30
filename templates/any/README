@@ -10,6 +10,3 @@ You have to adapt the .meta file:
 'source_files' is a regular expression that match the source files of the kata. A valid source_files definition would be .*\.java for all files ending with .java.
 
 Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-endless.%sh%.)
-
-Assumptions:
-  - The whole kata source code is in the one %kata_file.ext%.

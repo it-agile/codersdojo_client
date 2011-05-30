@@ -3,4 +3,4 @@ then
   jspec init
   mv spec.js spec/unit
 fi
-codersdojo start run-once.%sh% spec/unit/spec.js
+codersdojo start run-once.%sh%

@@ -9,7 +9,6 @@ Assumptions:
   - A Java JDK is installed on your system and 'java' and 'javac' are in the path.
   - junit.jar is placed in the 'lib' directory.
   - junit.jar contains JUnit 4.
-  - The whole kata source code is in the one %Kata_file%Test.java.
   - The kata class file is generated into the 'bin' directory.
   - In the source file the classes are placed in the default package.
   - The kata source file has a main method that starts the tests.

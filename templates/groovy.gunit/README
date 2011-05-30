@@ -8,6 +8,5 @@ Run run-endless.%sh% and start your kata. (On Mac/Linux you have to call ./run-e
 Assumptions:
   - Java and Groovy is installed on your system, 'groovy' is in the path and GROOVY_HOME is set.
   - groovy.jar is placed in the 'lib' directory.
-  - The whole kata source code is in the one %Kata_file%Test.groovy.
 
 The support for Groovy/GUnit was contributed by Stefan Roock.

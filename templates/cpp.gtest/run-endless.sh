@@ -1,1 +1,1 @@
-codersdojo start run-once.sh %Kata_file%.cc
+codersdojo start run-once.sh

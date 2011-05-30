@@ -1,1 +1,1 @@
-codersdojo start run-once.sh %kata_file%.pl
+codersdojo start run-once.sh
