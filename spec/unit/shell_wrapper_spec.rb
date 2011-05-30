@@ -21,7 +21,7 @@ describe ShellWrapper do
 	end
 	
 	it "should filter files by regex pattern recursivly" do
-		Dir.should_receive(:glob).with('**/*').and_return ['file1.rb', 'file2.py']
+		Dir.should_receive(:glob).with('myDir/**/*').and_return ['file1.rb', 'file2.py']
 		File.should_receive(:file?).any_number_of_times.and_return true
 		@shell.files_in_dir_tree('myDir', '.*\.rb').should == ['file1.rb']
 	end

@@ -47,7 +47,7 @@ describe Uploader do
       it "through a rest interface and log process" do
         states = [(mock State), (mock State)]
 				states.each_with_index {|state, index|
-	        state.should_receive(:code).and_return "code#{index}"
+	        state.should_receive(:files).and_return ["code#{index}"]
 	        state.should_receive(:time).and_return "time#{index}"
 	        state.should_receive(:result).and_return "result#{index}"
 					state.should_receive(:return_code).and_return index
@@ -59,8 +59,8 @@ describe Uploader do
         @state_reader_mock.should_receive(:read_next_state).and_return states[1]
 				@state_reader_mock.should_receive(:has_next_state).and_return false
         RestClient.should_receive(:post).with('http://dummy_host/katas', 
-					{"states[1]"=>{:created_at=>"time1", :result=>"result1", :code=>"code1", :green => false}, 
-					 "states[0]"=>{:created_at=>"time0", :result=>"result0", :code=>"code0", :green => true}, 
+					{"states[1]"=>{:created_at=>"time1", :result=>"result1", :code=>["code1"], :green => false}, 
+					 "states[0]"=>{:created_at=>"time0", :result=>"result0", :code=>["code0"], :green => true}, 
 					 :framework=>"dummy.framework"})
         @uploader.upload_kata_and_states
       end

@@ -68,15 +68,20 @@ class ShellWrapper
 	
 	def files_in_dir dir, regexp_pattern=nil
 		Dir.new(dir).entries.find_all{|entry|
-			File.file?(entry) and (not regexp_pattern or entry =~ Regexp.new(regexp_pattern))
+			file_matches_regexp? entry, regexp_pattern
 		}
 	end
 	
-	def files_in_dir_tree dir, regexp_pattern
-		Dir.glob("**/*").reject{|entry|
-			not File.file?(entry) or not entry =~ Regexp.new(regexp_pattern)
+	def files_in_dir_tree dir, regexp_pattern=nil
+		Dir.glob("#{dir}/**/*").find_all{|entry|
+			file_matches_regexp? entry, regexp_pattern
 		}
 	end
+
+	def file_matches_regexp? dir_entry, regexp_pattern
+		File.file?(dir_entry) and (not regexp_pattern or dir_entry =~ Regexp.new(regexp_pattern))
+	end
+		
 	
 	def newest_dir_entry dir, files=nil
 		unless files then files = real_dir_entries(dir) end

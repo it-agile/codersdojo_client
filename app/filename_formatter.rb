@@ -13,10 +13,10 @@ class FilenameFormatter
 		CODERSDOJO_WORKSPACE
 	end
 
-  def source_code_file state_dir
-    Dir.entries(state_dir).each { |file|
-      return state_file state_dir, file unless file =='..' || file == '.' || file == INFO_FILE || file == RESULT_FILE }
-  end
+	def source_file_in_state_dir? file
+		file = extract_last_path_item file
+		file != '..' and file != '.' and file != INFO_FILE and file != RESULT_FILE
+	end
 
   def result_file state_dir
     state_file state_dir, RESULT_FILE
