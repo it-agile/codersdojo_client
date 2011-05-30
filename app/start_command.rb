@@ -16,12 +16,13 @@ class StartCommand
 
 	def start command, file
 		unless command then @view.show_missing_command_argument_error "start", "shell_command"; return end
-		unless file then @view.show_missing_command_argument_error "start", "kata_file"; return end
+		if file then @view.show_deprecated_command_argument_warning "start", "kata_file" end # since 30-may-2011, remove argument in later version
 	  @view.show_start_kata command, file, @meta_file.framework_property
-	  dojo = Runner.new @shell, SessionIdGenerator.new
-	  dojo.file = file
-	  dojo.run_command = command
-	  scheduler = Scheduler.new dojo, @view, [@upload_command]
+	  runner = Runner.new @shell, SessionIdGenerator.new, @view
+	  runner.file = file # deprecated
+		runner.source_files = @meta_file.source_files
+	  runner.run_command = command
+	  scheduler = Scheduler.new runner, @view, [@upload_command]
 	  scheduler.start
 	end
 	

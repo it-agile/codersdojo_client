@@ -16,7 +16,7 @@ class CaptureSingleRunCommand
 	end
 
 	def capture_single_run run_command, kata_file
-		runner = Runner.new @shell, SessionIdGenerator.new
+		runner = Runner.new @shell, SessionIdGenerator.new, @view
 		runner.run_command = run_command
 		session_id = @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace) 
 		filename_formatter = FilenameFormatter.new

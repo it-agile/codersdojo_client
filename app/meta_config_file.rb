@@ -1,6 +1,6 @@
 class MetaConfigFile
 
-	PROPERTY_FILENAME = '.meta'	
+	PROPERTY_FILENAME = '.meta'
 	
 	def initialize shell
 		@shell = shell
@@ -9,9 +9,14 @@ class MetaConfigFile
 	def framework_property
 		properties['framework']
 	end
+	
+	def source_files
+		properties['source_files']
+	end
 
 	def properties
-	  @shell.read_properties PROPERTY_FILENAME
+	  @properties = @shell.read_properties PROPERTY_FILENAME unless @properties
+	  @properties
 	end
 	
 end

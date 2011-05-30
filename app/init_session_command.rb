@@ -12,7 +12,7 @@ class InitSessionCommand
 	end
 
 	def init_session
-		runner = Runner.new @shell, SessionIdGenerator.new
+		runner = Runner.new @shell, SessionIdGenerator.new, @view
 	  session_dir = runner.init_session
 	  @view.show_init_session_result session_dir
 	end

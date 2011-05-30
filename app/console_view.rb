@@ -153,13 +153,23 @@ helptext
 		show_usage
 	end
 	
-	def show_start_kata command, file, framework
-	  show "Starting CodersDojo-Client with command #{command} and kata file #{file} with framework #{framework}. Use Ctrl+C to finish the kata."		
-	end
-	
 	def show_missing_command_argument_error command, missing_argument
 		show "Command <#{command}> recognized but argument <#{missing_argument}> was missing.\n"
 		show_detailed_help command
+	end
+	
+	def show_deprecated_command_argument_warning command, deprecated_argument
+		show "Argument #{deprecated_argument} is deprecated for command #{command}. Please remove it."
+	end
+	
+	def show_start_kata command, file, framework
+	  show "Starting CodersDojo-Client with command #{command} and kata file #{file} with framework #{framework}. Use Ctrl+C to finish the kata."		
+	end
+
+	def show_run_once_message modified_file, modification_time
+		time = modification_time.strftime("%X")
+		date = modification_time.strftime("%x")
+		show "\nFile #{modified_file} was modified at #{time} on #{date}. Run tests."
 	end
 	
 	def show_upload_start session_directory, hostname, framework
