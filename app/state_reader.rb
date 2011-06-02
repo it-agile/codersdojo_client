@@ -56,7 +56,12 @@ class StateReader
 	def read_source_files state_dir
 		files = @shell.files_in_dir_tree state_dir
 		source_files = files.find_all{|file| @filename_formatter.source_file_in_state_dir? file}
-		source_files.collect {|file| @shell.read_file file}
+		marker = "=========="
+		source_files.collect {|file| 
+			filename = @filename_formatter.extract_last_path_item file
+			code = @shell.read_file(file)
+			"#{marker} #{filename} #{marker}\n\n#{code}"
+		}
 	end
 
 	def fill_state_with_properties state, properties

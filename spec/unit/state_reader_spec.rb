@@ -19,7 +19,7 @@ describe StateReader do
 		@shell_mock.should_receive(:read_properties).with(".codersdojo/id0815/#{@state_dir_prefix}0/info.yml").and_return('return_code' => 256)
     state = @state_reader.read_next_state
     state.time.should == @a_time
-    state.files.should == ["source code"]
+    state.files.should == ["========== file.rb ==========\n\nsource code"]
     state.result.should == "result"
     state.return_code.should == 256
     @state_reader.next_step.should == 1

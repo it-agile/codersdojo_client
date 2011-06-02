@@ -1,3 +1,4 @@
+require 'json'
 require 'state'
 require 'state_reader'
 require 'progress'

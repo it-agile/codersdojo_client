@@ -20,10 +20,10 @@ describe ShellWrapper do
 		@shell.files_in_dir('myDir', '.*\.rb').should == ['file1.rb']
 	end
 	
-	it "should filter files by regex pattern recursivly" do
-		Dir.should_receive(:glob).with('myDir/**/*').and_return ['file1.rb', 'file2.py']
+	it "should filter files by regex pattern recursivly and sort result alphabetically" do
+		Dir.should_receive(:glob).with('myDir/**/*').and_return ['file3.rb', 'file2.rb', 'file1.py']
 		File.should_receive(:file?).any_number_of_times.and_return true
-		@shell.files_in_dir_tree('myDir', '.*\.rb').should == ['file1.rb']
+		@shell.files_in_dir_tree('myDir', '.*\.rb').should == ['file2.rb', "file3.rb"]
 	end
 
 	it "should omit . and .. from dir list" do

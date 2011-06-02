@@ -75,7 +75,7 @@ class ShellWrapper
 	def files_in_dir_tree dir, regexp_pattern=nil
 		Dir.glob("#{dir}/**/*").find_all{|entry|
 			file_matches_regexp? entry, regexp_pattern
-		}
+		}.sort
 	end
 
 	def file_matches_regexp? dir_entry, regexp_pattern
