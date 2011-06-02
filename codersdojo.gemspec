@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
-   s.version = "1.3.00"
-   s.date = %q{2011-05-30}
+   s.version = "1.3.01"
+   s.date = %q{2011-06-02}
    s.name = %q{codersdojo}
    s.authors = ["CodersDojo-Team"]
    s.email = %q{codersdojo@it-agile.de}
