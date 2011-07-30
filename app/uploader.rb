@@ -47,7 +47,7 @@ class Uploader
 		kata_data = {:framework => @framework}
 		states_data = states.each_with_index do |state,index|
 			green = state.return_code == 0
-			kata_data["states[#{index}]"] = {:code => state.files, :result => state.result, :green => green, 
+			kata_data["states[#{index}]"] = {:code => state.file_contents, :result => state.result, :green => green, 
 				:created_at => state.time}
 		end
     RestClient.post "#{@hostname}#{@@kata_path}", kata_data

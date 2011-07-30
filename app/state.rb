@@ -1,12 +1,13 @@
 class State
 
-  attr_accessor :time, :files, :result, :return_code
+  attr_accessor :time, :files, :result, :return_code, :file_contents
 
-  def initialize time=nil, files=nil, result=nil, return_code=nil
-    @time = time
-    @files = files
-    @result = result
-    @return_code = return_code
-  end
+	def green?
+		@return_code == 0
+	end
+	
+	def red?
+		not green?
+	end
 
 end

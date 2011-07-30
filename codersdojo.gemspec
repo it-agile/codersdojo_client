@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
-   s.version = "1.3.01"
-   s.date = %q{2011-06-02}
+   s.version = "1.4.00"
+   s.date = %q{2011-07-30}
    s.name = %q{codersdojo}
    s.authors = ["CodersDojo-Team"]
    s.email = %q{codersdojo@it-agile.de}
@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
    s.test_files = Dir['spec/*']
    s.executables = ['codersdojo']
    s.required_ruby_version = '>= 1.8.6'
+   s.add_dependency('json', '>= 1.4.6')
    s.add_dependency('rest-client', '>= 1.6.1')
    s.add_dependency('term-ansicolor', '>= 1.0.5')
 end

@@ -20,5 +20,9 @@ class InitSessionCommand
 	def accepts_shell_command? command
 		command == 'init-session'
 	end
+	
+	def continue_test_loop?
+		false
+	end
 		
 end

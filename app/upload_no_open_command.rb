@@ -16,4 +16,8 @@ class UploadNoOpenCommand
 		command == 'upload-no-open'
 	end
 	
+	def continue_test_loop?
+		false
+	end
+	
 end

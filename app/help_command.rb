@@ -20,4 +20,8 @@ class HelpCommand
 		['help', '-h', '--help'].member? command
 	end
 
+	def continue_test_loop?
+		false
+	end
+
 end

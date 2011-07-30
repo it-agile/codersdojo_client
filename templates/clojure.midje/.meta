@@ -1,0 +1,3 @@
+framework: clojure.midje
+source_files: .*\.clj
+

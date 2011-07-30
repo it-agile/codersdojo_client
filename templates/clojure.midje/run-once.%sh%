@@ -1,0 +1,1 @@
+java -cp lib/clojure-contrib.jar%:%lib/clojure.jar%:%lib/midje.jar%:%lib/unifycle.jar clojure.main %kata_file%.clj

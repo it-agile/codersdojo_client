@@ -47,7 +47,7 @@ describe Uploader do
       it "through a rest interface and log process" do
         states = [(mock State), (mock State)]
 				states.each_with_index {|state, index|
-	        state.should_receive(:files).and_return ["code#{index}"]
+	        state.should_receive(:file_contents).and_return ["code#{index}"]
 	        state.should_receive(:time).and_return "time#{index}"
 	        state.should_receive(:result).and_return "result#{index}"
 					state.should_receive(:return_code).and_return index

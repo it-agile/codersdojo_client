@@ -180,6 +180,14 @@ helptext
 		show result
 	end
 	
+	def show_revert_to_step step
+		show "Revert to step #{step}."
+	end
+	
+	def show_no_green_state_to_revert_to
+		show "Sorry, no previous green state to revert to."
+	end
+	
 	def show_socket_error command
 		show "Encountered network error while <#{command}>. Is http://www.codersdojo.com down?"
 	end
@@ -194,6 +202,7 @@ helptext
 		show <<-msg 
 
 You finished your kata. Choose your next action:
+  g) Revert to last green state.
   u) Upload the kata to http://www.codersdojo.com.
   e) Exit without uploading.
   r) Resume the kata.

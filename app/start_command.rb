@@ -3,11 +3,11 @@ require 'scheduler'
 
 class StartCommand
 	
-	def initialize shell, view, upload_command
+	def initialize shell, view, eval_loop_commands
 		@shell = shell
 		@view = view
 		@meta_file = MetaConfigFile.new @shell
-		@upload_command = upload_command
+		@eval_loop_commands = eval_loop_commands
 	end
 	
 	def execute_from_shell params
@@ -21,12 +21,16 @@ class StartCommand
 	  runner = Runner.new @shell, SessionIdGenerator.new, @view
 		runner.source_files = @meta_file.source_files
 	  runner.run_command = command
-	  scheduler = Scheduler.new runner, @view, [@upload_command]
+	  scheduler = Scheduler.new runner, @view, @eval_loop_commands
 	  scheduler.start
 	end
 	
 	def accepts_shell_command? command
 		command == 'start'
+	end
+	
+	def continue_test_loop?
+		true
 	end
 	
 end

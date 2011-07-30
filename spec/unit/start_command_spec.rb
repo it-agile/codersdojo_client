@@ -6,7 +6,7 @@ describe StartCommand do
 		@shell_mock = mock
 		@view_mock = mock.as_null_object
 		@upload_command_mock = mock
-		@command = StartCommand.new @shell_mock, @view_mock, @upload_command_mock
+		@command = StartCommand.new @shell_mock, @view_mock, [@upload_command_mock]
   end
 
 	it "should start scheduler" do
@@ -18,6 +18,4 @@ describe StartCommand do
 		@command.start 'aCommand.sh', 'primes.rb'
 	end
 	
-
-
 end

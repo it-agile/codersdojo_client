@@ -28,5 +28,9 @@ class CaptureSingleRunCommand
 	def accepts_shell_command? command
 		command == COMMAND_NAME
 	end
+	
+	def continue_test_loop?
+		false
+	end
 		
 end

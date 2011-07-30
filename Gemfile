@@ -1,5 +1,5 @@
 source :rubygems
-gem "rest-client"
+gem "json"
 
 group :test do
 	gem "rspec", :require => "spec"

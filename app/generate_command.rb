@@ -26,5 +26,9 @@ class GenerateCommand
 	def accepts_shell_command? command
 		command == 'setup'
 	end
+	
+	def continue_test_loop?
+		false
+	end
 
 end

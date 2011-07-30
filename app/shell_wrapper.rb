@@ -14,6 +14,12 @@ class ShellWrapper
     FileUtils.cp_r source, destination
   end
 
+	def rm_r file_regex
+		files_in_dir_tree('.', file_regex).each do |file|
+			FileUtils.rm file
+		end
+	end
+
   def mkdir dir
     FileUtils.mkdir dir
   end

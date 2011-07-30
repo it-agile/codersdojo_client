@@ -25,7 +25,7 @@ class UploadCommand
 		formatter = FilenameFormatter.new
 		framework = @meta_file.framework_property
 		if not session_directory then
-			session_directory = formatter.session_dir @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace) 
+			session_directory = formatter.session_dir @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace)
 		end
 		@view.show_upload_start session_directory, @hostname, framework
 		@uploader.framework = framework
@@ -45,5 +45,9 @@ class UploadCommand
 	def accepts_shell_command? command
 		command == 'upload'
 	end
-	
+
+	def continue_test_loop?
+		false
+	end
+			
 end

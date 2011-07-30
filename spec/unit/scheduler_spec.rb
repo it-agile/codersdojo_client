@@ -31,6 +31,7 @@ describe Scheduler do
 		@command_a_mock.should_receive(:command_key).and_return 'a'
 		@command_b_mock.should_receive(:command_key).and_return 'b'
 		@command_b_mock.should_receive(:execute)
+		@command_b_mock.should_receive(:continue_test_loop?).and_return false
 
 	  Thread.new { @scheduler.start }
 	  Process.kill "INT", 0
