@@ -1,0 +1,2 @@
+ghc %kata_file%.hs
+./%kata_file%

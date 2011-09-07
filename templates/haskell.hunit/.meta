@@ -1,0 +1,3 @@
+framework: haskell.hunit
+source_files: .*\.hs
+
