@@ -1,5 +1,5 @@
 require 'state'
-require 'revert_to_green_command'
+require 'commands/revert_to_green_command'
 
 describe RevertToGreenCommand do
 

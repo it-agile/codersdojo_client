@@ -3,10 +3,10 @@ require 'scheduler'
 
 class StartCommand
 	
-	def initialize shell, view, eval_loop_commands
-		@shell = shell
+	def initialize meta_config_file, runner, view, eval_loop_commands
+		@runner = runner
 		@view = view
-		@meta_file = MetaConfigFile.new @shell
+		@meta_file = meta_config_file
 		@eval_loop_commands = eval_loop_commands
 	end
 	
@@ -18,10 +18,9 @@ class StartCommand
 		unless command then @view.show_missing_command_argument_error "start", "shell_command"; return end
 		if file then @view.show_deprecated_command_argument_warning "start", "kata_file" end # since 30-may-2011, remove argument in later version
 	  @view.show_start_kata command, file, @meta_file.framework_property
-	  runner = Runner.new @shell, SessionIdGenerator.new, @view
-		runner.source_files = @meta_file.source_files
-	  runner.run_command = command
-	  scheduler = Scheduler.new runner, @view, @eval_loop_commands
+		@runner.source_files = @meta_file.source_files
+	  @runner.run_command = command
+	  scheduler = Scheduler.new @runner, @view, @eval_loop_commands
 	  scheduler.start
 	end
 	

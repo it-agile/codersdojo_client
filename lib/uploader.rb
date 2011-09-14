@@ -6,6 +6,7 @@ require 'filename_formatter'
 require 'xml_element_extractor'
 require 'rest_client'
 require 'shell_wrapper'
+require 'session_zipper'
 
 class Uploader
 
@@ -21,6 +22,7 @@ class Uploader
   end
 
 	def session_dir= dir
+		@session_dir = dir
 		@state_reader.session_dir = dir
 	end
 
@@ -30,6 +32,7 @@ class Uploader
   end
 
   def upload_kata_and_states
+	  upload_zipped_kata zip_kata
 		read_states
     kata = upload_kata
 		finish_url = "#{@hostname}#{@@description_path}/#{XMLElementExtractor.extract('kata/private-uuid', kata)}"
@@ -46,17 +49,25 @@ class Uploader
   def upload_kata
 		kata_data = {:framework => @framework}
 		states_data = states.each_with_index do |state,index|
-			green = state.return_code == 0
-			kata_data["states[#{index}]"] = {:code => state.file_contents, :result => state.result, :green => green, 
+			kata_data["states[#{index}]"] = {:code => state.file_contents, :result => state.result, :green => state.green?, 
 				:created_at => state.time}
 		end
     RestClient.post "#{@hostname}#{@@kata_path}", kata_data
   end
 
-  private
+  def zip_kata
+#	  SessionZipper.new.compress @session_dir
+  end
+
+  def upload_zipped_kata zip_file
+#	  RestClient.post "#{@hostname}#{@@zipped_kata_path}", {:zipped_kata => zip_file}
+  end
+
+private
   @@kata_path = '/katas'
   @@state_path = '/states'
 	@@description_path = '/kata_description'
+	@@zipped_kata_path = '/zipped_katas'
 
 end
 

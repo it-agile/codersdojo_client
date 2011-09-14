@@ -1,4 +1,4 @@
-require 'generate_command'
+require 'commands/generate_command'
 
 describe GenerateCommand do
 

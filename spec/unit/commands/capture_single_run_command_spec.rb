@@ -1,4 +1,4 @@
-require 'capture_single_run_command'
+require 'commands/capture_single_run_command'
 
 describe CaptureSingleRunCommand do
 
@@ -6,9 +6,8 @@ describe CaptureSingleRunCommand do
 		@shell_mock = mock
 		@view_mock = mock
 		@runner_mock = mock
-		Runner.should_receive(:new).any_number_of_times.and_return(@runner_mock)
 		@runner_mock.should_receive(:run_command=).any_number_of_times
-		@command = CaptureSingleRunCommand.new @shell_mock, @view_mock
+		@command = CaptureSingleRunCommand.new @shell_mock, @view_mock, @runner_mock
   end
 
 	it "should enforce the shell_command parameter" do

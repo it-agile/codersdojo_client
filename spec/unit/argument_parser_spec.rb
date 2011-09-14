@@ -10,11 +10,12 @@ describe ArgumentParser do
 		@upload_command_mock = mock.as_null_object
 		@generate_command_mock = mock.as_null_object
 		@start_command_mock = mock.as_null_object
+		@meta_config_file_mock = mock.as_null_object
 		HelpCommand.should_receive(:new).and_return @help_command_mock
 		GenerateCommand.should_receive(:new).and_return @generate_command_mock
 		UploadCommand.should_receive(:new).and_return @upload_command_mock
 		StartCommand.should_receive(:new).and_return @start_command_mock
-		
+		MetaConfigFile.should_receive(:new).and_return @meta_config_file_mock
 		@parser = ArgumentParser.new @shell_mock, @view_mock, @scaffolder_mock, "a host"
 	end
 	

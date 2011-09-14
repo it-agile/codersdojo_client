@@ -60,10 +60,14 @@ class Scaffolder
   end
 		
 	def template_path
-		file_path_elements = @shell.current_file.split '/' 
+		file_path_elements = Scaffolder::current_file.split '/' 
 		file_path_elements[-2..-1] = nil
 		(file_path_elements << 'templates').join '/'
 	end
+
+  def self.current_file
+	  __FILE__
+  end
 
 end
 

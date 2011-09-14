@@ -8,7 +8,7 @@ describe Scaffolder do
 		@shell_mock.should_receive(:remove_command_name).any_number_of_times.and_return "del"
 		@shell_mock.should_receive(:path_separator).any_number_of_times.and_return ";"
 		@shell_mock.should_receive(:dir_separator).any_number_of_times.and_return "/"
-		@shell_mock.should_receive(:current_file).any_number_of_times.and_return("aDir/app/aFile.rb")
+		Scaffolder.should_receive(:current_file).any_number_of_times.and_return("aDir/app/aFile.rb")
 		@scaffolder = Scaffolder.new @shell_mock
 	end
 	

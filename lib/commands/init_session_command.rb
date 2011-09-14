@@ -2,9 +2,9 @@ require 'runner'
 
 class InitSessionCommand
 
-	def initialize shell, view
-		@shell = shell
+	def initialize view, runner
 		@view = view
+		@runner = runner
 	end
 
 	def execute_from_shell params
@@ -12,8 +12,7 @@ class InitSessionCommand
 	end
 
 	def init_session
-		runner = Runner.new @shell, SessionIdGenerator.new, @view
-	  session_dir = runner.init_session
+	  session_dir = @runner.init_session
 	  @view.show_init_session_result session_dir
 	end
 	

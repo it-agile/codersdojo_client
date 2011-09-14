@@ -1,6 +1,7 @@
 require "info_property_file"
 require "filename_formatter"
 require "text_converter"
+require "return_code_evaluator"
 
 class Runner
 
@@ -8,11 +9,12 @@ class Runner
 
 	WORKING_DIR = '.'
 
-  def initialize shell, session_provider, view
+  def initialize shell, session_provider, view, return_code_evaluator
     @filename_formatter = FilenameFormatter.new
     @shell = shell
     @session_provider = session_provider
 		@view = view
+		@return_code_evaluator = return_code_evaluator
   end
 
   def start
@@ -47,10 +49,11 @@ class Runner
 		process = @shell.execute @run_command
 		result = TextConverter.new.remove_escape_sequences process.output
     state_dir = @filename_formatter.state_dir session_id, step
+    return_code = @return_code_evaluator.return_code(process)
     @shell.mkdir state_dir
     @shell.cp_r files, state_dir
     @shell.write_file @filename_formatter.result_file(state_dir), result
-    @shell.write_file @filename_formatter.info_file(state_dir), "#{InfoPropertyFile.RETURN_CODE_PROPERTY}: #{process.return_code}"
+    @shell.write_file @filename_formatter.info_file(state_dir), "#{InfoPropertyFile.RETURN_CODE_PROPERTY}: #{return_code}"
 	end
 	
 	def run_command= command

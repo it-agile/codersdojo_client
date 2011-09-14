@@ -1,4 +1,4 @@
-require 'upload_command'
+require 'commands/upload_command'
 
 describe UploadCommand do
 

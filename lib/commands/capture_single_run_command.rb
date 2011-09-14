@@ -4,9 +4,10 @@ class CaptureSingleRunCommand
 
 	COMMAND_NAME = 'capture-single-run'
 
-	def initialize shell, view
+	def initialize shell, view, runner
 		@shell = shell
 		@view = view
+		@runner = runner
 	end
 
 	def execute_from_shell params
@@ -16,13 +17,12 @@ class CaptureSingleRunCommand
 	end
 
 	def capture_single_run run_command, kata_file
-		runner = Runner.new @shell, SessionIdGenerator.new, @view
-		runner.run_command = run_command
+		@runner.run_command = run_command
 		session_id = @shell.newest_dir_entry(FilenameFormatter.codersdojo_workspace) 
 		filename_formatter = FilenameFormatter.new
 		last_state_dir = @shell.newest_dir_entry(filename_formatter.session_dir session_id)
 		step = last_state_dir.nil? ? 0 : filename_formatter.step_number_from_state_dir(last_state_dir) + 1
-		runner.execute_once kata_file, session_id, step
+		@runner.execute_once kata_file, session_id, step
 	end
 
 	def accepts_shell_command? command

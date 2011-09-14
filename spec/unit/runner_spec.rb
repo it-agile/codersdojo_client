@@ -14,7 +14,9 @@ describe Runner, "in run mode" do
     @session_id_provider_mock = mock.as_null_object
     @session_id_provider_mock.should_receive(:generate_id).and_return SESSION_ID
 		@view_mock = mock.as_null_object
-    @runner = Runner.new @shell_mock, @session_id_provider_mock, @view_mock
+		@return_code_evaluator_mock = mock
+		@return_code_evaluator_mock.should_receive(:return_code).any_number_of_times.and_return 0
+    @runner = Runner.new @shell_mock, @session_id_provider_mock, @view_mock, @return_code_evaluator_mock
     @runner.run_command = "run-once.sh"
   end
 
@@ -27,7 +29,6 @@ describe Runner, "in run mode" do
   it "should run ruby command on kata file given as argument" do
 		process_mock = mock
 		process_mock.should_receive(:output).and_return ''
-		process_mock.should_receive(:return_code).and_return 0
     @shell_mock.should_receive(:execute).and_return process_mock
     @runner.start
   end

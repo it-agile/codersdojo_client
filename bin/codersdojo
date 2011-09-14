@@ -14,7 +14,7 @@ msg
 end
 
 show_update_message_when_old
-codersdojo_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'app'))
+codersdojo_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(codersdojo_dir) unless $LOAD_PATH.include?(codersdojo_dir)
 require 'codersdojo'
 CodersDojo.new(ARGV).run

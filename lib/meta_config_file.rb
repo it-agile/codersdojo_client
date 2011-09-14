@@ -14,6 +14,10 @@ class MetaConfigFile
 		properties['source_files']
 	end
 
+  def success_detection
+	  properties['success_detection']
+	end
+
 	def properties
 	  @properties = @shell.read_properties PROPERTY_FILENAME unless @properties
 	  @properties

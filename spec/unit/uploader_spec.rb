@@ -50,7 +50,7 @@ describe Uploader do
 	        state.should_receive(:file_contents).and_return ["code#{index}"]
 	        state.should_receive(:time).and_return "time#{index}"
 	        state.should_receive(:result).and_return "result#{index}"
-					state.should_receive(:return_code).and_return index
+					state.should_receive(:green?).and_return(index == 0)
 				}
 				@state_reader_mock.should_receive(:reset)
 				@state_reader_mock.should_receive(:has_next_state).and_return true
