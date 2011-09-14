@@ -1,5 +1,5 @@
 require 'shell_process'
-require 'runner'
+require 'run/runner'
 
 describe Runner, "in run mode" do
 

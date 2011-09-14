@@ -1,4 +1,4 @@
-require "xml_element_extractor"
+require "upload/xml_element_extractor"
 
 describe XMLElementExtractor do
 	

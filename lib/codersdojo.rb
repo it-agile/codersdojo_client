@@ -2,7 +2,7 @@
 
 require 'console_view'
 require 'argument_parser'
-require 'scaffolder'
+require 'scaffold/scaffolder'
 
 class CodersDojo
 	

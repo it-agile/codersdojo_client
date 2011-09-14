@@ -1,4 +1,4 @@
-require 'scheduler'
+require 'run/scheduler'
 
 describe Scheduler do
 

@@ -1,4 +1,4 @@
-require 'uploader'
+require 'upload/uploader'
 
 describe Uploader do
 

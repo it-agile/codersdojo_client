@@ -1,4 +1,4 @@
-require 'text_template_machine'
+require 'scaffold/text_template_machine'
 
 describe TextTemplateMachine do
 	

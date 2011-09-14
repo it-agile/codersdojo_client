@@ -1,4 +1,4 @@
-require "scaffolder"
+require "scaffold/scaffolder"
 
 describe Scaffolder do
 

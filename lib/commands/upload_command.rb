@@ -1,5 +1,5 @@
 require 'meta_config_file'
-require 'uploader'
+require 'upload/uploader'
 
 class UploadCommand
 

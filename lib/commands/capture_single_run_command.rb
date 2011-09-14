@@ -1,5 +1,3 @@
-require 'runner'
-
 class CaptureSingleRunCommand
 
 	COMMAND_NAME = 'capture-single-run'

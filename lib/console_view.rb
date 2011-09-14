@@ -1,5 +1,5 @@
 require 'shell_wrapper'
-require 'text_template_machine'
+require 'scaffold/text_template_machine'
 require 'property_file_missing_exception'
 
 class ConsoleView

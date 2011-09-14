@@ -1,4 +1,4 @@
-require 'session_id_generator'
+require 'record/session_id_generator'
 
 describe SessionIdGenerator do
 	

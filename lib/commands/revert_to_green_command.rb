@@ -1,4 +1,3 @@
-
 class RevertToGreenCommand
 	
 	def initialize shell, view, meta_config_file, state_reader

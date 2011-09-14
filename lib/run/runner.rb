@@ -1,7 +1,7 @@
 require "info_property_file"
 require "filename_formatter"
-require "text_converter"
-require "return_code_evaluator"
+require "run/text_converter"
+require "record/return_code_evaluator"
 
 class Runner
 

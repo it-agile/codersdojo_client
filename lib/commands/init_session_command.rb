@@ -1,5 +1,3 @@
-require 'runner'
-
 class InitSessionCommand
 
 	def initialize view, runner

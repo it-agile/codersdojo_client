@@ -1,4 +1,4 @@
-require "return_code_evaluator"
+require "record/return_code_evaluator"
 
 describe ReturnCodeEvaluator do
 
