@@ -61,7 +61,10 @@ class Scaffolder
 		
 	def template_path
 		file_path_elements = Scaffolder::current_file.split '/' 
-		file_path_elements[-2..-1] = nil
+    while file_path_elements.last != 'lib' do
+	    file_path_elements.pop
+    end
+    file_path_elements.pop
 		(file_path_elements << 'templates').join '/'
 	end
 

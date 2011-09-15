@@ -1,5 +1,4 @@
 require 'record/session_id_generator'
-require 'record/return_code_evaluator'
 require 'run/runner'
 require 'state_reader'
 require 'shell_argument_exception'
@@ -19,8 +18,7 @@ class ArgumentParser
 	
 	def initialize shell, view, scaffolder, hostname
 		meta_config_file = MetaConfigFile.new shell
-		return_code_evaluator = ReturnCodeEvaluator.new meta_config_file.success_detection
-		runner = Runner.new shell, SessionIdGenerator.new, view, return_code_evaluator
+		runner = Runner.new shell, SessionIdGenerator.new, view, meta_config_file
 		@help_command = HelpCommand.new view
 		@xhelp_command = XHelpCommand.new view
 		@generate_command = GenerateCommand.new shell, view, scaffolder
