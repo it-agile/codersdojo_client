@@ -2,11 +2,11 @@ require 'json'
 require 'state'
 require 'state_reader'
 require 'upload/xml_element_extractor'
-require 'progress'
+require 'shellutils/progress'
 require 'filename_formatter'
 require 'rest_client'
-require 'shell_wrapper'
-require 'session_zipper'
+require 'shellutils/shell_wrapper'
+require 'shellutils/session_zipper'
 
 class Uploader
 
@@ -32,7 +32,6 @@ class Uploader
   end
 
   def upload_kata_and_states
-	  upload_zipped_kata zip_kata
 		read_states
     kata = upload_kata
 		finish_url = "#{@hostname}#{@@description_path}/#{XMLElementExtractor.extract('kata/private-uuid', kata)}"
@@ -55,12 +54,17 @@ class Uploader
     RestClient.post "#{@hostname}#{@@kata_path}", kata_data
   end
 
+  def upload_zipped_session
+	  private_url = upload_zipped_kata zip_kata
+    "Complete kata information at #{private_url}"
+	end
+
   def zip_kata
-#	  SessionZipper.new.compress @session_dir
+	  SessionZipper.new.compress @session_dir
   end
 
-  def upload_zipped_kata zip_file
-#	  RestClient.post "#{@hostname}#{@@zipped_kata_path}", {:zipped_kata => zip_file}
+  def upload_zipped_kata zip_file_name
+	  RestClient::Resource.new("#{@hostname}#{@@zipped_kata_path}").post(:transfer => { :path => "kata.zip" }, :upload => File.new(zip_file_name, 'rb'))
   end
 
 private

@@ -1,4 +1,4 @@
-require 'shell_process'
+require 'shellutils/shell_process'
 require 'run/runner'
 
 describe Runner, "in run mode" do
@@ -12,11 +12,11 @@ describe Runner, "in run mode" do
     @shell_mock = mock.as_null_object
 		@shell_mock.should_receive(:expand_run_command).with('run-once.sh').and_return 'bash run_once.sh'
     @session_id_provider_mock = mock.as_null_object
-    @session_id_provider_mock.should_receive(:generate_id).and_return SESSION_ID
+    @session_id_provider_mock.should_receive(:generate_id).any_number_of_times.and_return SESSION_ID
 		@view_mock = mock.as_null_object
-		@return_code_evaluator_mock = mock
-		@return_code_evaluator_mock.should_receive(:return_code).any_number_of_times.and_return 0
-    @runner = Runner.new @shell_mock, @session_id_provider_mock, @view_mock, @return_code_evaluator_mock
+		@meta_config_file_mock = mock
+		@meta_config_file_mock.should_receive(:success_detection).any_number_of_times
+    @runner = Runner.new @shell_mock, @session_id_provider_mock, @view_mock, @meta_config_file_mock
     @runner.run_command = "run-once.sh"
   end
 
@@ -29,20 +29,19 @@ describe Runner, "in run mode" do
   it "should run ruby command on kata file given as argument" do
 		process_mock = mock
 		process_mock.should_receive(:output).and_return ''
+		process_mock.should_receive(:return_code).and_return 0
     @shell_mock.should_receive(:execute).and_return process_mock
     @runner.start
   end
 
   it "should create a state directory for every state" do
+	  state_recorder_mock = mock.as_null_object
+	  StateRecorder.should_receive(:new).and_return state_recorder_mock
 	  @shell_mock.should_receive(:files_in_dir_tree).twice.and_return ['my_file.rb']
 	  @shell_mock.should_receive(:newest_dir_entry).twice.and_return 'my_file.rb'
     @shell_mock.should_receive(:modification_time).with("my_file.rb").and_return 1
-    @shell_mock.should_receive(:mkdir).with "#{STATE_DIR_PREFIX}0"
-    @shell_mock.should_receive(:cp_r).with ["my_file.rb"], "#{STATE_DIR_PREFIX}0"
     @runner.start
     @shell_mock.should_receive(:modification_time).with("my_file.rb").and_return 2
-    @shell_mock.should_receive(:mkdir).with "#{STATE_DIR_PREFIX}1"
-    @shell_mock.should_receive(:cp_r).with ["my_file.rb"], "#{STATE_DIR_PREFIX}1"
     @runner.execute
   end
 

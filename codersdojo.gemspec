@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
-   s.version = "1.5.04"
-   s.date = %q{2011-09-15}
+   s.version = "1.5.05"
+   s.date = %q{2011-09-18}
    s.name = %q{codersdojo}
    s.authors = ["CodersDojo-Team"]
    s.email = %q{codersdojo@it-agile.de}
@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
    s.add_dependency('json', '>= 1.4.6')
    s.add_dependency('rest-client', '>= 1.6.1')
    s.add_dependency('term-ansicolor', '>= 1.0.5')
-   s.add_dependency('shell-utils', '>= 0.0.1')
+   s.add_dependency('shell-utils', '= 0.0.7')
 end

@@ -1,5 +1,5 @@
 require 'info_property_file'
-require 'filename'
+require 'shellutils/filename'
 require 'filename_formatter'
 require 'state'
 

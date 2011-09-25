@@ -12,4 +12,9 @@ describe FilenameFormatter do
 		@formatter.step_number_from_state_dir('state_01').should == 1
 		@formatter.step_number_from_state_dir('state_123').should == 123
 	end
+	
+	it 'should integrate step into the state dir name ' do
+		@formatter.state_dir('session_dir', 1).should == "#{FilenameFormatter::WORKSPACE_DIR}/session_dir/state_1"
+	end
+	
 end

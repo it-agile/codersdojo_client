@@ -1,8 +1,8 @@
 require 'record/session_id_generator'
 require 'run/runner'
 require 'state_reader'
-require 'shell_argument_exception'
-require 'shell_wrapper'
+require 'shellutils/shell_argument_exception'
+require 'shellutils/shell_wrapper'
 require 'console_view'
 require 'commands/help_command'
 require 'commands/xhelp_command'
@@ -12,6 +12,7 @@ require 'commands/capture_single_run_command'
 require 'commands/revert_to_green_command'
 require 'commands/upload_command'
 require 'commands/upload_no_open_command'
+require 'commands/upload_zipped_session_command'
 require 'commands/start_command'
 
 class ArgumentParser
@@ -24,13 +25,14 @@ class ArgumentParser
 		@generate_command = GenerateCommand.new shell, view, scaffolder
 		@upload_command = UploadCommand.new shell, view, hostname
 		@upload_no_open_command = UploadNoOpenCommand.new @upload_command
+		@upload_zipped_session_command = UploadZippedSessionCommand.new shell, view, hostname
 		@init_session_command = InitSessionCommand.new view, runner
 		@capture_single_run_command = CaptureSingleRunCommand.new shell, view, runner
 		@revert_to_green_command = RevertToGreenCommand.new shell, view, meta_config_file, StateReader.new(shell)
 		@start_command = StartCommand.new meta_config_file, runner, view, [@upload_command, @revert_to_green_command]
 		@commands = [@help_command, @xhelp_command, @generate_command, @init_session_command, 
 			@capture_single_run_command, @start_command, @revert_to_green_command,
-			@upload_command, @upload_no_open_command]
+			@upload_command, @upload_no_open_command, @upload_zipped_session_command]
 	end
 	
 	def parse params

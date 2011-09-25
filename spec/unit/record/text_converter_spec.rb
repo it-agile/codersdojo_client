@@ -1,4 +1,4 @@
-require 'run/text_converter'
+require 'record/text_converter'
 
 describe TextConverter do
 

@@ -1,4 +1,4 @@
-require 'shell_wrapper'
+require 'shellutils/shell_wrapper'
 
 class FilenameFormatter
 

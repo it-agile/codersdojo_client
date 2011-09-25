@@ -1,4 +1,4 @@
-require 'shell_wrapper'
+require 'shellutils/shell_wrapper'
 require 'scaffold/text_template_machine'
 require 'property_file_missing_exception'
 
@@ -43,6 +43,7 @@ Commands:
   init-session                                      Create a new session dir within the .codersdojo dir.
   capture-single-run <shell_command> <kata_file>    Capture a single run.
   start <shell_command> <kata_file>                 Start the continuous test loop.
+  upload-zip [<session_dir>]                        Upload session as a ZIP file (beta feature)
 helptext
   end
 
