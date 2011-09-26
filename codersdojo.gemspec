@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
    s.add_dependency('json', '>= 1.4.6')
    s.add_dependency('rest-client', '>= 1.6.1')
    s.add_dependency('term-ansicolor', '>= 1.0.5')
-   s.add_dependency('shell-utils', '= 0.0.7')
+   s.add_dependency('shell-utils', '= 0.0.8')
 end
