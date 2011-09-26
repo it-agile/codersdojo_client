@@ -1,5 +1,6 @@
 source :rubygems
-gem "json"
+
+gemspec
 
 group :test do
 	gem "rspec", :require => "spec"
