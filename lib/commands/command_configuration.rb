@@ -1,4 +1,5 @@
 require 'record/session_id_generator'
+require 'record/state_recorder'
 require 'run/runner'
 require 'state_reader'
 require 'shellutils/shell_argument_exception'
@@ -15,11 +16,13 @@ require 'commands/upload_no_open_command'
 require 'commands/upload_zipped_session_command'
 require 'commands/start_command'
 
-class ArgumentParser
+class CommandConfiguration
+	
+	attr_reader :commands
 	
 	def initialize shell, view, scaffolder, hostname
 		meta_config_file = MetaConfigFile.new shell
-		runner = Runner.new shell, SessionIdGenerator.new, view, meta_config_file
+		runner = create_runner shell, view, meta_config_file
 		@help_command = HelpCommand.new view
 		@xhelp_command = XHelpCommand.new view
 		@generate_command = GenerateCommand.new shell, view, scaffolder
@@ -35,22 +38,15 @@ class ArgumentParser
 			@upload_command, @upload_no_open_command, @upload_zipped_session_command]
 	end
 	
-	def parse params
-		params[0] = params[0] ? params[0].downcase : 'help'
-		command_name = params[0]
-		command_executed = false
-		@commands.each do |command|
-			if command.accepts_shell_command?(command_name) 
-				command.execute_from_shell params
-				command_executed = true
-			end
-		end
-		if not command_executed and command_name == "spec"
-			# 'spec" is for testing purpose only: do nothing special
-		elsif not command_executed
-			raise ShellArgumentException.new command_name
-		end
+private
+	
+	def create_runner shell, view, meta_config_file
+		state_recorder = StateRecorder.new shell, SessionIdGenerator.new, meta_config_file
+		runner = Runner.new shell, view
+		runner.init_session_callback = Proc.new {state_recorder.init_session}
+		runner.execute_callback = Proc.new {|files, process| state_recorder.record_state files, process}
+		runner
 	end
-
+	
 end
 

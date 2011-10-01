@@ -28,6 +28,7 @@ Commands:
   help <command>                       See the details of the command.
   xhelp                                Print help text for advanced commands.
   setup <framework> <kata_file>        Setup the environment for running the kata.
+  upload-zip [<session_dir>]           Upload session as a ZIP file (beta feature)
   upload [<session_dir>]               Upload the kata to http://www.codersdojo.org and open the kata in a browser.
   upload-no-open [<session_dir>]       Upload the kata to http://www.codersdojo.org
 
@@ -43,7 +44,6 @@ Commands:
   init-session                                      Create a new session dir within the .codersdojo dir.
   capture-single-run <shell_command> <kata_file>    Capture a single run.
   start <shell_command> <kata_file>                 Start the continuous test loop.
-  upload-zip [<session_dir>]                        Upload session as a ZIP file (beta feature)
 helptext
   end
 

@@ -17,6 +17,7 @@ describe StartCommand do
 		@runner_mock.should_receive(:run_command=).with 'aCommand.sh'
 		scheduler_mock = mock
 		Scheduler.should_receive(:new).and_return scheduler_mock
+		scheduler_mock.should_receive(:interrupt_listener=)
 		scheduler_mock.should_receive(:start)
 		@command.start 'aCommand.sh', 'primes.rb'
 	end

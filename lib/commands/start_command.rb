@@ -1,5 +1,6 @@
 require 'meta_config_file'
 require 'run/scheduler'
+require 'run/scheduler_interrupt_listener'
 
 class StartCommand
 	
@@ -20,7 +21,8 @@ class StartCommand
 	  @view.show_start_kata command, file, @meta_file.framework_property
 		@runner.source_files = @meta_file.source_files
 	  @runner.run_command = command
-	  scheduler = Scheduler.new @runner, @view, @eval_loop_commands
+	  scheduler = Scheduler.new @runner
+	  scheduler.interrupt_listener = SchedulerInterruptListener.new @view, @eval_loop_commands
 	  scheduler.start
 	end
 	

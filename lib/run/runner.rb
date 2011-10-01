@@ -1,29 +1,17 @@
-require "info_property_file"
-require "filename_formatter"
-require "record/state_recorder"
-
 class Runner
 
-  attr_accessor :source_files, :run_command
+  attr_accessor :source_files, :run_command, :init_session_callback, :execute_callback
 
 	WORKING_DIR = '.'
 
-  def initialize shell, session_id_generator, view, meta_config_file
-	  @filename_formatter = FilenameFormatter.new
+  def initialize shell, view
     @shell = shell
-    @session_id_generator = session_id_generator
 		@view = view
-		@meta_config_file = meta_config_file
   end
 
   def start
-		@state_recorder = StateRecorder.new(@shell, @session_id_generator, @meta_config_file)
-    init_session 
+	  if @init_session_callback then @init_session_callback.call end
     execute
-  end
-
-  def init_session
-	  @state_recorder.init_session
   end
 
   def execute
@@ -42,7 +30,7 @@ class Runner
 
 	def execute_once files
 		process = @shell.execute @run_command
-		@state_recorder.record_state files, process
+		if @execute_callback then @execute_callback.call(files, process) end
 	end
 	
 	def run_command= command
