@@ -14,7 +14,7 @@ describe FilenameFormatter do
 	end
 	
 	it 'should integrate step into the state dir name ' do
-		@formatter.state_dir('session_dir', 1).should == "#{FilenameFormatter::WORKSPACE_DIR}/session_dir/state_1"
+		@formatter.state_dir('session_dir', 1).should == "#{FilenameFormatter::CODERSDOJO_WORKSPACE}/session_dir/state_1"
 	end
 	
 end

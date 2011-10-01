@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-   s.version = "1.5.07"
+   s.version = "1.5.08"
    s.date = %q{2011-10-01}
    s.name = %q{codersdojo}
    s.authors = ["CodersDojo-Team"]
@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
    s.add_dependency('rest-client', '>= 1.6.1')
    s.add_dependency('term-ansicolor', '>= 1.0.5')
    s.add_dependency('shell-utils', '= 0.0.9')
+   s.add_dependency('flote', '= 0.0.1')
 end

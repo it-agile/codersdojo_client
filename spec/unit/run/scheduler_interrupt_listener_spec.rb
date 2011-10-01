@@ -1,4 +1,4 @@
-require 'run/scheduler'
+require 'flote/scheduler'
 require 'run/scheduler_interrupt_listener'
 
 describe SchedulerInterruptListener do

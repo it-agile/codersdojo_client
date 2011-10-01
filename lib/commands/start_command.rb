@@ -1,5 +1,5 @@
 require 'meta_config_file'
-require 'run/scheduler'
+require 'flote/scheduler'
 require 'run/scheduler_interrupt_listener'
 
 class StartCommand
