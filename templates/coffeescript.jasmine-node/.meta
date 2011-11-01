@@ -1,0 +1,3 @@
+framework: coffeescript.jasmine-node
+source_files: .*\.coffee
+

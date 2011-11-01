@@ -1,0 +1,13 @@
+These files were created:
+  README is what you are currently reading
+  run-once.%sh% runs your tests once
+  run-endless.%sh% runs your tests endlessly via run-once.%sh%
+  %kata_file%.coffee the file with the system under test
+  kataSpec.coffee the jasmine spec file that you should edit
+  spec/dojoSpec.coffee a file that requires kataSpec, this is a workaround to prevent jasmine-node from executing spec files in the .codersdojo directory
+
+Run run-endless.%sh% and start your kata. (On Mac/Linux you have to make it executable and call ./run-endless.%sh%.)
+
+The support for Javascript/jasmine-node was contributed by Gregor Gramlich.
+You need to have node and jasmine-node installed.
+
