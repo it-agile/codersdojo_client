@@ -11,7 +11,8 @@ class MetaConfigFile
 	end
 	
 	def source_files
-		properties['source_files']
+		end_of_string = '\Z'
+		properties['source_files'] + end_of_string
 	end
 
   def success_detection
