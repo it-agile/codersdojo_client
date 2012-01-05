@@ -217,6 +217,15 @@ Maybe you created the directory structure with an older version of CodersDojo?
 Recreate the directory structure with the current version with 'codersdojo setup ...'.
 msg
 	end
+	
+	def show_internal_server_error exception, log_file_name
+		show <<-msg
+!!! WTF? 
+!!! An internal server error occurred. This probably means that we sucked and there is
+!!! a bug. An error log was written to #{log_file_name}.
+!!! Please help us to fix the bug and send us the log file via email: codersdojo@it-agile.de
+msg
+	end
 		
 	def show_kata_upload_hint
 		show "You finished your kata. You can upload it with 'codersdojo upload'."
