@@ -2,6 +2,7 @@ require 'json'
 require 'state'
 require 'state_reader'
 require 'upload/xml_element_extractor'
+require 'upload/encoding_adjuster'
 require 'shellutils/progress'
 require 'filename_formatter'
 require 'rest_client'
@@ -46,9 +47,11 @@ class Uploader
 	end
 
   def upload_kata
+		adjuster = EncodingAdjuster.new
 		kata_data = {:framework => @framework}
 		states_data = states.each_with_index do |state,index|
-			kata_data["states[#{index}]"] = {:code => state.file_contents, :result => state.result, :green => state.green?, 
+			kata_data["states[#{index}]"] = {:code => state.file_contents.collect{|content| adjuster.adjust(content)}, 
+        :result => adjuster.adjust(state.result), :green => state.green?, 
 				:created_at => state.time}
 		end
     RestClient.post "#{@hostname}#{@@kata_path}", kata_data
