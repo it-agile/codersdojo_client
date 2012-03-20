@@ -1,1 +1,1 @@
-perl %kata_file%.pl
+prove %kata_file%.pl
