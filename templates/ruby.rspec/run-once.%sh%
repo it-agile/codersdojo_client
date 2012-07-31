@@ -1,1 +1,1 @@
-spec %kata_file%.rb
+rspec %kata_file%.rb
