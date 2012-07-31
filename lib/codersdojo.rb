@@ -39,7 +39,7 @@ class CodersDojo
 			arg_parser = ArgumentParser.new command_config.commands
 			command = arg_parser.parse @params
 		rescue ShellArgumentException => e
-			view.show_unknwon_command_message e.command
+			view.show_unknown_command_message e.command
 		rescue PropertyFileMissingException => e
 			view.show_properties_file_missing_error e.filename
 		rescue RestClient::InternalServerError => e

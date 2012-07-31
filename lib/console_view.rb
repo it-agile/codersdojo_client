@@ -131,7 +131,7 @@ helptext
 upload-no-open                      
     Upload the newest kata session in .codersdojo to codersdojo.com.
 
-upload-no-opem <session_directory>  
+upload-no-open <session_directory>  
     Upload the kata <session_directory> to codersdojo.com. 
     <session_directory> is relative to the working directory.
 
@@ -149,7 +149,7 @@ Command #{command} not known. Try '#{current_command_path} help' to list the sup
 helptext
 	end
 	
-	def show_unknwon_command_message command
+	def show_unknown_command_message command
 		show "Command #{command} not known.\n\n"
 		show_usage
 	end
