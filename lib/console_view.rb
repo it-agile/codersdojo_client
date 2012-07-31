@@ -23,7 +23,7 @@ helptext
   def show_usage
     show <<-helptext
 Usage: #{current_command_path} command [options]
-  Commands:
+Commands:
   help, -h, --help                     Print this help text.
   help <command>                       See the details of the command.
   xhelp                                Print help text for advanced commands.
@@ -39,7 +39,7 @@ helptext
   def show_extended_help
     show <<-helptext
 Usage: #{current_command_path} command [options]
-  Commands:
+Commands:
   help <command>                                    See the details of the command.
   init-session                                      Create a new session dir within the .codersdojo dir.
   capture-single-run <shell_command> <kata_file>    Capture a single run.
