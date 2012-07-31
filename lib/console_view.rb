@@ -131,7 +131,7 @@ helptext
 upload-no-open                      
     Upload the newest kata session in .codersdojo to codersdojo.com.
 
-upload-no-opem <session_directory>  
+upload-no-open <session_directory>  
     Upload the kata <session_directory> to codersdojo.com. 
     <session_directory> is relative to the working directory.
 
