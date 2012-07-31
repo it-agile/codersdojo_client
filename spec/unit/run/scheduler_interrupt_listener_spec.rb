@@ -20,6 +20,7 @@ describe SchedulerInterruptListener do
 		@view_mock.should_receive :show_kata_upload_hint
 
 	  Thread.new { @scheduler.start }
+    sleep(0.1)
 	  Process.kill "INT", 0
 	  @scheduler.interrupt_listener.last_action_was_exit?.should == true
 	end	
@@ -37,6 +38,7 @@ describe SchedulerInterruptListener do
 		@command_b_mock.should_receive(:continue_test_loop?).and_return false
 
 	  Thread.new { @scheduler.start }
+    sleep(0.1)
 	  Process.kill "INT", 0
 	end	
 
