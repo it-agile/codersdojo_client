@@ -149,7 +149,7 @@ Command #{command} not known. Try '#{current_command_path} help' to list the sup
 helptext
 	end
 	
-	def show_unknwon_command_message command
+	def show_unknown_command_message command
 		show "Command #{command} not known.\n\n"
 		show_usage
 	end
