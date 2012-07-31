@@ -52,8 +52,8 @@ describe StateRecorder do
 	end
 	
 	it "should write the process return code into the info file" do
-    @process_mock.should_receive(:return_code).and_return 1
-		@shell_mock.should_receive(:write_file).with regex_matcher(/.*\/info.yml/), regex_matcher(/.*return_code: 1.*/)
+          ReturnCodeEvaluator.any_instance.stub(:return_code => 42)
+		@shell_mock.should_receive(:write_file).with regex_matcher(/.*\/info.yml/), regex_matcher(/.*return_code: 42.*/)
 		@state_recorder.record_state [], @process_mock
 	end
 
