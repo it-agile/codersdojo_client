@@ -61,17 +61,17 @@ helptext
     show <<-helptext
 
 setup <framework> <kata_file>
-Setup the environment for the kata for the given framework and kata file.
-The <kata_file> is the one file that will contain the source code of the code kata.
-If <kata_file> does not have an extension it will be added automatically
-  - except if <framework> is ??? (see below).
-By now <framework> is one of these:
+    Setup the environment for the kata for the given framework and kata file.
+    The <kata_file> is the one file that will contain the source code of the code kata.
+    If <kata_file> does not have an extension it will be added automatically
+    - except if <framework> is ??? (see below).
+    By now <framework> is one of these:
 #{templates}
-Use ??? as framework if your framework isn't in the list.
+    Use ??? as framework if your framework isn't in the list.
 
 Example:
-  :%/%dojo%/%my_kata$ #{current_command_path} setup ruby.test-unit prime
-  Setup the the environment for executing a code kata in kata file 'prime' with Ruby and test/unit.
+    :%/%dojo%/%my_kata$ #{current_command_path} setup ruby.test-unit prime
+        Setup the the environment for executing a code kata in kata file 'prime' with Ruby and test/unit.
 helptext
   end
 
@@ -79,10 +79,10 @@ helptext
     show <<-helptext
 
 start <shell_command> <kata_file>
-Start the continuous test runner, that runs <shell_command> whenever <kata_file>
-  changes. The <kata_file> has to include the whole source code of the kata.
-  Whenever the test runner is started, it creates a new session directory in the
-  directory .codersdojo where it logs the steps of the kata.
+    Start the continuous test runner, that runs <shell_command> whenever <kata_file>
+    changes. The <kata_file> has to include the whole source code of the kata.
+    Whenever the test runner is started, it creates a new session directory in the
+    directory .codersdojo where it logs the steps of the kata.
 helptext
   end
 
@@ -90,18 +90,18 @@ helptext
     show <<-helptext
 
 upload
-Upload the newest kata session in .codersdojo to codersdojo.com.
-  After the kata is uploaded the browser is started with the URL of the uploaded kata.
+    Upload the newest kata session in .codersdojo to codersdojo.com.
+    After the kata is uploaded the browser is started with the URL of the uploaded kata.
 
 upload <session_directory>
-Upload the kata <session_directory> to codersdojo.com.
-  <session_directory> is relative to the working directory.
+    Upload the kata <session_directory> to codersdojo.com.
+    <session_directory> is relative to the working directory.
 
 Examples:
-  :%/%dojo%/%my_kata$ #{current_command_path} upload
-Upload the newest kata located in directory ".codersdojo" to codersdojo.com.
-  :%/%dojo%/%my_kata$ #{current_command_path} upload .codersdojo%/%2010-11-02_16-21-53
-Upload the kata located in directory ".codersdojo%/%2010-11-02_16-21-53" to codersdojo.com.
+    :%/%dojo%/%my_kata$ #{current_command_path} upload
+        Upload the newest kata located in directory ".codersdojo" to codersdojo.com.
+    :%/%dojo%/%my_kata$ #{current_command_path} upload .codersdojo%/%2010-11-02_16-21-53
+        Upload the kata located in directory ".codersdojo%/%2010-11-02_16-21-53" to codersdojo.com.
 helptext
   end
 
@@ -109,8 +109,8 @@ helptext
     show <<-helptext
 
 init-session
-Create a new session dir in the .codersdojo dir.
-  Usually this command is used before using capture-single-run.
+    Create a new session dir in the .codersdojo dir.
+    Usually this command is used before using capture-single-run.
 helptext
   end
 
@@ -118,10 +118,10 @@ helptext
     show <<-helptext
 
 capture-single-run <shell_command> <kata_file>
-Execute <shell-command> once for <kata_file>.
-  The <kata_file> has to include the whole source code of the kata.
-  The run will be captured into the newest session dir in the .codersdojo dir.
-  Usually this command is used after a session dir has been created with the init-session command.
+    Execute <shell-command> once for <kata_file>.
+    The <kata_file> has to include the whole source code of the kata.
+    The run will be captured into the newest session dir in the .codersdojo dir.
+    Usually this command is used after a session dir has been created with the init-session command.
 helptext
   end
 
@@ -129,17 +129,17 @@ helptext
     show <<-helptext
 
 upload-no-open
-Upload the newest kata session in .codersdojo to codersdojo.com.
+    Upload the newest kata session in .codersdojo to codersdojo.com.
 
 upload-no-opem <session_directory>
-Upload the kata <session_directory> to codersdojo.com.
-  <session_directory> is relative to the working directory.
+    Upload the kata <session_directory> to codersdojo.com.
+    <session_directory> is relative to the working directory.
 
 Examples:
-  :%/%dojo%/%my_kata$ #{current_command_path} upload-no-open
-    Upload the newest kata located in directory ".codersdojo" to codersdojo.com.
-  :%/%dojo%/%my_kata$ #{current_command_path} upload-no-open .codersdojo%/%2010-11-02_16-21-53
-    Upload the kata located in directory ".codersdojo%/%2010-11-02_16-21-53" to codersdojo.com.
+    :%/%dojo%/%my_kata$ #{current_command_path} upload-no-open
+        Upload the newest kata located in directory ".codersdojo" to codersdojo.com.
+    :%/%dojo%/%my_kata$ #{current_command_path} upload-no-open .codersdojo%/%2010-11-02_16-21-53
+        Upload the kata located in directory ".codersdojo%/%2010-11-02_16-21-53" to codersdojo.com.
 helptext
   end
 
@@ -213,18 +213,18 @@ msg
   def show_properties_file_missing_error filename
     show <<-msg
 Property file #{filename} is missing.
-  Maybe you created the directory structure with an older version of CodersDojo?
-  Recreate the directory structure with the current version with 'codersdojo setup ...'.
+Maybe you created the directory structure with an older version of CodersDojo?
+Recreate the directory structure with the current version with 'codersdojo setup ...'.
 msg
   end
 
   def show_internal_server_error exception, log_file_name
     show <<-msg
-    !!! WTF?
-    !!! An internal server error occurred. This probably means that we sucked and there is
-    !!! a bug. An error log was written to #{log_file_name}.
-      !!! Please help us to fix the bug and send us the log file via email: codersdojo@it-agile.de
-    msg
+!!! WTF?
+!!! An internal server error occurred. This probably means that we sucked and there is
+!!! a bug. An error log was written to #{log_file_name}.
+!!! Please help us to fix the bug and send us the log file via email: codersdojo@it-agile.de
+msg
   end
 
   def show_kata_upload_hint
