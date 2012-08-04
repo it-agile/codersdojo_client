@@ -31,7 +31,6 @@ class Scaffolder
 	end
 
 	def scaffold template, kata_file
-		@template_machine.placeholder_values['kata_file.ext'] = kata_file
 		@template_machine.placeholder_values['kata_file'] = Filename.new(kata_file).without_extension.to_s
 		template = template == '???' ? ANY_TEMPLATE : template
 			dir_path = "#{template_path}/#{template}"
