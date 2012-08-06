@@ -25,7 +25,7 @@ class Scaffolder
 	
 	def as_dotted_list indentation, items
 		indent_string = ' '*indentation
-		grouped_items = items.group_by{|item| item.split('.').first}
+		grouped_items = items.group_by{|item| item.split(working_directory).first}
 		group_strings = grouped_items.collect{|group| group.last.join ', '}
 		"#{indent_string}* " + group_strings.join("\n#{indent_string}* ")
 	end
@@ -37,10 +37,11 @@ class Scaffolder
 			dir_path = "#{template_path}/#{template}"
 			to_copy = @shell.real_dir_entries dir_path
 			to_copy.each do |item|
-				file_path = "#{dir_path}/#{item}"
-				@shell.cp_r file_path, "."
-				transform_file_content item
-				transform_file_name item
+				source = "#{dir_path}/#{item}"
+                destination = "#{working_directory}/#{item}"
+				@shell.cp_r source, destination
+				transform_file_content destination
+				transform_file_name destination
 			end
 	end
 	
@@ -60,7 +61,7 @@ class Scaffolder
   end
 		
 	def template_path
-		file_path_elements = Scaffolder::current_file.split '/' 
+		file_path_elements = Scaffolder::current_file.split '/'
     while file_path_elements.last != 'lib' do
 	    file_path_elements.pop
     end
@@ -70,6 +71,10 @@ class Scaffolder
 
   def self.current_file
 	  __FILE__
+  end
+
+  def working_directory
+    '.'
   end
 
 end
