@@ -2,8 +2,7 @@ class TextTemplateMachine
 	
 	attr_accessor :placeholder_values
 	
-	def initialize shell
-		@shell =  shell
+	def initialize
 		@placeholder_values = []
 	end
 	
@@ -28,7 +27,7 @@ end
 class TextTemplateMachineFactory
 	
 	def self.create shell
-		template_machine = TextTemplateMachine.new shell
+		template_machine = TextTemplateMachine.new
 		template_machine.placeholder_values = {
 			'sh' => shell.shell_extension,
 			':' => shell.path_separator,
