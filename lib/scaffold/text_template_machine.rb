@@ -7,9 +7,7 @@ class TextTemplateMachine
 	end
 	
 	def render text
-		@placeholder_values.each do |placeholder_value|
-			placeholder = placeholder_value.first
-			value = placeholder_value.last
+		@placeholder_values.each do |placeholder, value|
 			text = replace_placeholder text, placeholder, value
 		end
 		text
@@ -17,9 +15,7 @@ class TextTemplateMachine
 	
 	def replace_placeholder text, placeholder, value
 		text = text.gsub "%#{placeholder}%", value
-		placeholder_cap = placeholder.capitalize
-		value_cap = value.capitalize
-		text.gsub "%#{placeholder_cap}%", value_cap
+		text.gsub "%#{placeholder.capitalize}%", value.capitalize
 	end
 	
 end
