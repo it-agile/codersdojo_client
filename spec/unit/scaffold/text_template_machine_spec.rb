@@ -3,8 +3,7 @@ require 'scaffold/text_template_machine'
 describe TextTemplateMachine do
 	
 	before (:each) do
-		shell_mock = mock
-		@machine = TextTemplateMachine.new shell_mock
+		@machine = TextTemplateMachine.new
 		@placeholder_values = {'a' => 'A', 'wo' => 'world', 'm' => 'my'}
 		@machine.placeholder_values = @placeholder_values
 	end
@@ -27,13 +26,11 @@ describe TextTemplateMachine do
 	end
 	
 	it "should use added placeholder" do
-		@machine.placeholder_values['xxx'] = 'xxx-value'
-		@machine.render('%xxx%').should == 'xxx-value'
+		@machine.render('%xxx%', 'xxx' => 'xxx-value').should == 'xxx-value'
 	end
 	
 	it "should use newest placeholder value" do
-		@machine.placeholder_values['a'] = 'b'
-		@machine.render('%a%').should == 'b'
+		@machine.render('%a%', 'a' => 'b').should == 'b'
 	end
 	
 end
