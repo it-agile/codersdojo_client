@@ -30,8 +30,7 @@ describe TextTemplateMachine do
 	end
 	
 	it "should use newest placeholder value" do
-		@machine.placeholder_values['a'] = 'b'
-		@machine.render('%a%').should == 'b'
+		@machine.render('%a%', 'a' => 'b').should == 'b'
 	end
 	
 end
