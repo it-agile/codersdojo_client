@@ -8,12 +8,13 @@ class TextTemplateMachine
 	
 	def render text, more_placeholders = {}
 		@placeholder_values.merge(more_placeholders).each do |placeholder, value|
-			text = replace_placeholder text, placeholder, value
+			text = convert text, placeholder, value
 		end
 		text
 	end
 	
-	def replace_placeholder text, placeholder, value
+  private
+	def convert text, placeholder, value
 		text = text.gsub "%#{placeholder}%", value
 		text.gsub "%#{placeholder.capitalize}%", value.capitalize
 	end
