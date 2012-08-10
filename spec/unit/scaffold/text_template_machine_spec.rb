@@ -26,8 +26,7 @@ describe TextTemplateMachine do
 	end
 	
 	it "should use added placeholder" do
-		@machine.placeholder_values['xxx'] = 'xxx-value'
-		@machine.render('%xxx%').should == 'xxx-value'
+		@machine.render('%xxx%', 'xxx' => 'xxx-value').should == 'xxx-value'
 	end
 	
 	it "should use newest placeholder value" do

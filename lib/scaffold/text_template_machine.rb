@@ -6,8 +6,8 @@ class TextTemplateMachine
 		@placeholder_values = []
 	end
 	
-	def render text
-		@placeholder_values.each do |placeholder, value|
+	def render text, more_placeholders = {}
+		@placeholder_values.merge(more_placeholders).each do |placeholder, value|
 			text = replace_placeholder text, placeholder, value
 		end
 		text
