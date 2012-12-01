@@ -20,5 +20,7 @@ Gem::Specification.new do |s|
    s.add_dependency('shell-utils', '= 0.1.1')
    s.add_dependency('flote', '= 0.0.2')
 
-   s.add_development_dependency('rake', '~> 10.0.0')
+   s.add_development_dependency 'rake', '~> 10.0.0'
+   s.add_development_dependency "rspec", '~> 2.0'
+   s.add_development_dependency 'watchr'
 end
