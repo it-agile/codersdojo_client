@@ -13,9 +13,12 @@ Gem::Specification.new do |s|
    s.test_files = Dir['spec/*']
    s.executables = ['codersdojo']
    s.required_ruby_version = '>= 1.8.6'
+
    s.add_dependency('json', '>= 1.4.6')
    s.add_dependency('rest-client', '>= 1.6.1')
    s.add_dependency('term-ansicolor', '>= 1.0.5')
    s.add_dependency('shell-utils', '= 0.1.1')
    s.add_dependency('flote', '= 0.0.2')
+
+   s.add_development_dependency('rake', '~> 10.0.0')
 end
