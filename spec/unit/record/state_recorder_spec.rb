@@ -17,7 +17,7 @@ describe StateRecorder do
 	  @process_mock = mock.as_null_object
     @session_id_generator_mock = mock.as_null_object
     @meta_config_file_mock = mock.as_null_object
-    @meta_config_file_mock.should_receive(:success_detection).any_number_of_times
+    @meta_config_file_mock.stub(:success_detection).and_return(false)
 		@state_recorder = StateRecorder.new @shell_mock, @session_id_generator_mock, @meta_config_file_mock
     @state_recorder.session_id = "session_id"
     @state_recorder.step = 0
