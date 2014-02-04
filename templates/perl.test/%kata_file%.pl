@@ -2,9 +2,9 @@ use strict;
 use Test;
 
 sub %kata_file% {
-  "foo"
+    return "fixme";
 }
 
 BEGIN { plan tests => 1, todo => [0] }
 
-ok ("fixme", %kata_file%())
+ok( %kata_file%(), "foo" );
