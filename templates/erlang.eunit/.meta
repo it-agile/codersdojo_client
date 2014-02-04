@@ -1,0 +1,3 @@
+framework: erlang.eunit
+source_files: .*\.erl
+success_detection: "Test passed\.|All \d+ tests passed\."

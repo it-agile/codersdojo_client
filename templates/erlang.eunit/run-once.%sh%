@@ -1,0 +1,5 @@
+test -e ebin || mkdir ebin
+rm ebin/*
+erlc -o ebin/ %kata_file%.erl
+erl -noshell -pa ebin -s init stop -eval "eunit:test(%kata_file%, [verbose])"
+
